@@ -1,0 +1,11 @@
+version: 2
+updates:
+  # Keeps the pinned action SHAs current. Gradle dependencies are updated by hand, because each
+  # update needs gradle/verification-metadata.xml regenerated (CONTRIBUTING.md).
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
