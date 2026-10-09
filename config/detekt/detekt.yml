@@ -4,3 +4,6 @@ style:
     # Calendar code is made of the spec's numbers (month lengths, epoch offsets, the multiply-shift
     # constants of ADR-0002 section 3); naming each one would hide where it comes from.
     active: false
+  MaxLineLength:
+    # Same limit as ktlint's official code style, so the two tools agree.
+    maxLineLength: 140

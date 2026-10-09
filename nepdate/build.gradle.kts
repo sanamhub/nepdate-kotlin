@@ -19,6 +19,17 @@ kotlin {
     abiValidation()
 }
 
+kover {
+    reports {
+        verify {
+            rule {
+                // ADR-0004 gate 3; the org target is 80 %.
+                minBound(90)
+            }
+        }
+    }
+}
+
 tasks.withType<JavaCompile>().configureEach {
     options.release.set(11)
 }
@@ -29,6 +40,7 @@ dependencies {
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)
     testImplementation(kotlin("test-junit5"))
+    testImplementation(libs.jqwik)
     testRuntimeOnly(libs.junit.platform.launcher)
 }
 
