@@ -11,3 +11,8 @@ versions follow [Semantic Versioning](https://semver.org/).
   `MIN`, `MAX`, the BS and AD fields, `dayOfWeek`, `dayOfYear`, `lengthOfMonth()`,
   `firstDayOfMonth()`, `lastDayOfMonth()`, `toEpochDay()`, ordering and `toString()` as `YYYY/MM/DD`.
 - `Month`, `Weekday`, `Lang` and `NepDateException` with its `kind`.
+- Arithmetic: `plusDays`, `minusDays`, `daysUntil`, `plusMonths` and `plusYears` with
+  `MonthOverflow.CLAMP` or `SPILL`, and `until` returning a `DateDiff` (years, months, days).
+- `FiscalYear` (1 Shrawan to the end of Ashad) with quarters `Q1`..`Q4`, `NepaliDate.fiscalYear` and
+  `NepaliDate.quarter`.
+- `NepaliDateRange`: the days of a month, a year or any span, as a read-only `List<NepaliDate>`.
