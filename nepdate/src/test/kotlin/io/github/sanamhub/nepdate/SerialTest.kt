@@ -41,7 +41,8 @@ class SerialTest {
 
     @Test
     fun `packing keeps each field`() {
-        val packed = pack(2199, 12, 31)
-        assertEquals(Triple(2199, 12, 31), ymd(packed))
+        assertEquals(Triple(2199, 12, 32), ymd(pack(2199, 12, 32)))
+        assertEquals(Triple(2081, 4, 32), ymd(pack(2081, 4, 32)))
+        assertEquals(Triple(1901, 1, 1), ymd(pack(1901, 1, 1)))
     }
 }
