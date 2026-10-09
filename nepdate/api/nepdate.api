@@ -58,20 +58,33 @@ public final class io/github/sanamhub/nepdate/NepaliDate : java/lang/Comparable 
 	public fun compareTo (Lio/github/sanamhub/nepdate/NepaliDate;)I
 	public synthetic fun compareTo (Ljava/lang/Object;)I
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun firstDayOfMonth ()Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun getDayOfMonth ()I
+	public final fun getDayOfWeek ()Lio/github/sanamhub/nepdate/Weekday;
+	public final fun getDayOfYear ()I
+	public final fun getGregorianDay ()I
+	public final fun getGregorianMonth ()I
+	public final fun getGregorianYear ()I
 	public final fun getMonth ()Lio/github/sanamhub/nepdate/Month;
 	public final fun getMonthValue ()I
 	public final fun getYear ()I
 	public fun hashCode ()I
+	public final fun lastDayOfMonth ()Lio/github/sanamhub/nepdate/NepaliDate;
+	public final fun lengthOfMonth ()I
 	public static final fun of (III)Lio/github/sanamhub/nepdate/NepaliDate;
 	public static final fun of (ILio/github/sanamhub/nepdate/Month;I)Lio/github/sanamhub/nepdate/NepaliDate;
+	public static final fun ofEpochDay (J)Lio/github/sanamhub/nepdate/NepaliDate;
+	public static final fun ofGregorian (III)Lio/github/sanamhub/nepdate/NepaliDate;
 	public static final fun ofOrNull (III)Lio/github/sanamhub/nepdate/NepaliDate;
+	public final fun toEpochDay ()J
 	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/github/sanamhub/nepdate/NepaliDate$Companion {
 	public final fun of (III)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun of (ILio/github/sanamhub/nepdate/Month;I)Lio/github/sanamhub/nepdate/NepaliDate;
+	public final fun ofEpochDay (J)Lio/github/sanamhub/nepdate/NepaliDate;
+	public final fun ofGregorian (III)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun ofOrNull (III)Lio/github/sanamhub/nepdate/NepaliDate;
 }
 

@@ -25,6 +25,59 @@ public class NepaliDate private constructor(
     /** The day of the month, 1..32. */
     public val dayOfMonth: Int get() = packedDay(ymd)
 
+    /** The weekday (ALGORITHM section 7). */
+    public val dayOfWeek: Weekday get() = WEEKDAYS[(serial + EPOCH_WEEKDAY) % 7]
+
+    /** The day of the BS year, 1..367. */
+    public val dayOfYear: Int get() = serial - MONTH_START[(packedYear(ymd) - MIN_YEAR) * 12] + 1
+
+    /**
+     * The length of this date's month.
+     *
+     * @return 29..32
+     */
+    public fun lengthOfMonth(): Int = bsMonthLength(packedYear(ymd), packedMonth(ymd))
+
+    /**
+     * Day 1 of this date's month.
+     *
+     * @return the first day of the month
+     */
+    public fun firstDayOfMonth(): NepaliDate {
+        val y = packedYear(ymd)
+        val m = packedMonth(ymd)
+        return NepaliDate(toSerial(y, m, 1), pack(y, m, 1))
+    }
+
+    /**
+     * The last day of this date's month.
+     *
+     * @return the last day of the month
+     */
+    public fun lastDayOfMonth(): NepaliDate {
+        val y = packedYear(ymd)
+        val m = packedMonth(ymd)
+        val length = bsMonthLength(y, m)
+        return NepaliDate(toSerial(y, m, length), pack(y, m, length))
+    }
+
+    /** The AD (Gregorian) year. */
+    public val gregorianYear: Int get() = packedYear(packedAdOf(serial))
+
+    /** The AD (Gregorian) month, 1..12. */
+    public val gregorianMonth: Int get() = packedMonth(packedAdOf(serial))
+
+    /** The AD (Gregorian) day of the month. */
+    public val gregorianDay: Int get() = packedDay(packedAdOf(serial))
+
+    /**
+     * Days since AD 1970-01-01, the epoch of `java.time.LocalDate.toEpochDay`, so code without
+     * `java.time` (Android below API 26) can convert.
+     *
+     * @return -45920 for [MIN] to 63291 for [MAX]
+     */
+    public fun toEpochDay(): Long = (serial + EPOCH_UNIX_DAYS).toLong()
+
     /** Equal when both are the same day. */
     override fun equals(other: Any?): Boolean = other is NepaliDate && other.serial == serial
 
@@ -105,6 +158,48 @@ public class NepaliDate private constructor(
             return NepaliDate(toSerial(year, month, day), pack(year, month, day))
         }
 
+        /**
+         * The BS date of the AD (Gregorian) date [year]-[month]-[day].
+         *
+         * @return the date
+         * @throws NepDateException with [NepDateException.Kind.INVALID_GREGORIAN] when the AD date
+         *   doesn't exist (month outside 1..12, or day outside the month), else
+         *   [NepDateException.Kind.OUT_OF_RANGE] outside AD 1844-04-11..2143-04-15
+         */
+        @JvmStatic
+        @Throws(NepDateException::class)
+        public fun ofGregorian(
+            year: Int,
+            month: Int,
+            day: Int,
+        ): NepaliDate {
+            val kind = adErrorKind(year, month, day)
+            if (kind != null) throw adError(kind, year, month, day)
+            return ofSerial(serialOfAd(year, month, day))
+        }
+
+        /**
+         * The date [epochDay] days after AD 1970-01-01, as `java.time.LocalDate.ofEpochDay`.
+         *
+         * @return the date
+         * @throws NepDateException with [NepDateException.Kind.OUT_OF_RANGE] outside -45920..63291
+         */
+        @JvmStatic
+        @Throws(NepDateException::class)
+        public fun ofEpochDay(epochDay: Long): NepaliDate {
+            // Checked as a Long before narrowing, so huge values can't wrap into the range.
+            if (epochDay < EPOCH_UNIX_DAYS || epochDay > MAX_SERIAL + EPOCH_UNIX_DAYS) {
+                throw NepDateException(
+                    NepDateException.Kind.OUT_OF_RANGE,
+                    0,
+                    "epoch day $epochDay is outside $EPOCH_UNIX_DAYS..${MAX_SERIAL + EPOCH_UNIX_DAYS}",
+                )
+            }
+            return ofSerial((epochDay - EPOCH_UNIX_DAYS).toInt())
+        }
+
+        private val WEEKDAYS = Weekday.entries
+
         internal fun ofSerial(serial: Int): NepaliDate = NepaliDate(serial, packedBsOf(serial))
     }
 }
@@ -146,6 +241,43 @@ private fun bsError(
             NepDateException(kind, length, "day $day is outside 1..$length for $year-${pad2(month)}")
         }
     }
+
+private const val FIRST_AD_YEAR = 1844
+private const val LAST_AD_YEAR = 2143
+
+/** INVALID_GREGORIAN for a date that doesn't exist, else OUT_OF_RANGE outside the range, else null. */
+private fun adErrorKind(
+    year: Int,
+    month: Int,
+    day: Int,
+): NepDateException.Kind? =
+    when {
+        month < 1 || month > 12 -> NepDateException.Kind.INVALID_GREGORIAN
+        day < 1 || day > gregorianMonthLength(year, month) -> NepDateException.Kind.INVALID_GREGORIAN
+        year < FIRST_AD_YEAR || year > LAST_AD_YEAR -> NepDateException.Kind.OUT_OF_RANGE
+        serialOfAd(year, month, day) !in 0..MAX_SERIAL -> NepDateException.Kind.OUT_OF_RANGE
+        else -> null
+    }
+
+private fun adError(
+    kind: NepDateException.Kind,
+    year: Int,
+    month: Int,
+    day: Int,
+): NepDateException =
+    if (kind == NepDateException.Kind.INVALID_GREGORIAN) {
+        NepDateException(kind, 0, "AD $year-$month-$day is not a date in the Gregorian calendar")
+    } else {
+        NepDateException(kind, 0, "AD $year-$month-$day is outside 1844-04-11..2143-04-15")
+    }
+
+private fun gregorianMonthLength(
+    year: Int,
+    month: Int,
+): Int {
+    val base = if (isGregorianLeap(year)) CalendarTables.LEAP_BASE else 0
+    return CalendarTables.CUM[base + month] - CalendarTables.CUM[base + month - 1]
+}
 
 private fun pad2(value: Int): String = if (value < 10) "0$value" else value.toString()
 
