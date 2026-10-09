@@ -13,6 +13,9 @@ import io.github.sanamhub.nepdate.CalendarTables.MONTH_START
 /** Last valid serial: BS 2199-12-30. */
 internal const val MAX_SERIAL: Int = 109211
 
+/** Number of BS years supported, 1901..2199. */
+internal const val YEARS: Int = MAX_YEAR - MIN_YEAR + 1
+
 // Day 32 needs six bits, so the day takes bits 0..5 and the month bits 6..9. ADR-0002 section 1
 // writes `year shl 9 or month shl 5 or day`, where day 32 would set the month's lowest bit.
 internal fun pack(

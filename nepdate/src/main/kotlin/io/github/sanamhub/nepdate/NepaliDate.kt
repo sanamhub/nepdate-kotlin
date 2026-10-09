@@ -115,6 +115,71 @@ public class NepaliDate private constructor(
      */
     public fun daysUntil(other: NepaliDate): Long = (other.serial - serial).toLong()
 
+    /**
+     * The same day [months] months later, or earlier for a negative [months] (ALGORITHM section 8).
+     * When that day doesn't exist in the target month, [overflow] decides.
+     *
+     * @return the new date
+     * @throws NepDateException with [NepDateException.Kind.OUT_OF_RANGE] when the result is outside
+     *   the supported range
+     */
+    @JvmOverloads
+    @Throws(NepDateException::class)
+    public fun plusMonths(
+        months: Long,
+        overflow: MonthOverflow = MonthOverflow.CLAMP,
+    ): NepaliDate {
+        val serial = monthsLaterSerial(months, overflow)
+        if (serial < 0) throw outOfRange("$months months")
+        return ofSerial(serial)
+    }
+
+    /** The serial [months] months later, or -1 when it is outside the supported range. */
+    private fun monthsLaterSerial(
+        months: Long,
+        overflow: MonthOverflow,
+    ): Int {
+        // months is range-checked before it is narrowed, so the Int addition can't overflow.
+        val target =
+            if (months < -CalendarTables.MONTHS || months > CalendarTables.MONTHS) {
+                -1
+            } else {
+                (packedYear(ymd) - MIN_YEAR) * 12 + packedMonth(ymd) - 1 + months.toInt()
+            }
+        if (target < 0 || target >= CalendarTables.MONTHS) return -1
+        val day = packedDay(ymd)
+        val length = MONTH_START[target + 1] - MONTH_START[target]
+        return when {
+            day <= length -> MONTH_START[target] + day - 1
+            overflow == MonthOverflow.CLAMP -> MONTH_START[target] + length - 1
+            // Day d of a month too short for it is day (d - length) of the next month, which
+            // starts at MONTH_START[target + 1].
+            target + 1 < CalendarTables.MONTHS -> MONTH_START[target + 1] + day - length - 1
+            else -> -1
+        }
+    }
+
+    /**
+     * The same day [years] years later: [plusMonths] with `12 * years`.
+     *
+     * @return the new date
+     * @throws NepDateException with [NepDateException.Kind.OUT_OF_RANGE] when the result is outside
+     *   the supported range
+     */
+    @JvmOverloads
+    @Throws(NepDateException::class)
+    public fun plusYears(
+        years: Long,
+        overflow: MonthOverflow = MonthOverflow.CLAMP,
+    ): NepaliDate {
+        // Checked before multiplying so 12 * years can't overflow.
+        if (years < -YEARS || years > YEARS) throw outOfRange("$years years")
+        return plusMonths(years * 12, overflow)
+    }
+
+    private fun outOfRange(amount: String) =
+        NepDateException(NepDateException.Kind.OUT_OF_RANGE, 0, "$this plus $amount is outside $MIN..$MAX")
+
     private fun daysOutOfRange(days: Long) =
         NepDateException(NepDateException.Kind.OUT_OF_RANGE, 0, "$this plus $days days is outside $MIN..$MAX")
 

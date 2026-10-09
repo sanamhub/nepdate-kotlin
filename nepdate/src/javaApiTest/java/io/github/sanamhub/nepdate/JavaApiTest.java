@@ -50,6 +50,12 @@ class JavaApiTest {
         assertEquals(NepaliDate.of(2081, 4, 16), date.plusDays(1));
         assertEquals(NepaliDate.of(2081, 4, 14), date.minusDays(1));
         assertEquals(1L, date.daysUntil(NepaliDate.of(2081, 4, 16)));
+
+        NepaliDate end = NepaliDate.of(2081, 4, 32);
+        assertEquals(NepaliDate.of(2081, 6, 30), end.plusMonths(2));
+        assertEquals(NepaliDate.of(2081, 7, 2), end.plusMonths(2, MonthOverflow.SPILL));
+        assertEquals(NepaliDate.of(2082, 4, 32), end.plusYears(1));
+        assertEquals(NepaliDate.of(2082, 4, 32), end.plusYears(1, MonthOverflow.CLAMP));
     }
 
     @Test

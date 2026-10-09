@@ -31,6 +31,14 @@ public final class io/github/sanamhub/nepdate/Month$Companion {
 	public final fun of (I)Lio/github/sanamhub/nepdate/Month;
 }
 
+public final class io/github/sanamhub/nepdate/MonthOverflow : java/lang/Enum {
+	public static final field CLAMP Lio/github/sanamhub/nepdate/MonthOverflow;
+	public static final field SPILL Lio/github/sanamhub/nepdate/MonthOverflow;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/sanamhub/nepdate/MonthOverflow;
+	public static fun values ()[Lio/github/sanamhub/nepdate/MonthOverflow;
+}
+
 public final class io/github/sanamhub/nepdate/NepDateException : java/lang/IllegalArgumentException {
 	public final fun getKind ()Lio/github/sanamhub/nepdate/NepDateException$Kind;
 	public final fun getMonthLength ()I
@@ -79,6 +87,12 @@ public final class io/github/sanamhub/nepdate/NepaliDate : java/lang/Comparable 
 	public static final fun ofGregorian (III)Lio/github/sanamhub/nepdate/NepaliDate;
 	public static final fun ofOrNull (III)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun plusDays (J)Lio/github/sanamhub/nepdate/NepaliDate;
+	public final fun plusMonths (J)Lio/github/sanamhub/nepdate/NepaliDate;
+	public final fun plusMonths (JLio/github/sanamhub/nepdate/MonthOverflow;)Lio/github/sanamhub/nepdate/NepaliDate;
+	public static synthetic fun plusMonths$default (Lio/github/sanamhub/nepdate/NepaliDate;JLio/github/sanamhub/nepdate/MonthOverflow;ILjava/lang/Object;)Lio/github/sanamhub/nepdate/NepaliDate;
+	public final fun plusYears (J)Lio/github/sanamhub/nepdate/NepaliDate;
+	public final fun plusYears (JLio/github/sanamhub/nepdate/MonthOverflow;)Lio/github/sanamhub/nepdate/NepaliDate;
+	public static synthetic fun plusYears$default (Lio/github/sanamhub/nepdate/NepaliDate;JLio/github/sanamhub/nepdate/MonthOverflow;ILjava/lang/Object;)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun toEpochDay ()J
 	public fun toString ()Ljava/lang/String;
 }
