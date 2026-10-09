@@ -39,7 +39,7 @@ AC: `Month.of(4) == Month.SHRAWAN`; `Month.of(0)` and `Month.of(13)` throw `INVA
 Four internal functions, each O(1) with no loop and no allocation (ADR-0002 §3):
 - `toSerial(year, month, day): Int` = `MONTH_START[(year - 1901) * 12 + month - 1] + day - 1`.
 - `packedBsOf(serial): Int`: `mi = ((serial - 25) * 2153) shr 16`, then
-  `if (serial >= MONTH_START[mi + 1]) mi++`; returns `year shl 9 or month shl 5 or day`.
+  `if (serial >= MONTH_START[mi + 1]) mi++`; returns `year shl 10 or month shl 6 or day`.
 - `packedAdOf(serial): Int`: `i = ((serial - 40) * 5730) shr 21`, `if (serial >= JAN1[i + 1]) i++`,
   `doy = serial - JAN1[i]`, `base = 13` in a leap year else 0, `m = ((doy - 6) * 1000) shr 15`,
   `if (doy >= CUM[base + m + 1]) m++`; returns the AD date packed the same way.

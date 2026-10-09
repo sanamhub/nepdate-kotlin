@@ -23,7 +23,7 @@ differ by up to 2× on this laptop).
 ### 1. Date representation
 
 `NepaliDate` is a final class with two `Int` fields: `serial` (days since BS 1901-01-01,
-ALGORITHM §4) and `ymd`, the BS date packed as `year shl 9 or month shl 5 or day`. `year`,
+ALGORITHM §4) and `ymd`, the BS date packed as `year shl 10 or month shl 6 or day` (6 bits for the day: BS months reach day 32; corrected 2026-10-10 after the K1-04 test caught `shl 9`/`shl 5`). `year`,
 `monthValue` and `dayOfMonth` are shifts and masks. `equals`, `hashCode` and `compareTo` use the
 serial. The object is 24 bytes on 64-bit HotSpot with compressed oops (12-byte header, two ints,
 padding). Not a `value class` (Java can't call it cleanly, ADR-0003) and not a `data class` (ABI).
