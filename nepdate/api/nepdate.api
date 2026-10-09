@@ -117,6 +117,30 @@ public final class io/github/sanamhub/nepdate/NepaliDate$Companion {
 	public final fun ofOrNull (III)Lio/github/sanamhub/nepdate/NepaliDate;
 }
 
+public final class io/github/sanamhub/nepdate/NepaliDateRange : kotlin/collections/AbstractList, java/util/RandomAccess {
+	public static final field Companion Lio/github/sanamhub/nepdate/NepaliDateRange$Companion;
+	public fun contains (Lio/github/sanamhub/nepdate/NepaliDate;)Z
+	public final fun contains (Ljava/lang/Object;)Z
+	public fun get (I)Lio/github/sanamhub/nepdate/NepaliDate;
+	public synthetic fun get (I)Ljava/lang/Object;
+	public final fun getEndInclusive ()Lio/github/sanamhub/nepdate/NepaliDate;
+	public fun getSize ()I
+	public final fun getStart ()Lio/github/sanamhub/nepdate/NepaliDate;
+	public fun indexOf (Lio/github/sanamhub/nepdate/NepaliDate;)I
+	public final fun indexOf (Ljava/lang/Object;)I
+	public fun lastIndexOf (Lio/github/sanamhub/nepdate/NepaliDate;)I
+	public final fun lastIndexOf (Ljava/lang/Object;)I
+	public static final fun of (Lio/github/sanamhub/nepdate/NepaliDate;Lio/github/sanamhub/nepdate/NepaliDate;)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public static final fun ofMonth (II)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public static final fun ofYear (I)Lio/github/sanamhub/nepdate/NepaliDateRange;
+}
+
+public final class io/github/sanamhub/nepdate/NepaliDateRange$Companion {
+	public final fun of (Lio/github/sanamhub/nepdate/NepaliDate;Lio/github/sanamhub/nepdate/NepaliDate;)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public final fun ofMonth (II)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public final fun ofYear (I)Lio/github/sanamhub/nepdate/NepaliDateRange;
+}
+
 public final class io/github/sanamhub/nepdate/Weekday : java/lang/Enum {
 	public static final field FRIDAY Lio/github/sanamhub/nepdate/Weekday;
 	public static final field MONDAY Lio/github/sanamhub/nepdate/Weekday;

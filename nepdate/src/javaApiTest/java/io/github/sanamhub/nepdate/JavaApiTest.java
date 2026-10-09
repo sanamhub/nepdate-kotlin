@@ -66,6 +66,20 @@ class JavaApiTest {
     }
 
     @Test
+    void ranges() throws NepDateException {
+        NepaliDateRange month = NepaliDateRange.ofMonth(2081, 4);
+        assertEquals(32, month.size());
+        assertEquals(NepaliDate.of(2081, 4, 1), month.getStart());
+        assertEquals(NepaliDate.of(2081, 4, 32), month.getEndInclusive());
+        assertEquals(NepaliDate.of(2081, 4, 15), month.get(14));
+        assertTrue(month.contains(NepaliDate.of(2081, 4, 15)));
+        assertEquals(366, NepaliDateRange.ofYear(2081).size());
+        java.util.List<NepaliDate> days = NepaliDateRange.of(NepaliDate.MIN, NepaliDate.MIN.plusDays(2));
+        assertEquals(3, days.size());
+        assertThrows(NepDateException.class, () -> NepaliDateRange.of(NepaliDate.MAX, NepaliDate.MIN));
+    }
+
+    @Test
     void enumsAndErrors() {
         assertEquals(Month.SHRAWAN, Month.of(4));
         assertEquals(4, Month.SHRAWAN.getValue());
