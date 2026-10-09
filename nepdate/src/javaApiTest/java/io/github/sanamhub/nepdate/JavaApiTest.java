@@ -66,6 +66,25 @@ class JavaApiTest {
     }
 
     @Test
+    void fiscalYears() throws NepDateException {
+        NepaliDate date = NepaliDate.of(2081, 4, 15);
+        FiscalYear fy = FiscalYear.containing(date);
+        assertEquals(fy, date.getFiscalYear());
+        assertEquals(new FiscalYear(2081), fy);
+        assertEquals(2081, fy.getStartYear());
+        assertEquals(NepaliDate.of(2081, 4, 1), fy.start());
+        assertEquals(NepaliDate.of(2082, 3, 32), fy.end());
+        assertEquals(fy.start(), fy.range().getStart());
+        assertEquals(Quarter.Q1, date.getQuarter());
+        assertEquals(Month.SHRAWAN, Quarter.Q1.getMonths().get(0));
+        assertEquals(NepaliDate.of(2081, 6, 30), fy.range(Quarter.Q1).getEndInclusive());
+        assertEquals("2081/82", fy.label());
+        assertEquals("२०८१/८२", fy.label(Lang.NEPALI));
+        assertTrue(fy.compareTo(new FiscalYear(2082)) < 0);
+        assertThrows(UnsupportedOperationException.class, () -> Quarter.Q1.getMonths().set(0, Month.MAGH));
+    }
+
+    @Test
     void ranges() throws NepDateException {
         NepaliDateRange month = NepaliDateRange.ofMonth(2081, 4);
         assertEquals(32, month.size());

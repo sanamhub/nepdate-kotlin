@@ -61,6 +61,12 @@ public class NepaliDate private constructor(
         return NepaliDate(toSerial(y, m, length), pack(y, m, length))
     }
 
+    /** The fiscal year this date falls in (ALGORITHM section 8b). */
+    public val fiscalYear: FiscalYear get() = FiscalYear.containing(this)
+
+    /** The fiscal-year quarter of this date's month. */
+    public val quarter: Quarter get() = Quarter.ofMonth(packedMonth(ymd))
+
     /** The AD (Gregorian) year. */
     public val gregorianYear: Int get() = packedYear(packedAdOf(serial))
 

@@ -25,11 +25,13 @@ public class DateDiff internal constructor(
             other.totalDays == totalDays
 
     override fun hashCode(): Int {
-        var result = isNegative.hashCode()
+        // Written out: Boolean.hashCode() and Long.hashCode() compile to static methods Android
+        // only has from API 24 (animalsniffer, ADR-0004 gate 8).
+        var result = if (isNegative) 1 else 0
         result = 31 * result + years
         result = 31 * result + months
         result = 31 * result + days
-        result = 31 * result + totalDays.hashCode()
+        result = 31 * result + (totalDays xor (totalDays ushr 32)).toInt()
         return result
     }
 

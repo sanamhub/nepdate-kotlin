@@ -9,6 +9,29 @@ public final class io/github/sanamhub/nepdate/DateDiff {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/sanamhub/nepdate/FiscalYear : java/lang/Comparable {
+	public static final field Companion Lio/github/sanamhub/nepdate/FiscalYear$Companion;
+	public fun <init> (I)V
+	public fun compareTo (Lio/github/sanamhub/nepdate/FiscalYear;)I
+	public synthetic fun compareTo (Ljava/lang/Object;)I
+	public static final fun containing (Lio/github/sanamhub/nepdate/NepaliDate;)Lio/github/sanamhub/nepdate/FiscalYear;
+	public final fun end ()Lio/github/sanamhub/nepdate/NepaliDate;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getStartYear ()I
+	public fun hashCode ()I
+	public final fun label ()Ljava/lang/String;
+	public final fun label (Lio/github/sanamhub/nepdate/Lang;)Ljava/lang/String;
+	public static synthetic fun label$default (Lio/github/sanamhub/nepdate/FiscalYear;Lio/github/sanamhub/nepdate/Lang;ILjava/lang/Object;)Ljava/lang/String;
+	public final fun range ()Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public final fun range (Lio/github/sanamhub/nepdate/Quarter;)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public final fun start ()Lio/github/sanamhub/nepdate/NepaliDate;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/sanamhub/nepdate/FiscalYear$Companion {
+	public final fun containing (Lio/github/sanamhub/nepdate/NepaliDate;)Lio/github/sanamhub/nepdate/FiscalYear;
+}
+
 public final class io/github/sanamhub/nepdate/Lang : java/lang/Enum {
 	public static final field ENGLISH Lio/github/sanamhub/nepdate/Lang;
 	public static final field NEPALI Lio/github/sanamhub/nepdate/Lang;
@@ -82,11 +105,13 @@ public final class io/github/sanamhub/nepdate/NepaliDate : java/lang/Comparable 
 	public final fun getDayOfMonth ()I
 	public final fun getDayOfWeek ()Lio/github/sanamhub/nepdate/Weekday;
 	public final fun getDayOfYear ()I
+	public final fun getFiscalYear ()Lio/github/sanamhub/nepdate/FiscalYear;
 	public final fun getGregorianDay ()I
 	public final fun getGregorianMonth ()I
 	public final fun getGregorianYear ()I
 	public final fun getMonth ()Lio/github/sanamhub/nepdate/Month;
 	public final fun getMonthValue ()I
+	public final fun getQuarter ()Lio/github/sanamhub/nepdate/Quarter;
 	public final fun getYear ()I
 	public fun hashCode ()I
 	public final fun lastDayOfMonth ()Lio/github/sanamhub/nepdate/NepaliDate;
@@ -139,6 +164,17 @@ public final class io/github/sanamhub/nepdate/NepaliDateRange$Companion {
 	public final fun of (Lio/github/sanamhub/nepdate/NepaliDate;Lio/github/sanamhub/nepdate/NepaliDate;)Lio/github/sanamhub/nepdate/NepaliDateRange;
 	public final fun ofMonth (II)Lio/github/sanamhub/nepdate/NepaliDateRange;
 	public final fun ofYear (I)Lio/github/sanamhub/nepdate/NepaliDateRange;
+}
+
+public final class io/github/sanamhub/nepdate/Quarter : java/lang/Enum {
+	public static final field Q1 Lio/github/sanamhub/nepdate/Quarter;
+	public static final field Q2 Lio/github/sanamhub/nepdate/Quarter;
+	public static final field Q3 Lio/github/sanamhub/nepdate/Quarter;
+	public static final field Q4 Lio/github/sanamhub/nepdate/Quarter;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getMonths ()Ljava/util/List;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/sanamhub/nepdate/Quarter;
+	public static fun values ()[Lio/github/sanamhub/nepdate/Quarter;
 }
 
 public final class io/github/sanamhub/nepdate/Weekday : java/lang/Enum {
