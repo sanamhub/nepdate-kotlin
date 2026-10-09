@@ -1,0 +1,6 @@
+# The default rules, plus these changes. Each one needs a reason.
+style:
+  MagicNumber:
+    # Calendar code is made of the spec's numbers (month lengths, epoch offsets, the multiply-shift
+    # constants of ADR-0002 section 3); naming each one would hide where it comes from.
+    active: false

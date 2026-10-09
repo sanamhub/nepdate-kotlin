@@ -44,6 +44,22 @@ class CodegenTest {
     }
 
     @Test
+    fun `generated file holds the month lengths and epoch constants`() {
+        val data = parseCalendar(calendarJson)
+        val text = renderCalendar(data)
+        assertTrue("internal const val EPOCH_UNIX_DAYS: Int = -45920\n" in text)
+        assertTrue("internal const val EPOCH_WEEKDAY: Int = 4\n" in text)
+        val rows = Regex(""""([0-3]{12})"(?: \+)? // (\d{4})""").findAll(text).toList()
+        assertEquals(299, rows.size)
+        assertEquals("1901", rows.first().groupValues[2])
+        assertEquals("2199", rows.last().groupValues[2])
+        val digits = rows.joinToString("") { it.groupValues[1] }
+        assertEquals(3588, digits.length)
+        val expected = data.monthLengths.flatten().joinToString("") { (it - 29).toString() }
+        assertEquals(expected, digits)
+    }
+
+    @Test
     fun `running twice gives identical bytes`() {
         copyShared()
         assertEquals(0, runCodegen(root, check = false))

@@ -12,6 +12,10 @@ const val MAX_YEAR = 2199
 private const val EPOCH_BS = "1901-01-01"
 private const val EPOCH_AD = "1844-04-11"
 private const val MONTHS = 12
+
+// days_from_civil(1844, 4, 11) and its weekday (ALGORITHM section 2). verify_vectors.py asserts both.
+private const val EPOCH_UNIX_DAYS = -45920
+private const val EPOCH_WEEKDAY = 4
 private val LENGTHS = 29..32
 
 /** A problem in `shared/data` that stops generation; the message names the field or year. */
@@ -64,6 +68,18 @@ fun renderCalendar(data: CalendarData): String {
         append(HEADER)
         append("package io.github.sanamhub.nepdate\n\n")
         append("internal const val MIN_YEAR: Int = $MIN_YEAR\n")
-        append("internal const val MAX_YEAR: Int = $MAX_YEAR\n")
+        append("internal const val MAX_YEAR: Int = $MAX_YEAR\n\n")
+        append("/** Days from 1970-01-01 to BS 1901-01-01 (AD 1844-04-11), ALGORITHM section 2. */\n")
+        append("internal const val EPOCH_UNIX_DAYS: Int = $EPOCH_UNIX_DAYS\n\n")
+        append("/** Weekday of BS 1901-01-01, 0 = Sunday: a Thursday. */\n")
+        append("internal const val EPOCH_WEEKDAY: Int = $EPOCH_WEEKDAY\n\n")
+        append("/** One character per BS month from 1901-01 to 2199-12: '0' + (length - 29). */\n")
+        append("internal const val MONTH_LENGTHS_DATA: String =\n")
+        data.monthLengths.forEachIndexed { index, lengths ->
+            val year = MIN_YEAR + index
+            val digits = lengths.joinToString("") { (it - LENGTHS.first).toString() }
+            val joiner = if (year == MAX_YEAR) "" else " +"
+            append("    \"$digits\"$joiner // $year\n")
+        }
     }
 }

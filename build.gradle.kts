@@ -19,6 +19,7 @@ subprojects {
     }
     configure<dev.detekt.gradle.extensions.DetektExtension> {
         buildUponDefaultConfig.set(true)
+        config.setFrom(rootProject.file("config/detekt/detekt.yml"))
     }
     tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
         exclude("**/*.generated.kt")

@@ -38,6 +38,7 @@ animalsniffer {
 
 tasks.test {
     useJUnitPlatform()
+    systemProperty("nepdate.shared", rootProject.file("shared").absolutePath)
     // CI also runs the tests on Java 11, the bytecode target: -PtestJavaVersion=11.
     providers.gradleProperty("testJavaVersion").orNull?.let { version ->
         javaLauncher.set(javaToolchains.launcherFor { languageVersion.set(JavaLanguageVersion.of(version)) })
