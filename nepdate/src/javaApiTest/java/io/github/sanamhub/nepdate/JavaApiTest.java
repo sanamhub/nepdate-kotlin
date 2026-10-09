@@ -54,8 +54,8 @@ class JavaApiTest {
         NepaliDate end = NepaliDate.of(2081, 4, 32);
         assertEquals(NepaliDate.of(2081, 6, 30), end.plusMonths(2));
         assertEquals(NepaliDate.of(2081, 7, 2), end.plusMonths(2, MonthOverflow.SPILL));
-        assertEquals(NepaliDate.of(2082, 4, 32), end.plusYears(1));
-        assertEquals(NepaliDate.of(2082, 4, 32), end.plusYears(1, MonthOverflow.CLAMP));
+        assertEquals(NepaliDate.of(2082, 4, 31), end.plusYears(1));
+        assertEquals(NepaliDate.of(2082, 5, 1), end.plusYears(1, MonthOverflow.SPILL));
     }
 
     @Test
