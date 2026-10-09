@@ -45,6 +45,14 @@ class JavaApiTest {
     }
 
     @Test
+    void dayArithmetic() throws NepDateException {
+        NepaliDate date = NepaliDate.of(2081, 4, 15);
+        assertEquals(NepaliDate.of(2081, 4, 16), date.plusDays(1));
+        assertEquals(NepaliDate.of(2081, 4, 14), date.minusDays(1));
+        assertEquals(1L, date.daysUntil(NepaliDate.of(2081, 4, 16)));
+    }
+
+    @Test
     void enumsAndErrors() {
         assertEquals(Month.SHRAWAN, Month.of(4));
         assertEquals(4, Month.SHRAWAN.getValue());

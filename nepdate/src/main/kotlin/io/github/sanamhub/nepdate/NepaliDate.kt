@@ -78,6 +78,46 @@ public class NepaliDate private constructor(
      */
     public fun toEpochDay(): Long = (serial + EPOCH_UNIX_DAYS).toLong()
 
+    /**
+     * The date [days] days later, or earlier for a negative [days] (ALGORITHM section 8).
+     *
+     * @return the new date
+     * @throws NepDateException with [NepDateException.Kind.OUT_OF_RANGE] when the result is outside
+     *   BS 1901-01-01..2199-12-30
+     */
+    @Throws(NepDateException::class)
+    public fun plusDays(days: Long): NepaliDate {
+        // Checked as a Long first, so a huge argument can't overflow the Int addition.
+        if (days < -MAX_SERIAL || days > MAX_SERIAL) throw daysOutOfRange(days)
+        val result = serial + days.toInt()
+        if (result < 0 || result > MAX_SERIAL) throw daysOutOfRange(days)
+        return ofSerial(result)
+    }
+
+    /**
+     * The date [days] days earlier.
+     *
+     * @return the new date
+     * @throws NepDateException with [NepDateException.Kind.OUT_OF_RANGE] when the result is outside
+     *   the supported range
+     */
+    @Throws(NepDateException::class)
+    public fun minusDays(days: Long): NepaliDate {
+        // -Long.MIN_VALUE overflows back to itself.
+        if (days == Long.MIN_VALUE) throw daysOutOfRange(days)
+        return plusDays(-days)
+    }
+
+    /**
+     * Days from this date to [other]: positive when [other] is later (PARITY D-07).
+     *
+     * @return the signed number of days, -109211..109211
+     */
+    public fun daysUntil(other: NepaliDate): Long = (other.serial - serial).toLong()
+
+    private fun daysOutOfRange(days: Long) =
+        NepDateException(NepDateException.Kind.OUT_OF_RANGE, 0, "$this plus $days days is outside $MIN..$MAX")
+
     /** Equal when both are the same day. */
     override fun equals(other: Any?): Boolean = other is NepaliDate && other.serial == serial
 

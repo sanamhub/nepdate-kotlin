@@ -7,3 +7,8 @@ style:
   MaxLineLength:
     # Same limit as ktlint's official code style, so the two tools agree.
     maxLineLength: 140
+complexity:
+  TooManyFunctions:
+    # docs/API.md fixes NepaliDate's surface at about 30 members, mirroring java.time.LocalDate.
+    allowedFunctionsPerClass: 40
+    allowedFunctionsPerObject: 20
