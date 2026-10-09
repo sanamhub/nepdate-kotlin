@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kover)
     alias(libs.plugins.maven.publish)
+    alias(libs.plugins.animalsniffer)
 }
 
 kotlin {
@@ -23,10 +24,16 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 dependencies {
+    // A call to an API missing on Android 5.0 fails the build (ADR-0004 gate 8).
+    signature("${libs.animalsniffer.android.signature.get()}@signature")
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)
     testImplementation(kotlin("test-junit5"))
     testRuntimeOnly(libs.junit.platform.launcher)
+}
+
+animalsniffer {
+    sourceSets = listOf(project.sourceSets.main.get())
 }
 
 tasks.test {

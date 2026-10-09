@@ -10,6 +10,8 @@ jqwik = "1.10.1"
 jazzer = "0.30.0"
 kotlinx-benchmark = "0.5.0"
 kotlinx-serialization = "1.11.0"
+animalsniffer = "2.0.1"
+android-api-21 = "5.0.1_r2"
 
 [libraries]
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
@@ -17,6 +19,7 @@ junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 jqwik = { module = "net.jqwik:jqwik", version.ref = "jqwik" }
 jazzer-junit = { module = "com.code-intelligence:jazzer-junit", version.ref = "jazzer" }
+animalsniffer-android-signature = { module = "net.sf.androidscents.signature:android-api-level-21", version.ref = "android-api-21" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
 [plugins]
@@ -27,4 +30,5 @@ kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 dokka-javadoc = { id = "org.jetbrains.dokka-javadoc", version.ref = "dokka" }
+animalsniffer = { id = "ru.vyarus.animalsniffer", version.ref = "animalsniffer" }
 kotlinx-benchmark = { id = "org.jetbrains.kotlinx.benchmark", version.ref = "kotlinx-benchmark" }
