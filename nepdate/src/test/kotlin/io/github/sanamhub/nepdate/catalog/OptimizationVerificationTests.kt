@@ -20,7 +20,8 @@ import kotlin.test.fail
 
 /**
  * C# `Core/OptimizationVerificationTests.cs`, the phase 1 methods (prefixes Constructor, CompareTo,
- * Equals, GetHashCode, Operator, DayOfWeek, EnglishDate, MonthEndDay, IsDefault, IsLeapYear).
+ * Equals, GetHashCode, Operator, DayOfWeek, EnglishDate, MonthEndDay, IsDefault, IsLeapYear) and the
+ * phase 2 methods (prefix Subtraction).
  */
 class OptimizationVerificationTests {
     private fun local(date: NepaliDate): LocalDate = LocalDate.of(date.gregorianYear, date.gregorianMonth, date.gregorianDay)
@@ -252,6 +253,29 @@ class OptimizationVerificationTests {
                 assertEquals(expected, date.dayOfWeek)
             }
         }
+    }
+
+    // C# subtracts dates into a TimeSpan; the port's signed day count is daysUntil (PARITY D-07).
+    @Test
+    fun Subtraction_SameDate_ReturnsZeroDays() {
+        assertEquals(0L, earlier.daysUntil(earlier))
+    }
+
+    @Test
+    fun Subtraction_AdjacentDays_ReturnsOneDay() {
+        assertEquals(1L, earlier.daysUntil(later))
+        assertEquals(-1L, later.daysUntil(earlier))
+    }
+
+    @Test
+    fun Subtraction_CrossMonth_CorrectDays() {
+        assertEquals(1L, NepaliDate.of(2080, 4, 32).daysUntil(NepaliDate.of(2080, 5, 1)))
+    }
+
+    @Test
+    fun Subtraction_CrossYear_CorrectDays() {
+        val lastOfPreviousYear = NepaliDate.of(2080, 12, 1).lastDayOfMonth()
+        assertEquals(1L, lastOfPreviousYear.daysUntil(NepaliDate.of(2081, 1, 1)))
     }
 
     // IsDefault_DefaultStruct_ReturnsTrue and IsDefault_ValidDate_ReturnsFalse: not ported, PARITY D-01
