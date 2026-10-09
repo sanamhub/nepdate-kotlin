@@ -11,6 +11,7 @@ gates=(
   "test koverVerify"
   ":codegen:run --args=--check"
   "checkKotlinAbi"
+  ":nepdate:javaApiTest"
   "animalsnifferMain"
 )
 

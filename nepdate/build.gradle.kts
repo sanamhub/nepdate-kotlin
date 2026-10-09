@@ -48,6 +48,27 @@ animalsniffer {
     sourceSets = listOf(project.sourceSets.main.get())
 }
 
+// ADR-0004 gate 6: Java sources that call the public API as a Java user would (K1-07).
+val javaApiTest: SourceSet by sourceSets.creating {
+    compileClasspath += sourceSets.main.get().output
+    runtimeClasspath += sourceSets.main.get().output
+}
+configurations[javaApiTest.implementationConfigurationName].extendsFrom(configurations.testImplementation.get())
+configurations[javaApiTest.runtimeOnlyConfigurationName].extendsFrom(configurations.testRuntimeOnly.get())
+
+val javaApiTestTask =
+    tasks.register<Test>("javaApiTest") {
+        description = "Calls every public symbol from Java."
+        group = "verification"
+        testClassesDirs = javaApiTest.output.classesDirs
+        classpath = javaApiTest.runtimeClasspath
+        useJUnitPlatform()
+    }
+
+tasks.check {
+    dependsOn(javaApiTestTask)
+}
+
 tasks.test {
     useJUnitPlatform()
     systemProperty("nepdate.shared", rootProject.file("shared").absolutePath)
