@@ -56,6 +56,13 @@ class JavaApiTest {
         assertEquals(NepaliDate.of(2081, 7, 2), end.plusMonths(2, MonthOverflow.SPILL));
         assertEquals(NepaliDate.of(2082, 4, 31), end.plusYears(1));
         assertEquals(NepaliDate.of(2082, 5, 1), end.plusYears(1, MonthOverflow.SPILL));
+
+        DateDiff diff = NepaliDate.of(2080, 1, 1).until(date);
+        assertEquals(false, diff.isNegative());
+        assertEquals(1, diff.getYears());
+        assertEquals(3, diff.getMonths());
+        assertEquals(14, diff.getDays());
+        assertEquals(473L, diff.getTotalDays());
     }
 
     @Test

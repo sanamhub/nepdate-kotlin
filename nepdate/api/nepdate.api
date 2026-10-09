@@ -1,3 +1,14 @@
+public final class io/github/sanamhub/nepdate/DateDiff {
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDays ()I
+	public final fun getMonths ()I
+	public final fun getTotalDays ()J
+	public final fun getYears ()I
+	public fun hashCode ()I
+	public final fun isNegative ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/sanamhub/nepdate/Lang : java/lang/Enum {
 	public static final field ENGLISH Lio/github/sanamhub/nepdate/Lang;
 	public static final field NEPALI Lio/github/sanamhub/nepdate/Lang;
@@ -95,6 +106,7 @@ public final class io/github/sanamhub/nepdate/NepaliDate : java/lang/Comparable 
 	public static synthetic fun plusYears$default (Lio/github/sanamhub/nepdate/NepaliDate;JLio/github/sanamhub/nepdate/MonthOverflow;ILjava/lang/Object;)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun toEpochDay ()J
 	public fun toString ()Ljava/lang/String;
+	public final fun until (Lio/github/sanamhub/nepdate/NepaliDate;)Lio/github/sanamhub/nepdate/DateDiff;
 }
 
 public final class io/github/sanamhub/nepdate/NepaliDate$Companion {

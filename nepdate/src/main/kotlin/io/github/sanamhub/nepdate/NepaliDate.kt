@@ -177,6 +177,28 @@ public class NepaliDate private constructor(
         return plusMonths(years * 12, overflow)
     }
 
+    /**
+     * The calendar distance to [other] in years, months and days (ALGORITHM section 8a): the most
+     * whole months that, added with [MonthOverflow.CLAMP], don't pass the later date, then the days left.
+     *
+     * @return the distance, with [DateDiff.isNegative] set when [other] is earlier
+     */
+    public fun until(other: NepaliDate): DateDiff {
+        val negative = other.serial < serial
+        val from = if (negative) other else this
+        val to = if (negative) this else other
+        // The month difference is right, or one too many when the day of the month runs past
+        // the later date; so step down at most once, never loop.
+        var months =
+            (packedYear(to.ymd) - packedYear(from.ymd)) * 12 + packedMonth(to.ymd) - packedMonth(from.ymd)
+        var landed = from.monthsLaterSerial(months.toLong(), MonthOverflow.CLAMP)
+        if (landed > to.serial) {
+            months--
+            landed = from.monthsLaterSerial(months.toLong(), MonthOverflow.CLAMP)
+        }
+        return DateDiff(negative, months / 12, months % 12, to.serial - landed, daysUntil(other))
+    }
+
     private fun outOfRange(amount: String) =
         NepDateException(NepDateException.Kind.OUT_OF_RANGE, 0, "$this plus $amount is outside $MIN..$MAX")
 
