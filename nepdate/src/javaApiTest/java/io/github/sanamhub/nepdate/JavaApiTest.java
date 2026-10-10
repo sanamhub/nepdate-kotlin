@@ -139,6 +139,10 @@ class JavaApiTest {
         date.appendLongString(out, true, true);
         date.appendLongString(out, true, true, true);
         assertSame(out, date.appendLongString(out, true, true, true, Lang.NEPALI));
+        assertEquals("15.04.81", date.format("dd.MM.yy"));
+        assertEquals("१५.०४.८१", date.format("dd.MM.yy", Lang.NEPALI));
+        assertSame(out, date.formatTo(out, "D"));
+        assertSame(out, date.formatTo(out, "D", Lang.NEPALI));
     }
 
     @Test

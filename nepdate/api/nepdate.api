@@ -132,6 +132,12 @@ public final class io/github/sanamhub/nepdate/NepaliDate : java/lang/Comparable 
 	public final fun daysUntil (Lio/github/sanamhub/nepdate/NepaliDate;)J
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun firstDayOfMonth ()Lio/github/sanamhub/nepdate/NepaliDate;
+	public final fun format (Ljava/lang/String;)Ljava/lang/String;
+	public final fun format (Ljava/lang/String;Lio/github/sanamhub/nepdate/Lang;)Ljava/lang/String;
+	public static synthetic fun format$default (Lio/github/sanamhub/nepdate/NepaliDate;Ljava/lang/String;Lio/github/sanamhub/nepdate/Lang;ILjava/lang/Object;)Ljava/lang/String;
+	public final fun formatTo (Ljava/lang/StringBuilder;Ljava/lang/String;)Ljava/lang/StringBuilder;
+	public final fun formatTo (Ljava/lang/StringBuilder;Ljava/lang/String;Lio/github/sanamhub/nepdate/Lang;)Ljava/lang/StringBuilder;
+	public static synthetic fun formatTo$default (Lio/github/sanamhub/nepdate/NepaliDate;Ljava/lang/StringBuilder;Ljava/lang/String;Lio/github/sanamhub/nepdate/Lang;ILjava/lang/Object;)Ljava/lang/StringBuilder;
 	public final fun getDayOfMonth ()I
 	public final fun getDayOfWeek ()Lio/github/sanamhub/nepdate/Weekday;
 	public final fun getDayOfYear ()I

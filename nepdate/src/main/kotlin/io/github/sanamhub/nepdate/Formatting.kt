@@ -58,6 +58,81 @@ internal fun appendShort(
     return out
 }
 
+/** FORMATTING section 5: a standard pattern, or one left-to-right pass over a custom one. */
+internal fun appendPattern(
+    out: StringBuilder,
+    date: NepaliDate,
+    pattern: String,
+    lang: Lang,
+): StringBuilder =
+    when (pattern) {
+        "", "G", "g", "d" -> appendShort(out, date, DateOrder.YMD, Separator.SLASH, true, lang)
+        "D" -> appendLong(out, date, weekday = false, year = true, pad = true, lang = lang)
+        "s" -> appendShort(out, date, DateOrder.YMD, Separator.DASH, true, lang)
+        else -> appendCustomPattern(out, date, pattern, lang)
+    }
+
+private fun appendCustomPattern(
+    out: StringBuilder,
+    date: NepaliDate,
+    pattern: String,
+    lang: Lang,
+): StringBuilder {
+    var i = 0
+    while (i < pattern.length) {
+        val c = pattern[i]
+        when (c) {
+            // A backslash at the very end writes nothing (FORMATTING section 5).
+            '\\' -> {
+                if (i + 1 < pattern.length) out.append(pattern[i + 1])
+                i += 2
+            }
+            // An unterminated quote runs to the end of the pattern.
+            '\'' -> {
+                val close = pattern.indexOf('\'', i + 1)
+                val end = if (close < 0) pattern.length else close
+                out.append(pattern, i + 1, end)
+                i = end + 1
+            }
+            'y', 'M', 'd' -> {
+                var run = i
+                while (run < pattern.length && pattern[run] == c) run++
+                appendToken(out, date, c, run - i, lang)
+                i = run
+            }
+            else -> {
+                out.append(c)
+                i++
+            }
+        }
+    }
+    return out
+}
+
+private fun appendToken(
+    out: StringBuilder,
+    date: NepaliDate,
+    letter: Char,
+    length: Int,
+    lang: Lang,
+) {
+    when (letter) {
+        'y' ->
+            if (length >= 4) {
+                appendNumber(out, date.year.toLong(), 4, lang)
+            } else {
+                appendNumber(out, (date.year % 100).toLong(), 2, lang)
+            }
+        'M' ->
+            when {
+                length >= 4 -> out.append(date.month.displayName(lang))
+                length == 3 -> out.append(date.month.shortName(lang))
+                else -> appendNumber(out, date.monthValue.toLong(), length, lang)
+            }
+        else -> appendNumber(out, date.dayOfMonth.toLong(), if (length == 2) 2 else 0, lang)
+    }
+}
+
 internal fun appendLong(
     out: StringBuilder,
     date: NepaliDate,

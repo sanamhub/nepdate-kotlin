@@ -263,6 +263,31 @@ public class NepaliDate private constructor(
     ): String = appendLong(StringBuilder(LONG_CAPACITY), this, weekday, year, pad, lang).toString()
 
     /**
+     * The date in a .NET-style [pattern] (FORMATTING section 5): `yyyy`, `yy`, `MMMM`, `MMM`, `MM`,
+     * `M`, `dd`, `d`, quoted `'text'` and `\x` literals, or the standard patterns `""`, `G`, `g`,
+     * `d`, `D` and `s`. For example `dd.MM.yy` gives `15.04.81`.
+     *
+     * @return the formatted date; token digits and names in [lang], literals unchanged
+     */
+    @JvmOverloads
+    public fun format(
+        pattern: String,
+        lang: Lang = Lang.ENGLISH,
+    ): String = appendPattern(StringBuilder(pattern.length + 16), this, pattern, lang).toString()
+
+    /**
+     * Appends [format] to [out]. Allocates nothing once [out] has room.
+     *
+     * @return [out]
+     */
+    @JvmOverloads
+    public fun formatTo(
+        out: StringBuilder,
+        pattern: String,
+        lang: Lang = Lang.ENGLISH,
+    ): StringBuilder = appendPattern(out, this, pattern, lang)
+
+    /**
      * Appends [toShortString] to [out]. Allocates nothing once [out] has room.
      *
      * @return [out]
