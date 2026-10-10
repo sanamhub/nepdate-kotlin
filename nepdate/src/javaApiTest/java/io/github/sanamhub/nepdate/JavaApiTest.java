@@ -146,6 +146,18 @@ class JavaApiTest {
     }
 
     @Test
+    void parsing() throws NepDateException {
+        NepaliDate date = NepaliDate.of(2080, 4, 15);
+        assertEquals(date, NepaliDate.parse("2080/04/15"));
+        assertEquals(date, NepaliDate.parse(new StringBuilder("२०८०-०४-१५")));
+        assertEquals(date, NepaliDate.parseLenient("15 Shrawan 2080"));
+        assertEquals(date, NepaliDate.parseOrNull("2080 4 15"));
+        assertNull(NepaliDate.parseOrNull("15 Shrawan 2080"));
+        NepDateException error = assertThrows(NepDateException.class, () -> NepaliDate.parse("2080/05"));
+        assertEquals(NepDateException.Kind.WRONG_GROUP_COUNT, error.getKind());
+    }
+
+    @Test
     void enumsAndErrors() {
         assertEquals(Month.SHRAWAN, Month.of(4));
         assertEquals(4, Month.SHRAWAN.getValue());

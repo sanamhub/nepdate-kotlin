@@ -158,6 +158,9 @@ public final class io/github/sanamhub/nepdate/NepaliDate : java/lang/Comparable 
 	public static final fun ofEpochDay (J)Lio/github/sanamhub/nepdate/NepaliDate;
 	public static final fun ofGregorian (III)Lio/github/sanamhub/nepdate/NepaliDate;
 	public static final fun ofOrNull (III)Lio/github/sanamhub/nepdate/NepaliDate;
+	public static final fun parse (Ljava/lang/CharSequence;)Lio/github/sanamhub/nepdate/NepaliDate;
+	public static final fun parseLenient (Ljava/lang/CharSequence;)Lio/github/sanamhub/nepdate/NepaliDate;
+	public static final fun parseOrNull (Ljava/lang/CharSequence;)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun plusDays (J)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun plusMonths (J)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun plusMonths (JLio/github/sanamhub/nepdate/MonthOverflow;)Lio/github/sanamhub/nepdate/NepaliDate;
@@ -189,6 +192,9 @@ public final class io/github/sanamhub/nepdate/NepaliDate$Companion {
 	public final fun ofEpochDay (J)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun ofGregorian (III)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun ofOrNull (III)Lio/github/sanamhub/nepdate/NepaliDate;
+	public final fun parse (Ljava/lang/CharSequence;)Lio/github/sanamhub/nepdate/NepaliDate;
+	public final fun parseLenient (Ljava/lang/CharSequence;)Lio/github/sanamhub/nepdate/NepaliDate;
+	public final fun parseOrNull (Ljava/lang/CharSequence;)Lio/github/sanamhub/nepdate/NepaliDate;
 }
 
 public final class io/github/sanamhub/nepdate/NepaliDateRange : kotlin/collections/AbstractList, java/util/RandomAccess {

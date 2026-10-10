@@ -418,6 +418,61 @@ public class NepaliDate private constructor(
 
         private val WEEKDAYS = Weekday.entries
 
+        /**
+         * Strict parsing (PARSING section 1): exactly year, month and day, in ASCII or Devanagari
+         * digits, between the separators `- / . _ \ space । |`. For example `2080/05/15`,
+         * `2080-5-15` or `२०८०/०५/१५`.
+         *
+         * @return the date
+         * @throws NepDateException with a parse kind ([NepDateException.Kind.INVALID_CHARACTER],
+         *   [NepDateException.Kind.WRONG_GROUP_COUNT], [NepDateException.Kind.NUMBER_TOO_LONG]) or a
+         *   validation kind as [of]
+         */
+        @JvmStatic
+        @Throws(NepDateException::class)
+        public fun parse(text: CharSequence): NepaliDate = fromScan(scanStrict(text), text)
+
+        /**
+         * Lenient parsing for human input (PARSING section 2): strict parsing first, then month
+         * names (`15 Shrawan 2080`, `Shrawan 15, 2080`, `१५ साउन २०८०`), era markers (`BS`, `वि.सं.`)
+         * and day-month-year order (`15/04/2080`). It rejects rather than guesses: two-digit years
+         * are [NepDateException.Kind.AMBIGUOUS].
+         *
+         * @return the date
+         * @throws NepDateException with a parse kind or a validation kind as [of]
+         */
+        @JvmStatic
+        @Throws(NepDateException::class)
+        public fun parseLenient(text: CharSequence): NepaliDate = fromScan(scanLenient(text), text)
+
+        /**
+         * Strict parsing as [parse], or null where [parse] would throw. Builds no exception.
+         *
+         * @return the date, or null
+         */
+        @JvmStatic
+        public fun parseOrNull(text: CharSequence): NepaliDate? {
+            val value = scanStrictValid(text)
+            if (value < 0) return null
+            return of(scannedYear(value), scannedMonth(value), scannedDay(value))
+        }
+
+        private fun fromScan(
+            value: Long,
+            text: CharSequence,
+        ): NepaliDate {
+            if (value < 0) {
+                val kind = scanErrorKind(value)
+                throw NepDateException(kind, 0, "\"$text\" is not a date: ${kind.name}")
+            }
+            val year = scannedYear(value)
+            val month = scannedMonth(value)
+            val day = scannedDay(value)
+            val kind = bsErrorKind(year, month, day)
+            if (kind != null) throw bsError(kind, year, month, day)
+            return NepaliDate(toSerial(year, month, day), pack(year, month, day))
+        }
+
         internal fun ofSerial(serial: Int): NepaliDate = NepaliDate(serial, packedBsOf(serial))
     }
 }
@@ -443,7 +498,7 @@ internal fun bsMonthLength(
     return MONTH_START[index + 1] - MONTH_START[index]
 }
 
-private fun bsError(
+internal fun bsError(
     kind: NepDateException.Kind,
     year: Int,
     month: Int,
