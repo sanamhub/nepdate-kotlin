@@ -19,4 +19,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "nepdate-kotlin"
 
-include(":nepdate", ":codegen")
+include(":nepdate", ":nepdate-patro", ":codegen")
