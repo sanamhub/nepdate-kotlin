@@ -41,6 +41,7 @@ dependencies {
     testImplementation(libs.junit.jupiter)
     testImplementation(kotlin("test-junit5"))
     testImplementation(libs.jqwik)
+    testImplementation(libs.jazzer.junit)
     testRuntimeOnly(libs.junit.platform.launcher)
 }
 

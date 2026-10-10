@@ -41,7 +41,7 @@ private fun isStrictSeparator(c: Char): Boolean =
 /** The lenient separators: the strict ones without `.`, plus `,` (PARSING section 2). */
 internal fun isLenientSeparator(c: Char): Boolean = c != '.' && (isStrictSeparator(c) || c == ',')
 
-// One pass mirroring PARSING section 1 step by step; splitting it would hide the order of the checks.
+// One pass mirroring PARSING section 1 step by step; smaller functions would hide the order of the checks.
 
 /** PARSING section 1 steps 1 to 3: three groups of digits, before validation. */
 @Suppress("CyclomaticComplexMethod", "ReturnCount")

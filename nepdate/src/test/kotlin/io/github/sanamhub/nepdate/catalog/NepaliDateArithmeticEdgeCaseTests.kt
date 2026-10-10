@@ -118,7 +118,7 @@ class NepaliDateArithmeticEdgeCaseTests {
 
     @Test
     fun TryParse_AutoAdjust_ValidStandardFormat_ReturnsCorrectDate() {
-        // Without auto-adjusting this is a plain strict parse. K3-04: NepaliDate.parseOrNull("2080/05/15").
-        assertEquals(NepaliDate.of(2080, 5, 15), NepaliDate.ofOrNull(2080, 5, 15))
+        // Without auto-adjusting this is a plain strict parse.
+        assertEquals(NepaliDate.of(2080, 5, 15), NepaliDate.parseOrNull("2080/05/15"))
     }
 }

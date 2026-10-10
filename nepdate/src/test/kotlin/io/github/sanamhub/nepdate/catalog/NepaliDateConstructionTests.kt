@@ -4,15 +4,15 @@ package io.github.sanamhub.nepdate.catalog
 
 import io.github.sanamhub.nepdate.NepDateException
 import io.github.sanamhub.nepdate.NepaliDate
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import kotlin.test.fail
 
 /** C# `Core/NepaliDateConstructionTests.cs`, phase 1. */
 class NepaliDateConstructionTests {
@@ -53,12 +53,10 @@ class NepaliDateConstructionTests {
         assertFailsWith<NepDateException> { NepaliDate.of(year, month, day) }
     }
 
-    // Built with `of` until K3-04: parse("2080/05/15") and the other separators.
     @ParameterizedTest
     @ValueSource(strings = ["2080/05/15", "2080-05-15", "2080.05.15", "2080_05_15", """2080\05\15""", "2080 05 15"])
     fun Constructor_ValidStringFormats_CreatesInstance(input: String) {
-        assertEquals(10, input.length)
-        assertYmd(NepaliDate.of(2080, 5, 15), 2080, 5, 15) // K3-04: NepaliDate.parse(input)
+        assertYmd(NepaliDate.parse(input), 2080, 5, 15)
     }
 
     // Not ported, PARITY D-06 (no day and month swapping, no two-digit year guessing):
@@ -68,16 +66,14 @@ class NepaliDateConstructionTests {
 
     @ParameterizedTest
     @ValueSource(strings = ["", "invalid", "2080/5"])
-    @Disabled(NEEDS_PARSE)
     fun Constructor_InvalidStringFormats_ThrowsException(input: String) {
-        fail("$NEEDS_PARSE: $input")
+        assertFailsWith<NepDateException> { NepaliDate.parse(input) }
     }
 
     @ParameterizedTest
     @ValueSource(strings = ["2080/5/40"])
     fun Constructor_ValidFormatInvalidDate_ThrowsException(input: String) {
-        assertEquals("2080/5/40", input)
-        val error = assertFailsWith<NepDateException> { NepaliDate.of(2080, 5, 40) } // K3-04: parse(input)
+        val error = assertFailsWith<NepDateException> { NepaliDate.parse(input) }
         assertEquals(NepDateException.Kind.INVALID_DAY, error.kind)
     }
 
@@ -88,13 +84,14 @@ class NepaliDateConstructionTests {
 
     @Test
     fun TryParse_ValidString_ReturnsTrueWithCorrectDate() {
-        assertYmd(NepaliDate.of(2080, 5, 15), 2080, 5, 15) // K3-04: NepaliDate.parseOrNull("2080/05/15")
+        val date = NepaliDate.parseOrNull("2080/05/15")
+        assertNotNull(date)
+        assertYmd(date, 2080, 5, 15)
     }
 
     @ParameterizedTest
     @ValueSource(strings = ["", "invalid", "2080/5"])
-    @Disabled(NEEDS_PARSE)
     fun TryParse_InvalidString_ReturnsFalseWithDefault(input: String) {
-        fail("$NEEDS_PARSE: $input")
+        assertNull(NepaliDate.parseOrNull(input))
     }
 }

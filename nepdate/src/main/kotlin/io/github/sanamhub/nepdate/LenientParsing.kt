@@ -2,324 +2,176 @@ package io.github.sanamhub.nepdate
 
 // PARSING sections 2 and 3, on top of the strict scanner in Parsing.kt.
 
-// PARSING section 3. Latin tokens are lower case; input letters are folded to match.
-private val MONTH_TOKENS: Array<String> =
-    arrayOf(
-        "baishakh",
-        "baisakh",
-        "baishak",
-        "vaishakh",
-        "vaisakh",
-        "bai",
-        "बैशाख",
-        "वैशाख",
-        "बैसाख",
-        "jestha",
-        "jeth",
-        "jyestha",
-        "jes",
-        "जेठ",
-        "जेष्ठ",
-        "ज्येष्ठ",
-        "ashad",
-        "ashadh",
-        "asar",
-        "asadh",
-        "asa",
-        "असार",
-        "आषाढ",
-        "असाढ",
-        "shrawan",
-        "shravan",
-        "srawan",
-        "sawan",
-        "saun",
-        "shr",
-        "साउन",
-        "श्रावण",
-        "सावन",
-        "bhadra",
-        "bhadau",
-        "bha",
-        "भदौ",
-        "भाद्र",
-        "भाद्रपद",
-        "ashoj",
-        "asoj",
-        "ashwin",
-        "aso",
-        "असोज",
-        "आश्विन",
-        "असौज",
-        "kartik",
-        "kattik",
-        "kar",
-        "कार्तिक",
-        "कात्तिक",
-        "mangsir",
-        "mansir",
-        "margashirsha",
-        "man",
-        "मंसिर",
-        "मङ्सिर",
-        "मार्गशीर्ष",
-        "poush",
-        "paush",
-        "push",
-        "pus",
-        "pou",
-        "पुष",
-        "पौष",
-        "पुस",
-        "magh",
-        "mag",
-        "माघ",
-        "falgun",
-        "phalgun",
-        "fagun",
-        "fal",
-        "फागुन",
-        "फाल्गुन",
-        "chaitra",
-        "chait",
-        "cha",
-        "चैत",
-        "चैत्र",
-    )
+// PARSING section 2 step 2. nextToken returns one token at a time as a Long, so scanLenient keeps
+// its counts in local variables and allocates nothing: bits 0..30 the start index, bits 31..61 the
+// end index, bit 62 set for a number. -1 means no more tokens.
+private const val END_SHIFT = 31
+private const val NUMBER_FLAG = 1L shl 62
+private const val INDEX_MASK = 0x7FFFFFFFL
 
-// The month of each entry of MONTH_TOKENS.
-private val MONTH_OF_TOKEN: IntArray =
-    intArrayOf(
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        2,
-        3,
-        3,
-        3,
-        3,
-        3,
-        3,
-        3,
-        3,
-        4,
-        4,
-        4,
-        4,
-        4,
-        4,
-        4,
-        4,
-        4,
-        5,
-        5,
-        5,
-        5,
-        5,
-        5,
-        6,
-        6,
-        6,
-        6,
-        6,
-        6,
-        6,
-        7,
-        7,
-        7,
-        7,
-        7,
-        8,
-        8,
-        8,
-        8,
-        8,
-        8,
-        8,
-        9,
-        9,
-        9,
-        9,
-        9,
-        9,
-        9,
-        9,
-        10,
-        10,
-        10,
-        11,
-        11,
-        11,
-        11,
-        11,
-        11,
-        12,
-        12,
-        12,
-        12,
-        12,
-    )
-
-// Era markers, compared case-insensitively, and the words गते and मिति, compared exactly.
-private val DROPPED_TOKENS: Array<String> =
-    arrayOf("bs", "b.s.", "b.s", "vs", "v.s.", "v.s", "बि.सं.", "वि.सं.", "बि.सं", "वि.सं", "गते", "मिति")
-
-/**
- * The reference parser lower-cases with Python's `str.lower()`. The only characters it maps onto
- * an ASCII letter are A to Z and the Kelvin sign; `regionMatches(ignoreCase = true)` would also
- * match the dotless ı and the dotted İ against `i`, which the spec's vectors reject.
- */
-private fun foldCase(c: Char): Char =
-    when (c) {
-        in 'A'..'Z' -> c + ('a' - 'A')
-        'K' -> 'k'
-        else -> c
-    }
-
-@Suppress("ReturnCount") // a length check and a mismatch both end the comparison early
-private fun tokenEquals(
-    text: CharSequence,
+private fun token(
     start: Int,
     end: Int,
-    token: String,
+    number: Boolean,
+): Long = start.toLong() or (end.toLong() shl END_SHIFT) or (if (number) NUMBER_FLAG else 0L)
+
+/** True when the run from [start] to the next separator holds only digits and dots. */
+private fun isNumericRun(
+    text: CharSequence,
+    start: Int,
 ): Boolean {
-    if (end - start != token.length) return false
-    for (i in token.indices) {
-        if (foldCase(text[start + i]) != token[i]) return false
+    var i = start
+    while (i < text.length && !isLenientSeparator(text[i])) {
+        if (text[i] != '.' && digitValue(text[i]) < 0) return false
+        i++
     }
     return true
 }
 
-private fun monthOfWord(
+/** The first number in a run of digits and dots from [from], or -1 when only dots remain. */
+private fun nextNumber(
     text: CharSequence,
-    start: Int,
-    end: Int,
-): Int {
-    for (i in MONTH_TOKENS.indices) {
-        if (tokenEquals(text, start, end, MONTH_TOKENS[i])) return MONTH_OF_TOKEN[i]
-    }
-    return 0
+    from: Int,
+): Long {
+    var i = from
+    while (i < text.length && text[i] == '.') i++
+    if (i == text.length || isLenientSeparator(text[i])) return -1L
+    var end = i
+    while (end < text.length && digitValue(text[end]) >= 0) end++
+    return token(i, end, true)
 }
 
-private fun isDropped(
-    text: CharSequence,
-    start: Int,
-    end: Int,
-): Boolean {
-    for (token in DROPPED_TOKENS) {
-        if (tokenEquals(text, start, end, token)) return true
-    }
-    return false
-}
+// Branches follow PARSING section 2 step 2 one for one: a number inside a run, separators, a
+// run of digits and dots, and a word.
 
 /**
- * What the lenient tokeniser found. A small mutable holder local to one call; escape analysis
- * keeps it off the heap.
+ * The next token at or after [from]. A run without separators is one word, dots included
+ * (`B.S.`), unless it holds only digits and dots: then each run of digits between dots is a number
+ * (`2080.05.15`). Words end at a separator, so [from] inside a run (its previous char isn't a
+ * separator) means the last token was a number of the same run.
  */
-private class LenientTokens {
+@Suppress("CyclomaticComplexMethod", "ReturnCount", "LoopWithTooManyJumpStatements")
+private fun nextToken(
+    text: CharSequence,
+    from: Int,
+): Long {
+    if (from > 0 && from < text.length && !isLenientSeparator(text[from - 1])) {
+        val number = nextNumber(text, from)
+        if (number >= 0) return number
+    }
+    var i = from
+    while (i < text.length) {
+        if (isLenientSeparator(text[i]) || (i > 0 && !isLenientSeparator(text[i - 1]))) {
+            i++
+            continue
+        }
+        if (isNumericRun(text, i)) {
+            val number = nextNumber(text, i)
+            if (number >= 0) return number
+            i++
+            continue
+        }
+        var end = i
+        while (end < text.length && !isLenientSeparator(text[end])) end++
+        return token(i, end, false)
+    }
+    return -1L
+}
+
+// One loop with the counts in locals keeps the lenient parser free of allocation (ADR-0002 section 7).
+
+/** PARSING section 2: the lenient result before validation, or a negative kind. */
+@Suppress("CyclomaticComplexMethod")
+internal fun scanLenient(text: CharSequence): Long {
+    val strict = scanStrictValid(text)
+    if (strict >= 0) return strict
     var numbers = 0
     var words = 0
     var month = 0
     var tooLong = false
-    val values = IntArray(3)
-    val lengths = IntArray(3)
-
-    fun addNumber(
-        value: Int,
-        length: Int,
-    ) {
-        if (length > MAX_DIGITS) tooLong = true
-        if (numbers < 3) {
-            values[numbers] = value
-            lengths[numbers] = length
-        }
-        numbers++
-    }
-}
-
-/** PARSING section 2 step 2: tokenise [text] from [start] to [end], a run without separators. */
-private fun addRawToken(
-    tokens: LenientTokens,
-    text: CharSequence,
-    start: Int,
-    end: Int,
-) {
-    var numeric = true
-    for (i in start until end) {
-        if (digitValue(text[i]) < 0 && text[i] != '.') numeric = false
-    }
-    if (numeric) {
-        // Digits and dots only: each run of digits between dots is a number.
-        var value = 0
-        var length = 0
-        for (i in start..end) {
-            if (i < end && text[i] != '.') {
-                // Values of over four digits only set tooLong; keep the Int from overflowing.
-                if (length < MAX_DIGITS + 1) value = value * 10 + digitValue(text[i])
-                length++
-            } else if (length > 0) {
-                tokens.addNumber(value, length)
-                value = 0
-                length = 0
+    var v0 = 0
+    var v1 = 0
+    var v2 = 0
+    var l0 = 0
+    var l1 = 0
+    var l2 = 0
+    var pos = 0
+    while (true) {
+        val t = nextToken(text, pos)
+        if (t < 0) break
+        val start = (t and INDEX_MASK).toInt()
+        val end = ((t ushr END_SHIFT) and INDEX_MASK).toInt()
+        pos = end
+        if (t and NUMBER_FLAG != 0L) {
+            val length = end - start
+            if (length > MAX_DIGITS) tooLong = true
+            val value = if (length > MAX_DIGITS) 0 else numberValue(text, start, end)
+            when (numbers) {
+                0 -> {
+                    v0 = value
+                    l0 = length
+                }
+                1 -> {
+                    v1 = value
+                    l1 = length
+                }
+                2 -> {
+                    v2 = value
+                    l2 = length
+                }
             }
-        }
-    } else if (!isDropped(text, start, end)) {
-        tokens.words++
-        if (tokens.words == 1) tokens.month = monthOfWord(text, start, end)
-    }
-}
-
-/** PARSING section 2: the lenient result before validation, or a negative kind. */
-internal fun scanLenient(text: CharSequence): Long {
-    val strict = scanStrictValid(text)
-    if (strict >= 0) return strict
-    val tokens = LenientTokens()
-    var start = -1
-    for (i in 0..text.length) {
-        if (i == text.length || isLenientSeparator(text[i])) {
-            if (start >= 0) addRawToken(tokens, text, start, i)
-            start = -1
-        } else if (start < 0) {
-            start = i
+            numbers++
+        } else if (!isDropped(text, start, end)) {
+            words++
+            if (words == 1) month = monthOfWord(text, start, end)
         }
     }
     return when {
-        tokens.tooLong -> scanError(NepDateException.Kind.NUMBER_TOO_LONG)
-        tokens.words == 1 && tokens.month > 0 && tokens.numbers == 2 -> monthNameForm(tokens)
-        tokens.words == 0 && tokens.numbers == 3 -> numericForm(tokens)
+        tooLong -> scanError(NepDateException.Kind.NUMBER_TOO_LONG)
+        words == 1 && month > 0 && numbers == 2 -> monthNameForm(v0, l0, v1, l1, month)
+        words == 0 && numbers == 3 -> numericForm(v0, l0, v1, v2, l2)
         else -> scanError(NepDateException.Kind.UNRECOGNIZED)
     }
 }
 
+private fun numberValue(
+    text: CharSequence,
+    start: Int,
+    end: Int,
+): Int {
+    var value = 0
+    for (i in start until end) value = value * 10 + digitValue(text[i])
+    return value
+}
+
 /** PARSING section 2 step 3: one 4-digit year, and a day of 1 or 2 digits, in either order. */
-private fun monthNameForm(tokens: LenientTokens): Long {
-    val firstIsYear = tokens.lengths[0] == MAX_DIGITS
-    val secondIsYear = tokens.lengths[1] == MAX_DIGITS
-    val year = if (firstIsYear) 0 else 1
-    val day = 1 - year
-    return if (firstIsYear == secondIsYear || tokens.lengths[day] > 2) {
-        scanError(NepDateException.Kind.AMBIGUOUS)
-    } else {
-        scanned(tokens.values[year], tokens.month, tokens.values[day])
+private fun monthNameForm(
+    v0: Int,
+    l0: Int,
+    v1: Int,
+    l1: Int,
+    month: Int,
+): Long {
+    val firstIsYear = l0 == MAX_DIGITS
+    val secondIsYear = l1 == MAX_DIGITS
+    val dayLength = if (firstIsYear) l1 else l0
+    return when {
+        firstIsYear == secondIsYear || dayLength > 2 -> scanError(NepDateException.Kind.AMBIGUOUS)
+        firstIsYear -> scanned(v0, month, v1)
+        else -> scanned(v1, month, v0)
     }
 }
 
 /** PARSING section 2 step 4: `Y M D` or `D M Y`, told apart by the 4-digit year. */
-private fun numericForm(tokens: LenientTokens): Long =
+private fun numericForm(
+    v0: Int,
+    l0: Int,
+    v1: Int,
+    v2: Int,
+    l2: Int,
+): Long =
     when {
-        tokens.lengths[0] == MAX_DIGITS -> scanned(tokens.values[0], tokens.values[1], tokens.values[2])
-        tokens.lengths[2] == MAX_DIGITS -> scanned(tokens.values[2], tokens.values[1], tokens.values[0])
+        l0 == MAX_DIGITS -> scanned(v0, v1, v2)
+        l2 == MAX_DIGITS -> scanned(v2, v1, v0)
         else -> scanError(NepDateException.Kind.AMBIGUOUS)
     }
