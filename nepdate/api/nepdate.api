@@ -54,9 +54,15 @@ public final class io/github/sanamhub/nepdate/Month : java/lang/Enum {
 	public static final field MANGSIR Lio/github/sanamhub/nepdate/Month;
 	public static final field POUSH Lio/github/sanamhub/nepdate/Month;
 	public static final field SHRAWAN Lio/github/sanamhub/nepdate/Month;
+	public final fun displayName ()Ljava/lang/String;
+	public final fun displayName (Lio/github/sanamhub/nepdate/Lang;)Ljava/lang/String;
+	public static synthetic fun displayName$default (Lio/github/sanamhub/nepdate/Month;Lio/github/sanamhub/nepdate/Lang;ILjava/lang/Object;)Ljava/lang/String;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getValue ()I
 	public static final fun of (I)Lio/github/sanamhub/nepdate/Month;
+	public final fun shortName ()Ljava/lang/String;
+	public final fun shortName (Lio/github/sanamhub/nepdate/Lang;)Ljava/lang/String;
+	public static synthetic fun shortName$default (Lio/github/sanamhub/nepdate/Month;Lio/github/sanamhub/nepdate/Lang;ILjava/lang/Object;)Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Lio/github/sanamhub/nepdate/Month;
 	public static fun values ()[Lio/github/sanamhub/nepdate/Month;
 }
@@ -166,6 +172,12 @@ public final class io/github/sanamhub/nepdate/NepaliDateRange$Companion {
 	public final fun ofYear (I)Lio/github/sanamhub/nepdate/NepaliDateRange;
 }
 
+public final class io/github/sanamhub/nepdate/NepaliDigits {
+	public static final fun nepaliDigits (J)Ljava/lang/String;
+	public static final fun nepaliDigits (JI)Ljava/lang/String;
+	public static synthetic fun nepaliDigits$default (JIILjava/lang/Object;)Ljava/lang/String;
+}
+
 public final class io/github/sanamhub/nepdate/Quarter : java/lang/Enum {
 	public static final field Q1 Lio/github/sanamhub/nepdate/Quarter;
 	public static final field Q2 Lio/github/sanamhub/nepdate/Quarter;
@@ -185,7 +197,13 @@ public final class io/github/sanamhub/nepdate/Weekday : java/lang/Enum {
 	public static final field THURSDAY Lio/github/sanamhub/nepdate/Weekday;
 	public static final field TUESDAY Lio/github/sanamhub/nepdate/Weekday;
 	public static final field WEDNESDAY Lio/github/sanamhub/nepdate/Weekday;
+	public final fun displayName ()Ljava/lang/String;
+	public final fun displayName (Lio/github/sanamhub/nepdate/Lang;)Ljava/lang/String;
+	public static synthetic fun displayName$default (Lio/github/sanamhub/nepdate/Weekday;Lio/github/sanamhub/nepdate/Lang;ILjava/lang/Object;)Ljava/lang/String;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun shortName ()Ljava/lang/String;
+	public final fun shortName (Lio/github/sanamhub/nepdate/Lang;)Ljava/lang/String;
+	public static synthetic fun shortName$default (Lio/github/sanamhub/nepdate/Weekday;Lio/github/sanamhub/nepdate/Lang;ILjava/lang/Object;)Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Lio/github/sanamhub/nepdate/Weekday;
 	public static fun values ()[Lio/github/sanamhub/nepdate/Weekday;
 }

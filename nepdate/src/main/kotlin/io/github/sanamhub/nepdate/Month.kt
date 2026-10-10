@@ -42,6 +42,24 @@ public enum class Month {
     /** The month number, 1..12. */
     public val value: Int get() = ordinal + 1
 
+    /**
+     * The month's name (FORMATTING section 1).
+     *
+     * @return `Shrawan`, or `साउन` for [Lang.NEPALI]
+     */
+    @JvmOverloads
+    public fun displayName(lang: Lang = Lang.ENGLISH): String =
+        if (lang == Lang.NEPALI) MONTH_NAMES_NE[ordinal] else MONTH_NAMES_EN[ordinal]
+
+    /**
+     * The three-letter English abbreviation, with `Asa` for Ashad and `Aso` for Ashoj (PARITY D-04).
+     * Nepali has no customary abbreviation, so [Lang.NEPALI] gives the full name.
+     *
+     * @return `Shr`, or `साउन` for [Lang.NEPALI]
+     */
+    @JvmOverloads
+    public fun shortName(lang: Lang = Lang.ENGLISH): String = if (lang == Lang.NEPALI) MONTH_NAMES_NE[ordinal] else MONTH_SHORT_EN[ordinal]
+
     /** Factory. */
     public companion object {
         private val BY_INDEX = entries

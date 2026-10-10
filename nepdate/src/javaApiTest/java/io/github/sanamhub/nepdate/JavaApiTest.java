@@ -99,6 +99,20 @@ class JavaApiTest {
     }
 
     @Test
+    void namesAndDigits() {
+        assertEquals("Shrawan", Month.SHRAWAN.displayName());
+        assertEquals("साउन", Month.SHRAWAN.displayName(Lang.NEPALI));
+        assertEquals("Asa", Month.ASHAD.shortName());
+        assertEquals("असार", Month.ASHAD.shortName(Lang.NEPALI));
+        assertEquals("Tuesday", Weekday.TUESDAY.displayName());
+        assertEquals("मङ्गलवार", Weekday.TUESDAY.displayName(Lang.NEPALI));
+        assertEquals("Tue", Weekday.TUESDAY.shortName());
+        assertEquals("मङ्गल", Weekday.TUESDAY.shortName(Lang.NEPALI));
+        assertEquals("२०८१", NepaliDigits.nepaliDigits(2081));
+        assertEquals("०५", NepaliDigits.nepaliDigits(5, 2));
+    }
+
+    @Test
     void enumsAndErrors() {
         assertEquals(Month.SHRAWAN, Month.of(4));
         assertEquals(4, Month.SHRAWAN.getValue());
