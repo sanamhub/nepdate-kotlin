@@ -13,8 +13,31 @@ const val CALENDAR_JSON = "shared/data/calendar/bs-calendar.json"
 const val CALENDAR_OUTPUT = "nepdate/src/main/kotlin/io/github/sanamhub/nepdate/Calendar.generated.kt"
 
 /** Generated files under [root], relative path to content. */
-fun generate(root: Path): Map<String, String> =
-    mapOf(CALENDAR_OUTPUT to renderCalendar(parseCalendar(root.resolve(CALENDAR_JSON).readText())))
+fun generate(root: Path): Map<String, String> {
+    val calendar = parseCalendar(root.resolve(CALENDAR_JSON).readText())
+    return mapOf(
+        CALENDAR_OUTPUT to renderCalendar(calendar),
+        PATRO_OUTPUT to renderPatro(buildPatroTables(readPatroDays(root, calendar))),
+    )
+}
+
+/** Days of every `shared/data/patro/<year>.json`, read in ascending year. */
+fun readPatroDays(
+    root: Path,
+    calendar: CalendarData,
+): List<PatroDay> {
+    val files =
+        Files.list(root.resolve(PATRO_DIR)).use { stream ->
+            stream.filter { it.fileName.toString().endsWith(".json") }.toList()
+        }
+    return files
+        .map { file ->
+            val year = file.fileName.toString().removeSuffix(".json").toIntOrNull()
+            if (year == null) throw CodegenException("$PATRO_DIR/${file.fileName}: name is not <year>.json")
+            year to file
+        }.sortedBy { it.first }
+        .flatMap { (year, file) -> parsePatroFile(year, file.readText(), calendar) }
+}
 
 /**
  * Writes the generated files under [root], or with [check] compares them and writes nothing.

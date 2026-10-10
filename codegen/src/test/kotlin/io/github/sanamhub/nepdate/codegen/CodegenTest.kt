@@ -29,6 +29,11 @@ class CodegenTest {
         val target = root.resolve(CALENDAR_JSON)
         target.parent.createDirectories()
         target.writeText(json)
+        val patro = root.resolve(PATRO_DIR)
+        patro.createDirectories()
+        Files.list(repoRoot.resolve(PATRO_DIR)).use { files ->
+            files.forEach { Files.copy(it, patro.resolve(it.fileName.toString())) }
+        }
     }
 
     private fun json(transform: (String) -> String) = transform(calendarJson)
@@ -64,8 +69,10 @@ class CodegenTest {
         copyShared()
         assertEquals(0, runCodegen(root, check = false))
         val first = root.resolve(CALENDAR_OUTPUT).readBytes()
+        val firstPatro = root.resolve(PATRO_OUTPUT).readBytes()
         assertEquals(0, runCodegen(root, check = false))
         assertContentEquals(first, root.resolve(CALENDAR_OUTPUT).readBytes())
+        assertContentEquals(firstPatro, root.resolve(PATRO_OUTPUT).readBytes())
     }
 
     @Test
