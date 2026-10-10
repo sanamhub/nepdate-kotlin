@@ -9,6 +9,18 @@ public final class io/github/sanamhub/nepdate/DateDiff {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/sanamhub/nepdate/DateOrder : java/lang/Enum {
+	public static final field DMY Lio/github/sanamhub/nepdate/DateOrder;
+	public static final field DYM Lio/github/sanamhub/nepdate/DateOrder;
+	public static final field MDY Lio/github/sanamhub/nepdate/DateOrder;
+	public static final field MYD Lio/github/sanamhub/nepdate/DateOrder;
+	public static final field YDM Lio/github/sanamhub/nepdate/DateOrder;
+	public static final field YMD Lio/github/sanamhub/nepdate/DateOrder;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/sanamhub/nepdate/DateOrder;
+	public static fun values ()[Lio/github/sanamhub/nepdate/DateOrder;
+}
+
 public final class io/github/sanamhub/nepdate/FiscalYear : java/lang/Comparable {
 	public static final field Companion Lio/github/sanamhub/nepdate/FiscalYear$Companion;
 	public fun <init> (I)V
@@ -103,6 +115,18 @@ public final class io/github/sanamhub/nepdate/NepaliDate : java/lang/Comparable 
 	public static final field Companion Lio/github/sanamhub/nepdate/NepaliDate$Companion;
 	public static final field MAX Lio/github/sanamhub/nepdate/NepaliDate;
 	public static final field MIN Lio/github/sanamhub/nepdate/NepaliDate;
+	public final fun appendLongString (Ljava/lang/StringBuilder;)Ljava/lang/StringBuilder;
+	public final fun appendLongString (Ljava/lang/StringBuilder;Z)Ljava/lang/StringBuilder;
+	public final fun appendLongString (Ljava/lang/StringBuilder;ZZ)Ljava/lang/StringBuilder;
+	public final fun appendLongString (Ljava/lang/StringBuilder;ZZZ)Ljava/lang/StringBuilder;
+	public final fun appendLongString (Ljava/lang/StringBuilder;ZZZLio/github/sanamhub/nepdate/Lang;)Ljava/lang/StringBuilder;
+	public static synthetic fun appendLongString$default (Lio/github/sanamhub/nepdate/NepaliDate;Ljava/lang/StringBuilder;ZZZLio/github/sanamhub/nepdate/Lang;ILjava/lang/Object;)Ljava/lang/StringBuilder;
+	public final fun appendShortString (Ljava/lang/StringBuilder;)Ljava/lang/StringBuilder;
+	public final fun appendShortString (Ljava/lang/StringBuilder;Lio/github/sanamhub/nepdate/DateOrder;)Ljava/lang/StringBuilder;
+	public final fun appendShortString (Ljava/lang/StringBuilder;Lio/github/sanamhub/nepdate/DateOrder;Lio/github/sanamhub/nepdate/Separator;)Ljava/lang/StringBuilder;
+	public final fun appendShortString (Ljava/lang/StringBuilder;Lio/github/sanamhub/nepdate/DateOrder;Lio/github/sanamhub/nepdate/Separator;Z)Ljava/lang/StringBuilder;
+	public final fun appendShortString (Ljava/lang/StringBuilder;Lio/github/sanamhub/nepdate/DateOrder;Lio/github/sanamhub/nepdate/Separator;ZLio/github/sanamhub/nepdate/Lang;)Ljava/lang/StringBuilder;
+	public static synthetic fun appendShortString$default (Lio/github/sanamhub/nepdate/NepaliDate;Ljava/lang/StringBuilder;Lio/github/sanamhub/nepdate/DateOrder;Lio/github/sanamhub/nepdate/Separator;ZLio/github/sanamhub/nepdate/Lang;ILjava/lang/Object;)Ljava/lang/StringBuilder;
 	public fun compareTo (Lio/github/sanamhub/nepdate/NepaliDate;)I
 	public synthetic fun compareTo (Ljava/lang/Object;)I
 	public final fun daysUntil (Lio/github/sanamhub/nepdate/NepaliDate;)J
@@ -136,6 +160,19 @@ public final class io/github/sanamhub/nepdate/NepaliDate : java/lang/Comparable 
 	public final fun plusYears (JLio/github/sanamhub/nepdate/MonthOverflow;)Lio/github/sanamhub/nepdate/NepaliDate;
 	public static synthetic fun plusYears$default (Lio/github/sanamhub/nepdate/NepaliDate;JLio/github/sanamhub/nepdate/MonthOverflow;ILjava/lang/Object;)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun toEpochDay ()J
+	public final fun toIsoString ()Ljava/lang/String;
+	public final fun toLongString ()Ljava/lang/String;
+	public final fun toLongString (Z)Ljava/lang/String;
+	public final fun toLongString (ZZ)Ljava/lang/String;
+	public final fun toLongString (ZZZ)Ljava/lang/String;
+	public final fun toLongString (ZZZLio/github/sanamhub/nepdate/Lang;)Ljava/lang/String;
+	public static synthetic fun toLongString$default (Lio/github/sanamhub/nepdate/NepaliDate;ZZZLio/github/sanamhub/nepdate/Lang;ILjava/lang/Object;)Ljava/lang/String;
+	public final fun toShortString ()Ljava/lang/String;
+	public final fun toShortString (Lio/github/sanamhub/nepdate/DateOrder;)Ljava/lang/String;
+	public final fun toShortString (Lio/github/sanamhub/nepdate/DateOrder;Lio/github/sanamhub/nepdate/Separator;)Ljava/lang/String;
+	public final fun toShortString (Lio/github/sanamhub/nepdate/DateOrder;Lio/github/sanamhub/nepdate/Separator;Z)Ljava/lang/String;
+	public final fun toShortString (Lio/github/sanamhub/nepdate/DateOrder;Lio/github/sanamhub/nepdate/Separator;ZLio/github/sanamhub/nepdate/Lang;)Ljava/lang/String;
+	public static synthetic fun toShortString$default (Lio/github/sanamhub/nepdate/NepaliDate;Lio/github/sanamhub/nepdate/DateOrder;Lio/github/sanamhub/nepdate/Separator;ZLio/github/sanamhub/nepdate/Lang;ILjava/lang/Object;)Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public final fun until (Lio/github/sanamhub/nepdate/NepaliDate;)Lio/github/sanamhub/nepdate/DateDiff;
 }
@@ -187,6 +224,19 @@ public final class io/github/sanamhub/nepdate/Quarter : java/lang/Enum {
 	public final fun getMonths ()Ljava/util/List;
 	public static fun valueOf (Ljava/lang/String;)Lio/github/sanamhub/nepdate/Quarter;
 	public static fun values ()[Lio/github/sanamhub/nepdate/Quarter;
+}
+
+public final class io/github/sanamhub/nepdate/Separator : java/lang/Enum {
+	public static final field BACKSLASH Lio/github/sanamhub/nepdate/Separator;
+	public static final field DASH Lio/github/sanamhub/nepdate/Separator;
+	public static final field DOT Lio/github/sanamhub/nepdate/Separator;
+	public static final field SLASH Lio/github/sanamhub/nepdate/Separator;
+	public static final field SPACE Lio/github/sanamhub/nepdate/Separator;
+	public static final field UNDERSCORE Lio/github/sanamhub/nepdate/Separator;
+	public final fun getChar ()C
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/sanamhub/nepdate/Separator;
+	public static fun values ()[Lio/github/sanamhub/nepdate/Separator;
 }
 
 public final class io/github/sanamhub/nepdate/Weekday : java/lang/Enum {

@@ -2,6 +2,7 @@ package io.github.sanamhub.nepdate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -110,6 +111,34 @@ class JavaApiTest {
         assertEquals("मङ्गल", Weekday.TUESDAY.shortName(Lang.NEPALI));
         assertEquals("२०८१", NepaliDigits.nepaliDigits(2081));
         assertEquals("०५", NepaliDigits.nepaliDigits(5, 2));
+    }
+
+    @Test
+    void formatting() throws NepDateException {
+        NepaliDate date = NepaliDate.of(2081, 4, 15);
+        assertEquals("2081-04-15", date.toIsoString());
+        assertEquals("2081/04/15", date.toShortString());
+        assertEquals("15/04/2081", date.toShortString(DateOrder.DMY));
+        assertEquals("15-04-2081", date.toShortString(DateOrder.DMY, Separator.DASH));
+        assertEquals("15-4-2081", date.toShortString(DateOrder.DMY, Separator.DASH, false));
+        assertEquals("१५-४-२०८१", date.toShortString(DateOrder.DMY, Separator.DASH, false, Lang.NEPALI));
+        assertEquals('\\', Separator.BACKSLASH.getChar());
+        assertEquals("Shrawan 15, 2081", date.toLongString());
+        assertEquals("Tuesday, Shrawan 15, 2081", date.toLongString(true));
+        assertEquals("Tuesday, Shrawan 15", date.toLongString(true, false));
+        assertEquals("Shrawan 15", date.toLongString(false, false, false));
+        assertEquals("साउन १५", date.toLongString(false, false, false, Lang.NEPALI));
+        StringBuilder out = new StringBuilder();
+        date.appendShortString(out);
+        date.appendShortString(out, DateOrder.YMD);
+        date.appendShortString(out, DateOrder.YMD, Separator.DOT);
+        date.appendShortString(out, DateOrder.YMD, Separator.DOT, false);
+        date.appendShortString(out, DateOrder.YMD, Separator.DOT, false, Lang.ENGLISH);
+        date.appendLongString(out);
+        date.appendLongString(out, true);
+        date.appendLongString(out, true, true);
+        date.appendLongString(out, true, true, true);
+        assertSame(out, date.appendLongString(out, true, true, true, Lang.NEPALI));
     }
 
     @Test

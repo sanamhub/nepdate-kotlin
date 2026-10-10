@@ -61,11 +61,11 @@ public class FiscalYear(
         val out = StringBuilder(8)
         out.append(startYear).append('/')
         // Not Math.floorMod: Android has it only from API 24.
-        appendPadded(out, (((startYear.toLong() + 1) % 100 + 100) % 100).toInt(), 2)
+        appendNumber(out, ((startYear.toLong() + 1) % 100 + 100) % 100, 2, Lang.ENGLISH)
         if (lang == Lang.NEPALI) {
             for (i in out.indices) {
                 val c = out[i]
-                if (c in '0'..'9') out.setCharAt(i, (DEVANAGARI_ZERO + (c - '0')).toChar())
+                if (c in '0'..'9') out.setCharAt(i, DEVANAGARI_ZERO + (c - '0'))
             }
         }
         return out.toString()
@@ -89,8 +89,6 @@ public class FiscalYear(
          */
         @JvmStatic
         public fun containing(date: NepaliDate): FiscalYear = FiscalYear(if (date.monthValue >= 4) date.year else date.year - 1)
-
-        private const val DEVANAGARI_ZERO = 0x0966
 
         private fun firstDayOf(
             year: Long,

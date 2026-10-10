@@ -220,15 +220,75 @@ public class NepaliDate private constructor(
     override fun compareTo(other: NepaliDate): Int = serial.compareTo(other.serial)
 
     /** The date as `YYYY/MM/DD` (FORMATTING section 2), for example `2081/04/15`. */
-    override fun toString(): String {
-        val out = StringBuilder(10)
-        appendPadded(out, year, 4)
-        out.append('/')
-        appendPadded(out, monthValue, 2)
-        out.append('/')
-        appendPadded(out, dayOfMonth, 2)
-        return out.toString()
-    }
+    override fun toString(): String = appendShortString(StringBuilder(SHORT_CAPACITY)).toString()
+
+    /**
+     * The date as `YYYY-MM-DD` with ASCII digits (PARITY D-11), for example `2081-04-15`.
+     *
+     * @return the ISO-style string
+     */
+    public fun toIsoString(): String =
+        appendShort(StringBuilder(SHORT_CAPACITY), this, DateOrder.YMD, Separator.DASH, true, Lang.ENGLISH).toString()
+
+    /**
+     * The date as numbers in [order] with [separator] between them (FORMATTING section 3), for
+     * example `2081/04/15`, `15-4-2081` or `२०८१/०४/१५`.
+     *
+     * @param pad 4-digit year and 2-digit month and day when true, no padding when false
+     * @return the short form
+     */
+    @JvmOverloads
+    public fun toShortString(
+        order: DateOrder = DateOrder.YMD,
+        separator: Separator = Separator.SLASH,
+        pad: Boolean = true,
+        lang: Lang = Lang.ENGLISH,
+    ): String = appendShort(StringBuilder(SHORT_CAPACITY), this, order, separator, pad, lang).toString()
+
+    /**
+     * The date with the month name (FORMATTING section 4), for example `Shrawan 15, 2081`,
+     * `Tuesday, Shrawan 15, 2081` or `साउन १५, २०८१`.
+     *
+     * @param weekday start with the weekday's name
+     * @param year end with the year
+     * @param pad write the day with 2 digits
+     * @return the long form
+     */
+    @JvmOverloads
+    public fun toLongString(
+        weekday: Boolean = false,
+        year: Boolean = true,
+        pad: Boolean = true,
+        lang: Lang = Lang.ENGLISH,
+    ): String = appendLong(StringBuilder(LONG_CAPACITY), this, weekday, year, pad, lang).toString()
+
+    /**
+     * Appends [toShortString] to [out]. Allocates nothing once [out] has room.
+     *
+     * @return [out]
+     */
+    @JvmOverloads
+    public fun appendShortString(
+        out: StringBuilder,
+        order: DateOrder = DateOrder.YMD,
+        separator: Separator = Separator.SLASH,
+        pad: Boolean = true,
+        lang: Lang = Lang.ENGLISH,
+    ): StringBuilder = appendShort(out, this, order, separator, pad, lang)
+
+    /**
+     * Appends [toLongString] to [out]. Allocates nothing once [out] has room.
+     *
+     * @return [out]
+     */
+    @JvmOverloads
+    public fun appendLongString(
+        out: StringBuilder,
+        weekday: Boolean = false,
+        year: Boolean = true,
+        pad: Boolean = true,
+        lang: Lang = Lang.ENGLISH,
+    ): StringBuilder = appendLong(out, this, weekday, year, pad, lang)
 
     /** Constants and factories. */
     public companion object {
@@ -413,18 +473,3 @@ private fun gregorianMonthLength(
 }
 
 private fun pad2(value: Int): String = if (value < 10) "0$value" else value.toString()
-
-internal fun appendPadded(
-    out: StringBuilder,
-    value: Int,
-    width: Int,
-) {
-    var digits = 1
-    var rest = value / 10
-    while (rest > 0) {
-        digits++
-        rest /= 10
-    }
-    repeat(width - digits) { out.append('0') }
-    out.append(value)
-}
