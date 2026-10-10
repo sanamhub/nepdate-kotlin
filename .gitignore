@@ -6,3 +6,4 @@ local.properties
 *.gpg
 hs_err_pid*.log
 replay_pid*.log
+.jqwik-database

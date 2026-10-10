@@ -1,0 +1,31 @@
+public final class io/github/sanamhub/nepdate/patro/CalendarInfo {
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEvents ()Ljava/util/List;
+	public final fun getTithi ()Lio/github/sanamhub/nepdate/patro/Named;
+	public fun hashCode ()I
+	public final fun isPublicHoliday ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/sanamhub/nepdate/patro/Named {
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEnglish ()Ljava/lang/String;
+	public final fun getNepali ()Ljava/lang/String;
+	public fun hashCode ()I
+	public final fun name ()Ljava/lang/String;
+	public final fun name (Lio/github/sanamhub/nepdate/Lang;)Ljava/lang/String;
+	public static synthetic fun name$default (Lio/github/sanamhub/nepdate/patro/Named;Lio/github/sanamhub/nepdate/Lang;ILjava/lang/Object;)Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/sanamhub/nepdate/patro/NepaliDatePatro {
+	public static final fun getCalendarInfo (Lio/github/sanamhub/nepdate/NepaliDate;)Lio/github/sanamhub/nepdate/patro/CalendarInfo;
+}
+
+public final class io/github/sanamhub/nepdate/patro/Patro {
+	public static final field INSTANCE Lio/github/sanamhub/nepdate/patro/Patro;
+	public static final fun getCoverage ()Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public static final fun getPublicHolidays ()Ljava/util/List;
+	public static final fun info (Lio/github/sanamhub/nepdate/NepaliDate;)Lio/github/sanamhub/nepdate/patro/CalendarInfo;
+}
+
