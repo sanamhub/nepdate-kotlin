@@ -16,3 +16,8 @@ versions follow [Semantic Versioning](https://semver.org/).
 - `FiscalYear` (1 Shrawan to the end of Ashad) with quarters `Q1`..`Q4`, `NepaliDate.fiscalYear` and
   `NepaliDate.quarter`.
 - `NepaliDateRange`: the days of a month, a year or any span, as a read-only `List<NepaliDate>`.
+- Names and formatting: `Month` and `Weekday` `displayName` and `shortName` in English and Nepali,
+  `nepaliDigits`, `toShortString`, `toLongString`, `toIsoString`, `format` with .NET-style patterns,
+  and the `append*` and `formatTo` forms that write into a caller's `StringBuilder`.
+- Parsing: strict `parse` and `parseOrNull` (ASCII and Devanagari digits), and `parseLenient` for
+  human input with month names, era markers and day-month-year order.
