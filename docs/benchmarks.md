@@ -43,7 +43,7 @@ threads don't share the benchmark forks):
 
 ```
 gradlew.bat :benchmarks:mainBenchmarkJar
-java -jar benchmarks\build\benchmarks\main\jars\benchmarks-main-jmh-0.1.0-SNAPSHOT-JMH.jar ^
+java -jar benchmarks\build\benchmarks\main\jars\benchmarks-main-jmh-0.1.0-JMH.jar ^
   -f 3 -wi 5 -w 1s -i 10 -r 1s -prof gc -rf json -rff benchmarks\build\results.json
 ```
 
