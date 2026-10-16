@@ -13,6 +13,7 @@ import java.time.zone.ZoneRulesException
  * time-zone data has it; on a JDK whose zone data is stripped down, it falls back to a fixed
  * `+05:45` offset, so "today in Nepal" still works (K4-07).
  */
+@Suppress("SwallowedException") // the fallback is the point: a JDK without the zone data still gets Nepal time
 @JvmField
 public val KATHMANDU: ZoneId =
     try {
