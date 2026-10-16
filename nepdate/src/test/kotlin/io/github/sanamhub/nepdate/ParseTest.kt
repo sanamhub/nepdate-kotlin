@@ -41,7 +41,7 @@ class ParseTest {
 
     @Test
     fun `strict column of parse tsv`() {
-        assertTrue(rows.size >= 57)
+        assertEquals(67, rows.size)
         for (row in rows) check(row.getValue("input"), row.getValue("strict")) { NepaliDate.parse(it) }
     }
 
@@ -80,6 +80,11 @@ class ParseTest {
         assertEquals(
             NepDateException.Kind.UNRECOGNIZED,
             assertFailsWith<NepDateException> { NepaliDate.parseLenient("15 Baıshakh 2080") }.kind,
+        )
+        // The long s ſ (U+017F) is not folded either (PARSING section 2, hub 1d7ca17).
+        assertEquals(
+            NepDateException.Kind.UNRECOGNIZED,
+            assertFailsWith<NepDateException> { NepaliDate.parseLenient("15 ſhrawan 2080") }.kind,
         )
     }
 }
