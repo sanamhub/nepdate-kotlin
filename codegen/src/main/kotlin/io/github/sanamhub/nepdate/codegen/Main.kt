@@ -32,7 +32,11 @@ fun readPatroDays(
         }
     return files
         .map { file ->
-            val year = file.fileName.toString().removeSuffix(".json").toIntOrNull()
+            val year =
+                file.fileName
+                    .toString()
+                    .removeSuffix(".json")
+                    .toIntOrNull()
             if (year == null) throw CodegenException("$PATRO_DIR/${file.fileName}: name is not <year>.json")
             year to file
         }.sortedBy { it.first }

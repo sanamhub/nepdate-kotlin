@@ -197,6 +197,16 @@ public final class io/github/sanamhub/nepdate/NepaliDate$Companion {
 	public final fun parseOrNull (Ljava/lang/CharSequence;)Lio/github/sanamhub/nepdate/NepaliDate;
 }
 
+public final class io/github/sanamhub/nepdate/NepaliDateJavaTime {
+	public static final field KATHMANDU Ljava/time/ZoneId;
+	public static final fun nepaliToday ()Lio/github/sanamhub/nepdate/NepaliDate;
+	public static final fun nepaliToday (Ljava/time/Clock;)Lio/github/sanamhub/nepdate/NepaliDate;
+	public static final fun nepaliToday (Ljava/time/ZoneId;)Lio/github/sanamhub/nepdate/NepaliDate;
+	public static synthetic fun nepaliToday$default (Ljava/time/ZoneId;ILjava/lang/Object;)Lio/github/sanamhub/nepdate/NepaliDate;
+	public static final fun toLocalDate (Lio/github/sanamhub/nepdate/NepaliDate;)Ljava/time/LocalDate;
+	public static final fun toNepaliDate (Ljava/time/LocalDate;)Lio/github/sanamhub/nepdate/NepaliDate;
+}
+
 public final class io/github/sanamhub/nepdate/NepaliDateRange : kotlin/collections/AbstractList, java/util/RandomAccess {
 	public static final field Companion Lio/github/sanamhub/nepdate/NepaliDateRange$Companion;
 	public fun contains (Lio/github/sanamhub/nepdate/NepaliDate;)Z

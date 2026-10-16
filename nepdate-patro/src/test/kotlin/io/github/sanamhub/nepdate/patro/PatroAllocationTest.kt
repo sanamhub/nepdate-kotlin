@@ -40,7 +40,12 @@ class PatroAllocationTest {
         assertNoAllocation("Patro.info") { i -> if (Patro.info(dates[i and 63]).isPublicHoliday) 1L else 0L }
         assertNoAllocation("calendarInfo") { i -> if (dates[i and 63].calendarInfo.tithi == null) 1L else 0L }
         assertNoAllocation("events") { i -> System.identityHashCode(Patro.info(dates[i and 63]).events).toLong() and 1L }
-        assertNoAllocation("events.size") { i -> Patro.info(dates[i and 63]).events.size.toLong() }
+        assertNoAllocation("events.size") { i ->
+            Patro
+                .info(dates[i and 63])
+                .events.size
+                .toLong()
+        }
         assertNoAllocation("events[i]") { i ->
             val events = Patro.info(dates[i and 63]).events
             if (events.isEmpty()) 0L else events[i % events.size].english.length.toLong()

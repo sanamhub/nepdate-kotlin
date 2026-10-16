@@ -2,14 +2,16 @@
 
 package io.github.sanamhub.nepdate.catalog
 
+import io.github.sanamhub.nepdate.KATHMANDU
 import io.github.sanamhub.nepdate.Month
 import io.github.sanamhub.nepdate.NepaliDate
 import io.github.sanamhub.nepdate.Weekday
-import org.junit.jupiter.api.Disabled
+import io.github.sanamhub.nepdate.nepaliToday
+import io.github.sanamhub.nepdate.toNepaliDate
+import java.time.LocalDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.fail
 
 /** C# `Core/NepaliDatePropertiesTests.cs`, phase 1. */
 class NepaliDatePropertiesTests {
@@ -36,9 +38,9 @@ class NepaliDatePropertiesTests {
     }
 
     @Test
-    @Disabled(NEEDS_TODAY)
     fun Today_ReturnsCurrentNepaliDate() {
-        fail(NEEDS_TODAY)
+        // Today in Nepal time, not the device zone (ADR-0003, K4-07).
+        assertEquals(LocalDate.now(KATHMANDU).toNepaliDate(), nepaliToday())
     }
 
     @Test
