@@ -74,10 +74,12 @@ Kotlin extension is `Patro.info` in Java.
 shared/                  hub copy: data/, spec/, VERSION
 settings.gradle.kts      modules :nepdate, :nepdate-patro, :codegen, :benchmarks
 gradle/libs.versions.toml
-nepdate/                 core artifact                       (phase K0)
-nepdate-patro/           patro artifact                      (phase K4)
+nepdate/                 core artifact
+nepdate-patro/           patro artifact
 codegen/                 JVM app: generates the Kotlin tables from shared/data (not published)
-benchmarks/              kotlinx-benchmark (JMH) vs competitors (phase K5, not published)
+benchmarks/              kotlinx-benchmark (JMH) vs competitors (not published)
+samples/                 Android size and benchmark samples (separate builds)
+tools/consumer-check/    throwaway mavenLocal consumer (proves the published coordinates)
 docs/                    API.md, competitors.md, adr/, plan/, runbooks/
 ```
 

@@ -16,6 +16,7 @@ gates=(
   "checkCoreSplit"
   "CORE_ALONE"
   "animalsnifferMain"
+  "check-docs"
 )
 
 passed=0
@@ -28,6 +29,9 @@ for gate in "${gates[@]}"; do
       echo "ci: :nepdate:build runs a :nepdate-patro: task"
       exit 1
     fi
+  elif [ "$gate" = "check-docs" ]; then
+    echo "ci: ./scripts/check-docs.sh"
+    ./scripts/check-docs.sh
   else
     echo "ci: ./gradlew $gate"
     # shellcheck disable=SC2086 # each gate is a list of Gradle arguments
