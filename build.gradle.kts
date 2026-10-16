@@ -92,6 +92,11 @@ configure(subprojects.filter { it.path in libraryProjects }) {
             useJUnitPlatform()
             systemProperty("nepdate.shared", rootProject.file("shared").absolutePath)
             systemProperty("nepdate.repoRoot", rootProject.projectDir.absolutePath)
+            // ReadmeExamplesTest reads these files at runtime; declare them as inputs so a doc
+            // change re-runs the test instead of being skipped as up-to-date.
+            inputs.file(rootProject.file("README.md"))
+            inputs.file(rootProject.file("nepdate-patro/src/javaApiTest/java/io/github/sanamhub/nepdate/patro/ReadmeExamples.java"))
+            inputs.file(rootProject.file("tools/consumer-check/build.gradle.kts"))
             // CI also runs the tests on Java 11, the bytecode target: -PtestJavaVersion=11.
             providers.gradleProperty("testJavaVersion").orNull?.let { version ->
                 val toolchains = project.extensions.getByType<JavaToolchainService>()
