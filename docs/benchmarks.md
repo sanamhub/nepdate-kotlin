@@ -108,3 +108,26 @@ not a code regression; a profile is not meaningful on a loaded machine, so none 
 - shivathapaa has no parser in `nepali-date-picker-core`, so B6 has no shivathapaa column.
 - The published `nepdate` and `nepdate-patro` POMs are unchanged by this task: `:benchmarks` is a
   standalone module and none of its dependencies are published.
+
+## Android APK size (R8 release builds)
+
+`samples/android-size/` builds three release variants of the same minimal app with R8 enabled: a
+baseline with no NepDate, one with `nepdate` only, and one with `nepdate` + `nepdate-patro`.
+Measured 2026-10-17 with AGP 9.4.1, compileSdk 36, minSdk 21, no core library desugaring.
+
+| Variant | APK size | Delta vs bare |
+|---|---:|---:|
+| bare (no NepDate) | 15,562 B | |
+| core (`nepdate`) | 21,374 B | +5,812 B (5.7 KB) |
+| patro (`nepdate` + `nepdate-patro`) | 59,146 B | +43,584 B (42.6 KB) |
+
+Both deltas are inside the K5-03 targets (nepdate at most 60 KB, nepdate + patro at most 200 KB).
+
+## Android on-device benchmarks (blocked)
+
+`samples/android-bench/` builds the `androidx.benchmark` 1.5.0 microbenchmark and macrobenchmark
+modules (B1, B2, B5, B6, B7 on one input and the 64-input loop; cold-start core and patro init
+sections). CI only compiles them (`assembleAndroidTest`); running them needs the physical Pixel 6a
+used by `nepdate-mobile` (`./gradlew :microbenchmark:connectedCheck` and
+`:macrobenchmark:connectedCheck`), which is a human task. The medians will be copied here with the
+device, Android version and the `androidx.benchmark` JSON file once that run happens.
