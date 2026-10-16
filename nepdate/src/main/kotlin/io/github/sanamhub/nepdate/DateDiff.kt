@@ -16,6 +16,7 @@ public class DateDiff internal constructor(
     /** The signed day count, the same as [NepaliDate.daysUntil]. */
     public val totalDays: Long,
 ) {
+    /** Equal when [isNegative], [years], [months], [days] and [totalDays] all match. */
     override fun equals(other: Any?): Boolean =
         other is DateDiff &&
             other.isNegative == isNegative &&
@@ -24,6 +25,7 @@ public class DateDiff internal constructor(
             other.days == days &&
             other.totalDays == totalDays
 
+    /** Equal distances have the same hash code. */
     override fun hashCode(): Int {
         // Written out: Boolean.hashCode() and Long.hashCode() compile to static methods Android
         // only has from API 24 (animalsniffer, ADR-0004 gate 8).

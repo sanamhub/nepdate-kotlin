@@ -12,6 +12,10 @@ kotlinx-benchmark = "0.5.0"
 kotlinx-serialization = "1.11.0"
 animalsniffer = "2.0.1"
 android-api-21 = "5.0.1_r2"
+jmh = "1.37"
+shivathapaa = "3.3.0"
+adbs = "v4.0.0"
+aagitoex = "0.0.1-beta01"
 
 [libraries]
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
@@ -21,6 +25,10 @@ jqwik = { module = "net.jqwik:jqwik", version.ref = "jqwik" }
 jazzer-junit = { module = "com.code-intelligence:jazzer-junit", version.ref = "jazzer" }
 animalsniffer-android-signature = { module = "net.sf.androidscents.signature:android-api-level-21", version.ref = "android-api-21" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+jmh-core = { module = "org.openjdk.jmh:jmh-core", version.ref = "jmh" }
+nepali-date-picker-core = { module = "io.github.shivathapaa:nepali-date-picker-core", version.ref = "shivathapaa" }
+adbs-core = { module = "com.github.dhiraj-var.adbs:adbs-core", version.ref = "adbs" }
+aagitoex-nepdate = { module = "io.github.aagitoex:nepdate", version.ref = "aagitoex" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -32,3 +40,4 @@ dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 dokka-javadoc = { id = "org.jetbrains.dokka-javadoc", version.ref = "dokka" }
 animalsniffer = { id = "ru.vyarus.animalsniffer", version.ref = "animalsniffer" }
 kotlinx-benchmark = { id = "org.jetbrains.kotlinx.benchmark", version.ref = "kotlinx-benchmark" }
+allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }

@@ -1,0 +1,114 @@
+name: release
+
+# ADR-0005: real releases run on a vX.Y.Z tag push (production approval, publish, GitHub Release).
+# workflow_dispatch is the dry run: preflight and CI run, publishing and the release are skipped.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Tag or ref for the dry run (for example v0.1.0)"
+        required: true
+        default: "v0.1.0"
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    name: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.inputs.ref || github.ref }}
+          persist-credentials: false
+      - name: Version, tag and changelog agree
+        run: |
+          VERSION=$(grep '^version=' gradle.properties | cut -d= -f2)
+          echo "version: $VERSION"
+          grep -q "^## \[$VERSION\]" CHANGELOG.md || {
+            echo "CHANGELOG.md has no section ## [$VERSION] (move it out of [Unreleased])"
+            exit 1
+          }
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            TAG="${GITHUB_REF_NAME#v}"
+            [ "$TAG" = "$VERSION" ] || {
+              echo "tag v$TAG does not match version $VERSION"
+              exit 1
+            }
+          fi
+
+  ci:
+    name: ci
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.inputs.ref || github.ref }}
+          persist-credentials: false
+      - uses: gradle/actions/wrapper-validation@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - run: ./scripts/ci.sh
+
+  publish:
+    name: publish
+    needs: ci
+    # Only a real vX.Y.Z tag push publishes; workflow_dispatch is the dry run (ADR-0005).
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    environment: production
+    # The GitHub Release needs write; every other job reads only.
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - name: Publish both artifacts to Maven Central
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.ORG_GRADLE_PROJECT_mavenCentralUsername }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.ORG_GRADLE_PROJECT_mavenCentralPassword }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.ORG_GRADLE_PROJECT_signingInMemoryKey }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.ORG_GRADLE_PROJECT_signingInMemoryKeyPassword }}
+        run: ./gradlew --console=plain publishAndReleaseToMavenCentral
+      - name: GitHub Release from the changelog section
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          NOTES=$(awk -v v="$VERSION" '
+            $0 == "## [" v "]" { found = 1; next }
+            found && /^## \[/ { exit }
+            found { print }
+          ' CHANGELOG.md)
+          gh release create "$GITHUB_REF_NAME" --title "nepdate-kotlin $VERSION" --notes "$NOTES"
+      - name: Wait until repo1.maven.org serves both POMs
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          for artifact in nepdate nepdate-patro; do
+            url="https://repo1.maven.org/maven2/io/github/sanamhub/$artifact/$VERSION/$artifact-$VERSION.pom"
+            for i in $(seq 1 60); do
+              if curl -sf -o /dev/null "$url"; then
+                echo "serving: $url"
+                break
+              fi
+              echo "waiting ($i/60): $url"
+              sleep 30
+            done
+            curl -sf -o /dev/null "$url" || { echo "never served: $url"; exit 1; }
+          done

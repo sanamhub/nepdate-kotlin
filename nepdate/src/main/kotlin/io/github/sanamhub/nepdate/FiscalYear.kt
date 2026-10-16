@@ -71,10 +71,13 @@ public class FiscalYear(
         return out.toString()
     }
 
+    /** Orders by [startYear]. */
     override fun compareTo(other: FiscalYear): Int = startYear.compareTo(other.startYear)
 
+    /** Equal when both start in the same BS year. */
     override fun equals(other: Any?): Boolean = other is FiscalYear && other.startYear == startYear
 
+    /** The hash code of [startYear]. */
     override fun hashCode(): Int = startYear
 
     /** The same as [label] in English, for example `2082/83`. */

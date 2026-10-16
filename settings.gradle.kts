@@ -14,9 +14,21 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         mavenCentral()
+        // JitPack hosts the two JitPack-only benchmark competitors (K5-02). exclusiveContent
+        // keeps every other dependency resolving from Maven Central only (ADR-0001 decision 4).
+        exclusiveContent {
+            forRepository {
+                maven {
+                    url = uri("https://jitpack.io")
+                }
+            }
+            filter {
+                includeGroup("com.github.dhiraj-var.adbs")
+            }
+        }
     }
 }
 
 rootProject.name = "nepdate-kotlin"
 
-include(":nepdate", ":nepdate-patro", ":codegen")
+include(":nepdate", ":nepdate-patro", ":codegen", ":benchmarks")
