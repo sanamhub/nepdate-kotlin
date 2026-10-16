@@ -6,11 +6,16 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(providers.gradleProperty("nepdateToolchain").orNull?.toInt() ?: 17)
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_17)
         allWarningsAsErrors.set(true)
     }
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    // Match the Kotlin jvmTarget so JVM-target validation passes on every toolchain JDK.
+    options.release.set(17)
 }
 
 dependencies {

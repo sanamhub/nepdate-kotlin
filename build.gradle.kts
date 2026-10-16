@@ -40,10 +40,14 @@ subprojects {
 // own artifact id, POM name and description, and dependencies.
 val libraryProjects = setOf(":nepdate", ":nepdate-patro")
 
+// K6-03: the build toolchain, default 17 (ADR-0001). Override with -PnepdateToolchain=25 to run
+// the whole CI on a newer JDK; the JDK must be registered in org.gradle.java.installations.paths.
+val nepdateToolchain: Int = providers.gradleProperty("nepdateToolchain").orNull?.toInt() ?: 17
+
 configure(subprojects.filter { it.path in libraryProjects }) {
     pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
         configure<KotlinJvmProjectExtension> {
-            jvmToolchain(17)
+            jvmToolchain(nepdateToolchain)
             explicitApi()
             compilerOptions {
                 jvmTarget.set(JvmTarget.JVM_11)
