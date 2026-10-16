@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kover)
     alias(libs.plugins.maven.publish)
     alias(libs.plugins.animalsniffer)
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.dokka.javadoc)
 }
 
 dependencies {

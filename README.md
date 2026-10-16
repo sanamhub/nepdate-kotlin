@@ -21,7 +21,42 @@ is [NepDate](https://github.com/RajuPrasai/NepDate). The Android app in
 Neither `java.time`, ThreeTen-Extra, ICU4J nor Android's `android.icu` has a Bikram Sambat
 calendar (sources in [docs/competitors.md](docs/competitors.md)). Use this library for Nepali dates.
 
-**Status:** planning complete, implementation not started (next: phase K0).
+## Quick start
+
+Add the artifacts (same version, released together). Apps that only convert, format and parse
+dates need `nepdate` alone; `nepdate-patro` adds the patro (the Nepali almanac: tithi, public
+holidays and events).
+
+```gradle
+dependencies {
+    implementation("io.github.sanamhub:nepdate:0.1.0")
+    implementation("io.github.sanamhub:nepdate-patro:0.1.0")
+}
+```
+
+Kotlin:
+
+```kotlin
+val date = NepaliDate.of(2081, 4, 15)
+val fromAd = NepaliDate.ofGregorian(2024, 7, 30)
+val longForm = date.toLongString(lang = Lang.NEPALI)
+val parsed = NepaliDate.parseLenient("15 Shrawan 2080")
+val tithi = date.calendarInfo.tithi
+```
+
+Java:
+
+```java
+NepaliDate date = NepaliDate.of(2081, 4, 15);
+NepaliDate fromAd = NepaliDate.ofGregorian(2024, 7, 30);
+String longForm = date.toLongString(false, true, true, Lang.NEPALI);
+NepaliDate parsed = NepaliDate.parseLenient("15 Shrawan 2080");
+Named tithi = Patro.info(date).getTithi();
+```
+
+`NepaliDate.ofGregorian(2024, 7, 30)` is BS 2081-04-15. `toLongString` in Nepali prints `साउन
+१५, २०८१`; `parseLenient` accepts month names such as `15 Shrawan 2080`. The `calendarInfo`
+Kotlin extension is `Patro.info` in Java.
 
 ## Where to start
 

@@ -17,6 +17,7 @@ public class NepaliDateRange internal constructor(
     /** The last day, included. */
     public val endInclusive: NepaliDate get() = NepaliDate.ofSerial(last)
 
+    /** The number of days, first to last included. */
     override val size: Int get() = last - first + 1
 
     /** The day at [index]; throws [IndexOutOfBoundsException] outside `0 until size`. */
@@ -25,10 +26,25 @@ public class NepaliDateRange internal constructor(
         return NepaliDate.ofSerial(first + index)
     }
 
+    /**
+     * Whether [element] is one of the range's days.
+     *
+     * @return true when [element] is between [start] and [endInclusive]
+     */
     override fun contains(element: NepaliDate): Boolean = element.serial in first..last
 
+    /**
+     * The position of [element] in the range.
+     *
+     * @return the 0-based index, or -1 when [element] is outside the range
+     */
     override fun indexOf(element: NepaliDate): Int = if (contains(element)) element.serial - first else -1
 
+    /**
+     * The same as [indexOf]: a range has no duplicates.
+     *
+     * @return the 0-based index, or -1 when [element] is outside the range
+     */
     override fun lastIndexOf(element: NepaliDate): Int = indexOf(element)
 
     /** Factories. */

@@ -214,6 +214,7 @@ public class NepaliDate private constructor(
     /** Equal when both are the same day. */
     override fun equals(other: Any?): Boolean = other is NepaliDate && other.serial == serial
 
+    /** Equal dates have the same hash code. */
     override fun hashCode(): Int = serial
 
     /** Orders by day: negative when this date is earlier than [other]. */

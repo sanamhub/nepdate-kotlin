@@ -11,6 +11,7 @@ gates=(
   "test koverVerify"
   ":codegen:run --args=--check"
   "checkKotlinAbi"
+  ":dokkaGenerate"
   "javaApiTest"
   "checkCoreSplit"
   "CORE_ALONE"

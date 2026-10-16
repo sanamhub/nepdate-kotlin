@@ -13,6 +13,8 @@ plugins {
     alias(libs.plugins.kover) apply false
     alias(libs.plugins.maven.publish) apply false
     alias(libs.plugins.animalsniffer) apply false
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.dokka.javadoc) apply false
 }
 
 subprojects {
@@ -89,6 +91,7 @@ configure(subprojects.filter { it.path in libraryProjects }) {
         tasks.named<Test>("test") {
             useJUnitPlatform()
             systemProperty("nepdate.shared", rootProject.file("shared").absolutePath)
+            systemProperty("nepdate.repoRoot", rootProject.projectDir.absolutePath)
             // CI also runs the tests on Java 11, the bytecode target: -PtestJavaVersion=11.
             providers.gradleProperty("testJavaVersion").orNull?.let { version ->
                 val toolchains = project.extensions.getByType<JavaToolchainService>()
@@ -153,11 +156,34 @@ configure(subprojects.filter { it.path in libraryProjects }) {
             }
         }
     }
+
+    // K5-01: Dokka HTML for both modules, with every public symbol documented. reportUndocumented
+    // turns missing KDoc into a report; failOnWarning makes it fail the build.
+    pluginManager.withPlugin("org.jetbrains.dokka") {
+        configure<org.jetbrains.dokka.gradle.DokkaExtension> {
+            dokkaSourceSets.configureEach {
+                reportUndocumented.set(true)
+            }
+            dokkaPublications.configureEach {
+                failOnWarning.set(true)
+            }
+        }
+    }
 }
 
 // ADR-0004 gate 7, K4-05: the core artifact carries no patro data and doesn't depend on the patro.
 evaluationDependsOn(":nepdate")
 evaluationDependsOn(":nepdate-patro")
+
+// K5-01: aggregate both modules' Dokka HTML into one site (`./gradlew :dokkaGenerate`). Each module
+// applies org.jetbrains.dokka in its own build file; the root project collects them with dokka(...).
+configure<org.jetbrains.dokka.gradle.DokkaExtension> {
+    moduleName.set("nepdate-kotlin")
+}
+dependencies {
+    dokka(project(":nepdate"))
+    dokka(project(":nepdate-patro"))
+}
 
 val checkCoreSplit by tasks.registering {
     description = "Fails if the core jar or POM refers to the patro, or the core uses java.text or java.time outside JavaTime.kt."
