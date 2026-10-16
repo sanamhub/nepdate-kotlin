@@ -3,6 +3,7 @@ import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
+import ru.vyarus.gradle.plugin.animalsniffer.AnimalSniffer
 import ru.vyarus.gradle.plugin.animalsniffer.AnimalSnifferExtension
 
 plugins {
@@ -116,6 +117,11 @@ configure(subprojects.filter { it.path in libraryProjects }) {
         }
         configure<AnimalSnifferExtension> {
             sourceSets = listOf(the<SourceSetContainer>().getByName("main"))
+        }
+        // JavaTime.kt is the only file that touches java.time and is documented as needing it
+        // (ADR-0004 gate 8); checkCoreSplit still proves no other core class references java.time.
+        tasks.withType<AnimalSniffer>().configureEach {
+            exclude("**/NepaliDateJavaTime.class")
         }
     }
 
