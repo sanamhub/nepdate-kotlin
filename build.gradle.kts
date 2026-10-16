@@ -148,3 +148,46 @@ configure(subprojects.filter { it.path in libraryProjects }) {
         }
     }
 }
+
+// ADR-0004 gate 7, K4-05: the core artifact carries no patro data and doesn't depend on the patro.
+evaluationDependsOn(":nepdate")
+evaluationDependsOn(":nepdate-patro")
+
+val checkCoreSplit by tasks.registering {
+    description = "Fails if the core jar or POM refers to the patro, or the core uses java.text or java.time outside JavaTime.kt."
+    group = "verification"
+    val coreJar = project(":nepdate").tasks.named<Jar>("jar").flatMap { it.archiveFile }
+    val patroJar = project(":nepdate-patro").tasks.named<Jar>("jar").flatMap { it.archiveFile }
+    val corePomTask = project(":nepdate").tasks.named<GenerateMavenPom>("generatePomFileForMavenPublication")
+    val corePom = corePomTask.map { it.destination }
+    dependsOn(":nepdate:jar", ":nepdate-patro:jar", corePomTask)
+    inputs.file(coreJar)
+    inputs.file(patroJar)
+    inputs.file(corePom)
+    doLast {
+        val marker = "World Day Against Human Trafficking".toByteArray(Charsets.UTF_8)
+
+        fun ByteArray.has(needle: ByteArray): Boolean =
+            (0..size - needle.size).any { start -> needle.indices.all { this[start + it] == needle[it] } }
+
+        fun entries(jar: File): Map<String, ByteArray> =
+            java.util.zip.ZipFile(jar).use { zip ->
+                zip.entries().toList().filter { !it.isDirectory }.associate { it.name to zip.getInputStream(it).readBytes() }
+            }
+
+        val problems = mutableListOf<String>()
+        if ("nepdate-patro" in corePom.get().readText()) problems += "the core POM names nepdate-patro"
+        val core = entries(coreJar.get().asFile)
+        core.filterValues { it.has(marker) }.keys.forEach { problems += "core jar entry $it holds patro data" }
+        if (entries(patroJar.get().asFile).values.none { it.has(marker) }) problems += "the patro jar lacks the patro data"
+        val javaText = "java/text/".toByteArray()
+        val javaTime = "java/time/".toByteArray()
+        for ((name, bytes) in core.filterKeys { it.endsWith(".class") }) {
+            if (bytes.has(javaText)) problems += "$name uses java.text"
+            if (name != "io/github/sanamhub/nepdate/NepaliDateJavaTime.class" && bytes.has(javaTime)) {
+                problems += "$name uses java.time outside JavaTime.kt"
+            }
+        }
+        if (problems.isNotEmpty()) throw GradleException("checkCoreSplit:\n" + problems.joinToString("\n"))
+    }
+}

@@ -12,14 +12,26 @@ gates=(
   ":codegen:run --args=--check"
   "checkKotlinAbi"
   "javaApiTest"
+  "checkCoreSplit"
+  "CORE_ALONE"
   "animalsnifferMain"
 )
 
 passed=0
 for gate in "${gates[@]}"; do
-  echo "ci: ./gradlew $gate"
-  # shellcheck disable=SC2086 # each gate is a list of Gradle arguments
-  ./gradlew --console=plain $gate
+  if [ "$gate" = "CORE_ALONE" ]; then
+    # K4-05: building the core must not touch the patro module.
+    echo "ci: ./gradlew :nepdate:build --dry-run (no :nepdate-patro: task)"
+    plan=$(./gradlew --console=plain :nepdate:build --dry-run)
+    if grep -q ":nepdate-patro:" <<<"$plan"; then
+      echo "ci: :nepdate:build runs a :nepdate-patro: task"
+      exit 1
+    fi
+  else
+    echo "ci: ./gradlew $gate"
+    # shellcheck disable=SC2086 # each gate is a list of Gradle arguments
+    ./gradlew --console=plain $gate
+  fi
   passed=$((passed + 1))
 done
 
