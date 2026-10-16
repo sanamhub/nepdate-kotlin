@@ -49,6 +49,9 @@ class PatternFormatTest {
         assertEquals("4/15/2081", date.format("M/d/yyyy"))
         assertEquals("2081BS", date.format("yyyy'BS'"))
         assertEquals("2081MM-dd", date.format("""yyyy\M\M-\d\d"""))
+        // A backslash at the very end writes nothing (hub e2f9778 fixed the reference to match).
+        assertEquals("2081", date.format("""yyyy\"""))
+        assertEquals("", date.format("""\"""))
         assertEquals("Shr 2081", date.format("MMM yyyy"))
         assertEquals("15.04.81", date.format("dd.MM.yy"))
     }
