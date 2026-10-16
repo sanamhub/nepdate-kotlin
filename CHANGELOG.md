@@ -21,3 +21,8 @@ versions follow [Semantic Versioning](https://semver.org/).
   and the `append*` and `formatTo` forms that write into a caller's `StringBuilder`.
 - Parsing: strict `parse` and `parseOrNull` (ASCII and Devanagari digits), and `parseLenient` for
   human input with month names, era markers and day-month-year order.
+- Patro (`nepdate-patro`): tithi, public holidays and events for BS 2077-01-01 to 2084-08-20 via
+  `Patro.info`, `Patro.coverage`, `Patro.publicHolidays`, `CalendarInfo`, `Named`, and the
+  `NepaliDate.calendarInfo` extension. The core `nepdate` artifact contains none of this data.
+- `java.time` interop: `NepaliDate.toLocalDate`, `LocalDate.toNepaliDate`, `nepaliToday` (Nepal
+  time by default) and the `KATHMANDU` zone.
