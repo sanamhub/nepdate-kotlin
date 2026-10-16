@@ -2,15 +2,15 @@
 
 package io.github.sanamhub.nepdate.catalog
 
+import io.github.sanamhub.nepdate.Month
 import io.github.sanamhub.nepdate.NepaliDate
 import io.github.sanamhub.nepdate.NepaliDateRange
-import org.junit.jupiter.api.Disabled
+import io.github.sanamhub.nepdate.nepaliToday
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
-import kotlin.test.fail
 
 /**
  * C# `Core/NepaliDateRangeExtendedTests.cs`, phase 2. The port's range is a list of days with month,
@@ -41,53 +41,51 @@ class NepaliDateRangeExtendedTests {
         assertTrue(NepaliDateRange.ofYear(2080).size in 365..366)
     }
 
-    // The Current* rows need today in Nepal time.
+    // The Current* rows use today in Nepal time (nepaliToday, K4-07).
     @Test
-    @Disabled(NEEDS_TODAY)
     fun CurrentMonth_StartIsFirstDayOfCurrentMonth() {
-        fail(NEEDS_TODAY)
+        val today = nepaliToday()
+        assertEquals(today.firstDayOfMonth(), NepaliDateRange.ofMonth(today.year, today.monthValue).start)
     }
 
     @Test
-    @Disabled(NEEDS_TODAY)
     fun CurrentMonth_EndIsLastDayOfCurrentMonth() {
-        fail(NEEDS_TODAY)
+        val today = nepaliToday()
+        assertEquals(today.lastDayOfMonth(), NepaliDateRange.ofMonth(today.year, today.monthValue).endInclusive)
     }
 
     @Test
-    @Disabled(NEEDS_TODAY)
     fun CurrentMonth_ContainsToday() {
-        fail(NEEDS_TODAY)
+        val today = nepaliToday()
+        assertTrue(NepaliDateRange.ofMonth(today.year, today.monthValue).contains(today))
     }
 
     @Test
-    @Disabled(NEEDS_TODAY)
     fun CurrentFiscalYear_ContainsToday() {
-        fail(NEEDS_TODAY)
+        val today = nepaliToday()
+        assertTrue(today.fiscalYear.range().contains(today))
     }
 
     @Test
-    @Disabled(NEEDS_TODAY)
     fun CurrentFiscalYear_StartIsShrawan() {
-        fail(NEEDS_TODAY)
+        assertEquals(Month.SHRAWAN, nepaliToday().fiscalYear.start().month)
     }
 
     @Test
-    @Disabled(NEEDS_TODAY)
     fun CurrentFiscalYear_EndIsAshadh() {
-        fail(NEEDS_TODAY)
+        assertEquals(Month.ASHAD, nepaliToday().fiscalYear.end().month)
     }
 
     @Test
-    @Disabled(NEEDS_TODAY)
     fun CurrentCalendarYear_ContainsToday() {
-        fail(NEEDS_TODAY)
+        val today = nepaliToday()
+        assertTrue(NepaliDateRange.ofYear(today.year).contains(today))
     }
 
     @Test
-    @Disabled(NEEDS_TODAY)
     fun CurrentCalendarYear_StartIsBaishakh1() {
-        fail(NEEDS_TODAY)
+        val today = nepaliToday()
+        assertEquals(NepaliDate.of(today.year, 1, 1), NepaliDateRange.ofYear(today.year).start)
     }
 
     // Not ported, PARITY D-09 (no splitting, interval iteration, weekend or working-day helpers):

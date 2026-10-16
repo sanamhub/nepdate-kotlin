@@ -176,4 +176,18 @@ class JavaApiTest {
         assertEquals(NepDateException.Kind.OUT_OF_RANGE, ((NepDateException) range).getKind());
         assertThrows(NepDateException.class, () -> NepaliDate.ofEpochDay(Long.MAX_VALUE));
     }
+
+    @Test
+    void javaTime() throws NepDateException {
+        NepaliDate date = NepaliDate.of(2081, 4, 15);
+        assertEquals(java.time.LocalDate.of(2024, 7, 30), NepaliDateJavaTime.toLocalDate(date));
+        assertEquals(date, NepaliDateJavaTime.toNepaliDate(java.time.LocalDate.of(2024, 7, 30)));
+        assertEquals("Asia/Kathmandu", NepaliDateJavaTime.KATHMANDU.getId());
+        assertEquals(date, NepaliDateJavaTime.nepaliToday(
+                java.time.Clock.fixed(java.time.Instant.parse("2024-07-30T00:00:00Z"), NepaliDateJavaTime.KATHMANDU)));
+        assertTrue(NepaliDateJavaTime.nepaliToday() != null);
+        assertTrue(NepaliDateJavaTime.nepaliToday(NepaliDateJavaTime.KATHMANDU) != null);
+        assertThrows(NepDateException.class,
+                () -> NepaliDateJavaTime.toNepaliDate(java.time.LocalDate.of(1844, 4, 10)));
+    }
 }
