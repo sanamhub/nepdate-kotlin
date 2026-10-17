@@ -74,3 +74,32 @@ too. The new tests cover:
    too long; PIT counts a timeout as killed. The report does not claim each timeout was inspected.
 5. `FiscalYear.label` has one equivalent boundary mutant as explained above. The first run also had
    a second, real boundary; the all-years test killed it.
+
+## CI gate (K7-03)
+
+`scripts/mutation.sh` runs `:nepdate:pitest` and prints one line:
+
+```
+mutation: score 92% (threshold 92%, max surviving 49)
+```
+
+The two numbers live in `gradle.properties`: `nepdateMutationThreshold=92` and
+`nepdateMaxSurviving=49`. The score gate is just below the measured 92.1% (573/622). The surviving
+gate is the final count, 25 survived plus 24 no coverage. It exists because PIT rounds the score:
+one deleted test can drop 571/622 (91.8%) and still print 92%. `.github/workflows/ci.yml` runs the
+script in its own `mutation` job. `scripts/ci.sh` has a comment saying why PIT is not in the
+per-change gate.
+
+## Negative control
+
+Deleting `MutationCoverageTest.plusYears reports the month amount it really passed on` makes the
+script exit 1:
+
+```
+Exception in thread "main" java.lang.RuntimeException: Had 51 surviving mutants, but only 49 survivors allowed
+...
+mutation: score 92% (threshold 92%, max surviving 49)
+```
+
+The score stays 92% because 571/622 rounds to 92, so the score gate alone would pass. The surviving
+gate fails as intended. Restoring the test makes the script pass again with the line above.

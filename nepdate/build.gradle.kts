@@ -43,6 +43,9 @@ pitest {
     threads.set(4)
     outputFormats.set(setOf("HTML", "XML"))
     timestampedReports.set(false)
+    // K7-03: one point below the measured score. The same properties drive scripts/mutation.sh.
+    mutationThreshold.set(providers.gradleProperty("nepdateMutationThreshold").orNull?.toInt() ?: 92)
+    maxSurviving.set(providers.gradleProperty("nepdateMaxSurviving").orNull?.toInt() ?: 49)
     // The test task passes these two properties (root build.gradle.kts). PIT starts its own JVMs,
     // so the vector tests need them here too or they fail before any mutation is applied.
     jvmArgs.set(
