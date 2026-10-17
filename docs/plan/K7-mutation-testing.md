@@ -70,3 +70,11 @@ Survivors by file: DateDiff 11, LenientParsing 8, NepaliDate 13, Parsing 4, Fisc
 Formatting 2, NepaliDateRange 10 (all no coverage), Quarter 14 (all no coverage), NepaliDigits 1,
 Serial 1, MonthTokens 1. The full table with dispositions is in
 [`K7-mutation-report.md`](K7-mutation-report.md).
+
+## Result (K7-02 to K7-04)
+
+Final score 573/622 (92%), test strength 96%. The new tests kill 18 of the 67 open baseline
+mutants. The remaining 49 are 25 survived and 24 no coverage; each has a disposition in the report.
+`scripts/mutation.sh` prints `mutation: score 92% (threshold 92%, max surviving 49)`. Deleting the
+`plusYears` test raises the survivor count to 51, above the gate, and the script exits 1. The full
+CI run ends with `ci: 11/11 gates passed`.

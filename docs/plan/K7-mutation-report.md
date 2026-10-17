@@ -103,3 +103,8 @@ mutation: score 92% (threshold 92%, max surviving 49)
 
 The score stays 92% because 571/622 rounds to 92, so the score gate alone would pass. The surviving
 gate fails as intended. Restoring the test makes the script pass again with the line above.
+
+## Checkpoint
+
+`./scripts/ci.sh` ends with `ci: 11/11 gates passed`. No publishing, tag, remote or repository
+setting changed. The K7 rows are in `docs/plan/PROGRESS.md`.
