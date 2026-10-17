@@ -436,8 +436,9 @@ public class NepaliDate private constructor(
         /**
          * Lenient parsing for human input (PARSING section 2): strict parsing first, then month
          * names (`15 Shrawan 2080`, `Shrawan 15, 2080`, `१५ साउन २०८०`), era markers (`BS`, `वि.सं.`)
-         * and day-month-year order (`15/04/2080`). It rejects rather than guesses: two-digit years
-         * are [NepDateException.Kind.AMBIGUOUS].
+         * and day-month-year order (`15/04/2080`). It matches the input as given: there is no
+         * Unicode normalisation and no zero-width joiner removal (PARSING section 2). It rejects
+         * rather than guesses: two-digit years are [NepDateException.Kind.AMBIGUOUS].
          *
          * @return the date
          * @throws NepDateException with a parse kind or a validation kind as [of]

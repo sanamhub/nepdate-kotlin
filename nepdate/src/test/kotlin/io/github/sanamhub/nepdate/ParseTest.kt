@@ -72,6 +72,24 @@ class ParseTest {
     }
 
     @Test
+    fun `zero-width joiners inside a month name are not removed`() {
+        for (joiner in listOf('\u200C', '\u200D')) {
+            val text = "15 सा${joiner}उन 2080"
+            assertEquals(
+                NepDateException.Kind.INVALID_CHARACTER,
+                assertFailsWith<NepDateException> { NepaliDate.parse(text) }.kind,
+                "strict U+${joiner.code.toString(16)}",
+            )
+            assertEquals(
+                NepDateException.Kind.UNRECOGNIZED,
+                assertFailsWith<NepDateException> { NepaliDate.parseLenient(text) }.kind,
+                "lenient U+${joiner.code.toString(16)}",
+            )
+        }
+        assertEquals(NepaliDate.of(2080, 4, 15), NepaliDate.parseLenient("15 साउन 2080"))
+    }
+
+    @Test
     fun `case folding follows the reference`() {
         val shrawan = NepaliDate.of(2080, 4, 15)
         assertEquals(shrawan, NepaliDate.parseLenient("15 sHrAwAn 2080"))
