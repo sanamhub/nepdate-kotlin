@@ -66,7 +66,7 @@ normal test gate). The generated `Calendar_generatedKt` is not mutated.
 | Mutation score | 555 / 622 = 89% |
 | Test strength | 555 / (622 - 27) = 93% |
 
-Survivors by file: DateDiff 11, LenientParsing 8, NepaliDate 13, Parsing 4, FiscalYear 3,
+Survivors by file: DateDiff 11, LenientParsing 8, NepaliDate 13, Parsing 4, FiscalYear 2,
 Formatting 2, NepaliDateRange 10 (all no coverage), Quarter 14 (all no coverage), NepaliDigits 1,
 Serial 1, MonthTokens 1. The full table with dispositions is in
 [`K7-mutation-report.md`](K7-mutation-report.md).
