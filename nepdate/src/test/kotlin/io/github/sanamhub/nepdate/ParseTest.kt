@@ -41,7 +41,7 @@ class ParseTest {
 
     @Test
     fun `strict column of parse tsv`() {
-        assertEquals(67, rows.size)
+        assertEquals(69, rows.size)
         for (row in rows) check(row.getValue("input"), row.getValue("strict")) { NepaliDate.parse(it) }
     }
 
