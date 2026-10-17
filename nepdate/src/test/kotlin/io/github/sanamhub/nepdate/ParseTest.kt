@@ -41,7 +41,7 @@ class ParseTest {
 
     @Test
     fun `strict column of parse tsv`() {
-        assertEquals(67, rows.size)
+        assertEquals(69, rows.size)
         for (row in rows) check(row.getValue("input"), row.getValue("strict")) { NepaliDate.parse(it) }
     }
 
@@ -69,6 +69,24 @@ class ParseTest {
         assertEquals(shrawan, NepaliDate.parseLenient("15 Shrawan 2080"))
         assertEquals(shrawan, NepaliDate.parseLenient("Shrawan 15, 2080"))
         assertEquals(shrawan, NepaliDate.parseLenient("2080 Shrawan 15"))
+    }
+
+    @Test
+    fun `zero-width joiners inside a month name are not removed`() {
+        for (joiner in listOf('\u200C', '\u200D')) {
+            val text = "15 सा${joiner}उन 2080"
+            assertEquals(
+                NepDateException.Kind.INVALID_CHARACTER,
+                assertFailsWith<NepDateException> { NepaliDate.parse(text) }.kind,
+                "strict U+${joiner.code.toString(16)}",
+            )
+            assertEquals(
+                NepDateException.Kind.UNRECOGNIZED,
+                assertFailsWith<NepDateException> { NepaliDate.parseLenient(text) }.kind,
+                "lenient U+${joiner.code.toString(16)}",
+            )
+        }
+        assertEquals(NepaliDate.of(2080, 4, 15), NepaliDate.parseLenient("15 साउन 2080"))
     }
 
     @Test
