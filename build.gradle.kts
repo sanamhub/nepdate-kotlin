@@ -90,6 +90,9 @@ configure(subprojects.filter { it.path in libraryProjects }) {
             }
         tasks.named("check") {
             dependsOn(javaApiTestTask)
+            // K8-03: the committed api/<module>.api dumps are the public surface. A signature change
+            // fails build here as well as in the checkKotlinAbi gate of scripts/ci.sh.
+            dependsOn("checkKotlinAbi")
         }
 
         tasks.named<Test>("test") {
