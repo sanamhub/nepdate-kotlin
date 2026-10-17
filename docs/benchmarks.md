@@ -27,7 +27,7 @@ quiet machine with the benchmark pinned to logical CPU 2, which the final releas
 
 | Item | Value |
 |---|---|
-| nepdate-kotlin | `feat/K5-release` at the K5-02 commit |
+| nepdate-kotlin | commit `da6cec5`, before 0.1.0 |
 | JDK | Temurin 17.0.20.1 (the reference run in ADR-0002 used Temurin 25; no Temurin 25 was available) |
 | JMH | 1.37 (via kotlinx-benchmark 0.5.0) |
 | Kotlin | 2.4.20 |
@@ -121,7 +121,7 @@ Measured 2026-10-17 with AGP 9.4.1, compileSdk 36, minSdk 21, no core library de
 | core (`nepdate`) | 21,374 B | +5,812 B (5.7 KB) |
 | patro (`nepdate` + `nepdate-patro`) | 59,146 B | +43,584 B (42.6 KB) |
 
-Both deltas are inside the K5-03 targets (nepdate at most 60 KB, nepdate + patro at most 200 KB).
+Both deltas are inside the size targets (nepdate at most 60 KB, nepdate + patro at most 200 KB).
 
 ## Android on-device benchmarks (blocked)
 

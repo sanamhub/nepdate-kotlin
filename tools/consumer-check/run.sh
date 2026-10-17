@@ -18,14 +18,16 @@ echo "== publish to mavenLocal =="
 echo "== copy the consumer out of the repo =="
 rm -rf "$CONSUMER_DIR"
 mkdir -p "$CONSUMER_DIR"
-cp -r "$SCRIPT_DIR/settings.gradle.kts" "$SCRIPT_DIR/build.gradle.kts" "$SCRIPT_DIR/gradle" \
-    "$SCRIPT_DIR/gradlew" "$SCRIPT_DIR/gradlew.bat" "$SCRIPT_DIR/src" "$CONSUMER_DIR/"
-chmod +x "$CONSUMER_DIR/gradlew"
+cp -r "$SCRIPT_DIR/settings.gradle.kts" "$SCRIPT_DIR/build.gradle.kts" "$SCRIPT_DIR/src" \
+    "$CONSUMER_DIR/"
 
-cd "$CONSUMER_DIR"
+# The repo's own wrapper drives the copy (-p), so the consumer carries no second wrapper jar.
+VERSION="$(grep '^version=' gradle.properties | cut -d= -f2)"
+GRADLE=("$REPO_ROOT/gradlew" --console=plain -p "$CONSUMER_DIR")
 
 echo "== prove the jars resolve from mavenLocal =="
-./gradlew --console=plain -q printNepdatePath | tee /dev/stderr | grep -qE 'nepdate[\\/]0\.1\.0[\\/]'
+"${GRADLE[@]}" -q printNepdatePath | tee /dev/stderr \
+    | grep -qE "nepdate[\\/]${VERSION//./\\.}[\\/]"
 
 echo "== run the consumer =="
-./gradlew --console=plain run
+"${GRADLE[@]}" run

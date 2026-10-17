@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
-# K6-04 docs gate: the user-facing docs (README, docs/API, CHANGELOG) read like consumer pages.
+# Docs gate: every user-facing doc reads like a consumer page. docs/plan and docs/adr are the
+# project's working records and are not checked.
 # No em dashes, no task IDs, and every relative markdown link resolves.
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-files=(README.md docs/API.md CHANGELOG.md)
+files=(README.md CHANGELOG.md CONTRIBUTING.md SECURITY.md docs/*.md docs/runbooks/*.md)
 issues=0
 
 # 1. No em dashes (U+2014).
