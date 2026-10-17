@@ -1,6 +1,6 @@
 # Other Kotlin and Java libraries for the Bikram Sambat calendar
 
-Checked 2026-10-07 (GitHub, `repo1.maven.org` metadata, JitPack build API). Used by task K5-02.
+Checked 2026-10-07 (GitHub, `repo1.maven.org` metadata, JitPack build API). Used by [the benchmarks](benchmarks.md).
 
 ## Platform support: none
 
@@ -35,10 +35,10 @@ candidate for a later optional artifact, not v0.1.
 days differ between them. The benchmark's "agrees" column records where each one differs from
 `shared/data`. None ships tithi or holiday data.
 
-**Benchmark set (K5-02):** shivathapaa core 3.3.0, `adbs-core` v4.0.0, AagitoEx `nepdate`
+**Benchmark set:** shivathapaa core 3.3.0, `adbs-core` v4.0.0, AagitoEx `nepdate`
 0.0.1-beta01 and `date_picker_converter` 3.0.0, plus `java.time.LocalDate` as a floor (it is not
 a competitor, but no BS library can convert faster than `LocalDate.of(...).toEpochDay()` on the
-same inputs). The plan and acceptance criteria are in `docs/plan/K5-docs-bench-release.md` K5-02.
+same inputs). The method and results are in [the benchmarks](benchmarks.md).
 
 Sources: https://github.com/shivathapaa/Nepali-Date-Picker, https://github.com/dhiraj-var/adbs,
 https://jitpack.io/#dhiraj-var/adbs, https://github.com/sujit-sharma/bikram-sambat,

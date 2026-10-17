@@ -8,7 +8,7 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(providers.gradleProperty("nepdateToolchain").orNull?.toInt() ?: 17)
 }
 
 allOpen {

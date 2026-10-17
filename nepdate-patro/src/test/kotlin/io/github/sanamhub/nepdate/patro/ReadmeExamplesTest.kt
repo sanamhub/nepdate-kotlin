@@ -43,6 +43,32 @@ class ReadmeExamplesTest {
         assertEquals(normalize(markedRegion(javaSource)), normalize(javaBlock), "README java block")
     }
 
+    @Test
+    fun readmeInstallBlockMatchesConsumer() {
+        val readme = File(repoRoot(), "README.md").readText()
+        val gradleBlock = firstFencedBlock(readme, "## Quick start", "gradle")
+        val consumerBuild = File(repoRoot(), "tools/consumer-check/build.gradle.kts").readText()
+        assertEquals(normalize(gradleBlock), normalize(dependenciesBlock(consumerBuild)), "README gradle block")
+    }
+
+    private fun dependenciesBlock(source: String): String {
+        val start = source.indexOf("dependencies {")
+        assertTrue(start >= 0, "consumer build file has no dependencies block")
+        var depth = 0
+        var i = start
+        while (i < source.length) {
+            when (source[i]) {
+                '{' -> depth++
+                '}' -> {
+                    depth--
+                    if (depth == 0) return source.substring(start, i + 1)
+                }
+            }
+            i++
+        }
+        throw AssertionError("unbalanced braces in the consumer dependencies block")
+    }
+
     private fun repoRoot(): String = System.getProperty("nepdate.repoRoot")
 
     private fun firstFencedBlock(

@@ -27,6 +27,8 @@ class PatroAllocationTest {
         assumeTrue(mx != null && mx.isThreadAllocatedMemorySupported, "com.sun.management.ThreadMXBean is missing")
         mx!!.isThreadAllocatedMemoryEnabled = true
         repeat(WARM_UP) { sink += call.run(it) }
+        // getId() is deprecated since Java 19, but the tests also run on Java 11 (no threadId()).
+        @Suppress("DEPRECATION")
         val thread = Thread.currentThread().id
         val before = mx.getThreadAllocatedBytes(thread)
         for (i in 0 until CALLS) sink += call.run(i)

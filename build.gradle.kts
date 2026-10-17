@@ -40,10 +40,14 @@ subprojects {
 // own artifact id, POM name and description, and dependencies.
 val libraryProjects = setOf(":nepdate", ":nepdate-patro")
 
+// K6-03: the build toolchain, default 17 (ADR-0001). Override with -PnepdateToolchain=25 to run
+// the whole CI on a newer JDK; the JDK must be registered in org.gradle.java.installations.paths.
+val nepdateToolchain: Int = providers.gradleProperty("nepdateToolchain").orNull?.toInt() ?: 17
+
 configure(subprojects.filter { it.path in libraryProjects }) {
     pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
         configure<KotlinJvmProjectExtension> {
-            jvmToolchain(17)
+            jvmToolchain(nepdateToolchain)
             explicitApi()
             compilerOptions {
                 jvmTarget.set(JvmTarget.JVM_11)
@@ -92,6 +96,11 @@ configure(subprojects.filter { it.path in libraryProjects }) {
             useJUnitPlatform()
             systemProperty("nepdate.shared", rootProject.file("shared").absolutePath)
             systemProperty("nepdate.repoRoot", rootProject.projectDir.absolutePath)
+            // ReadmeExamplesTest reads these files at runtime; declare them as inputs so a doc
+            // change re-runs the test instead of being skipped as up-to-date.
+            inputs.file(rootProject.file("README.md"))
+            inputs.file(rootProject.file("nepdate-patro/src/javaApiTest/java/io/github/sanamhub/nepdate/patro/ReadmeExamples.java"))
+            inputs.file(rootProject.file("tools/consumer-check/build.gradle.kts"))
             // CI also runs the tests on Java 11, the bytecode target: -PtestJavaVersion=11.
             providers.gradleProperty("testJavaVersion").orNull?.let { version ->
                 val toolchains = project.extensions.getByType<JavaToolchainService>()
