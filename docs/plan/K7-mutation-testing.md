@@ -48,3 +48,25 @@ control and the doubtful points in this file. Add the K7 rows to `PROGRESS.md`.
 
 AC: `./scripts/ci.sh` passes; this file answers every item in the report; no publishing, tag or
 repository setting changed.
+
+## Baseline (K7-01)
+
+Command: `./gradlew --console=plain :nepdate:pitest` on 2026-10-18, PIT 1.30.1, Gradle 9.6.0,
+Temurin 17 toolchain, four PIT threads. Intrinsics calls are filtered with `avoidCallsTo`, and the
+fuzz, random and class-initialisation stress tests are excluded from PIT (they run once in the
+normal test gate). The generated `Calendar_generatedKt` is not mutated.
+
+| Metric | Value |
+|---|---|
+| Mutations generated | 622 |
+| Killed | 522 |
+| Timed out (counted as detected) | 33 |
+| Survived | 40 |
+| No coverage | 27 |
+| Mutation score | 555 / 622 = 89% |
+| Test strength | 555 / (622 - 27) = 93% |
+
+Survivors by file: DateDiff 11, LenientParsing 8, NepaliDate 13, Parsing 4, FiscalYear 3,
+Formatting 2, NepaliDateRange 10 (all no coverage), Quarter 14 (all no coverage), NepaliDigits 1,
+Serial 1, MonthTokens 1. The full table with dispositions is in
+[`K7-mutation-report.md`](K7-mutation-report.md).
