@@ -5,6 +5,8 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
+# PIT is not in this list: ./scripts/mutation.sh takes about four minutes, so ci.yml runs it in
+# its own mutation job. It is not part of the per-change gate.
 gates=(
   "ktlintCheck detekt"
   "build"
