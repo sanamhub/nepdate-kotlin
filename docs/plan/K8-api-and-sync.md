@@ -38,3 +38,17 @@ Run `./scripts/ci.sh` and `./scripts/mutation.sh`, record both last lines, and u
 
 AC: both scripts exit 0 and their last lines are in the report; no tag, publishing or repository
 setting changed.
+
+## Result (K8-04)
+
+Shared is at hub `c6cc327`: PARSING §2 forbids normalisation, and `parse.tsv` has 69 rows. The
+Kotlin parser already matched input as given, so the guard test and KDoc changed, not the parser.
+The API dumps already existed and were current; `checkKotlinAbi` now runs from `check` too.
+
+```text
+ci: 11/11 gates passed
+mutation: score 92% (threshold 92%, max surviving 49)
+```
+
+The two negative controls (joiner strip, API rename) and the doubtful points are in
+[`K8-report.md`](K8-report.md). No tag, publishing or repository setting changed.
