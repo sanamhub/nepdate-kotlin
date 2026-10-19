@@ -1,8 +1,8 @@
 # ADR-0002: Representation, tables and performance
 
-- Status: Accepted
-- Date: 2026-10-06, revised 2026-10-08 (measured design, patro rename per hub ADR-0004)
-- Deciders: Sanam Pakuwal
+- **Status:** accepted
+- **Date:** 2026-10-06, revised 2026-10-08 (measured design, patro rename per hub ADR-0004)
+- **Approved by:** Sanam
 
 ## Context
 
@@ -14,7 +14,7 @@ Glance widget updates and in app cold start, where class loading and table decod
 Every number below was measured on the BENCHMARK §1 reference machine (i5-12500H, Windows 11),
 OpenJDK 25.0.2 (Android Studio JBR), JMH 1.37, `-prof gc`, pinned with `start /affinity 4`
 (logical CPU 2), on 2026-10-07 and 2026-10-08. The experiment code lived in a scratch folder, not
-in this repo; K5-02 rebuilds the same cases as the real `:benchmarks` module. Inputs are the 64
+in this repo; the `:benchmarks` module rebuilds the same cases. Inputs are the 64
 BENCHMARK §2 dates. Numbers are ns per operation; compare rows of one table only (separate runs
 differ by up to 2× on this laptop).
 
@@ -23,7 +23,7 @@ differ by up to 2× on this laptop).
 ### 1. Date representation
 
 `NepaliDate` is a final class with two `Int` fields: `serial` (days since BS 1901-01-01,
-ALGORITHM §4) and `ymd`, the BS date packed as `year shl 10 or month shl 6 or day` (6 bits for the day: BS months reach day 32; corrected 2026-10-10 after the K1-04 test caught `shl 9`/`shl 5`). `year`,
+ALGORITHM §4) and `ymd`, the BS date packed as `year shl 10 or month shl 6 or day` (6 bits for the day, because BS months reach day 32). `year`,
 `monthValue` and `dayOfMonth` are shifts and masks. `equals`, `hashCode` and `compareTo` use the
 serial. The object is 24 bytes on 64-bit HotSpot with compressed oops (12-byte header, two ints,
 padding). Not a `value class` (Java can't call it cleanly, ADR-0003) and not a `data class` (ABI).
@@ -40,7 +40,7 @@ Caching `ymd` costs 4 bytes and one store, and every caller that reads fields ga
 
 | Table | Size | Built from | Used by |
 |---|---|---|---|
-| `MONTH_START: IntArray` | 3589 | `MONTH_LENGTHS_DATA` string (3588 chars, K1-01), cumulative sums | BS to serial, serial to BS, month length = `MONTH_START[i + 1] - MONTH_START[i]` |
+| `MONTH_START: IntArray` | 3589 | `MONTH_LENGTHS_DATA` string (3588 chars), cumulative sums | BS to serial, serial to BS, month length = `MONTH_START[i + 1] - MONTH_START[i]` |
 | `JAN1: IntArray` | 302 | computed in the initialiser: serial of 1 January of AD 1844 + i | serial to AD, AD to serial |
 | `CUM: IntArray` | 26 | literal: days before each month, common year then leap year | serial to AD, AD to serial |
 
@@ -53,7 +53,7 @@ array and no `YEAR_START`: the month estimate in §3 replaces the year search.
 - BS (y, m, d) to serial: `MONTH_START[(y - 1901) * 12 + m - 1] + d - 1`, after validation.
 - Serial to BS: month index `mi = ((s - 25) * 2153) shr 16`, then `if (s >= MONTH_START[mi + 1]) mi++`.
   One multiply, one shift, one compare. The estimate is never more than one month low; this was
-  checked for all 109,212 serials and K1-06 `ExhaustiveTest` keeps checking it.
+  checked for all 109,212 serials and `ExhaustiveTest` keeps checking it.
 - Serial to AD: year index `i = ((s - 40) * 5730) shr 21`, `if (s >= JAN1[i + 1]) i++`, then month
   `m = ((doy - 6) * 1000) shr 15` with one compare against `CUM`. Checked for all serials against
   Hinnant's `civil_from_days`.
@@ -80,7 +80,7 @@ From an earlier run (escaping B2): binary search over a 300-entry `YEAR_START` t
 
 The C#-style AD to BS table is 0.5 to 1.2 ns faster on B2 but needs a fourth 3589-entry table
 (14 KB of heap and its initialiser). Both are three to four times faster than C# NepDate (B2 18.64 ns), so
-the smaller tables win. Revisit only if K5-02 misses the §9 B2 target.
+the smaller tables win. Revisit only if the benchmark misses the §9 B2 target.
 
 ### 4. Table storage and class-initialisation cost
 
@@ -97,17 +97,17 @@ probe (694 µs):
 | `MONTH_START` (3589 ints) | +1246 µs | **+161 µs** |
 | `MONTH_START` + a 6826-entry block index | +2364 µs | +519 µs |
 | packed months + `YEAR_START` (599 ints) | +766 µs | not run |
-| patro tables (K4-02) | +7466 µs | **+5501 µs** |
+| patro tables | +7466 µs | **+5501 µs** |
 | patro tables + every day's `CalendarInfo` prebuilt (§5) | +9428 µs | not run |
 
 With `-Xint` the numbers are within 10 %, so the cost is class loading and the initialiser, not JIT.
-On Android, D8 turns array literals into `fill-array-data`, which may change this ranking; K5-03
-measures both inits on a device.
+On Android, D8 turns array literals into `fill-array-data`, which may change this ranking; the
+Android benchmark sample measures both inits on a device.
 
 ### 5. Patro layout (`nepdate-patro`)
 
-Tables per hub `shared/spec/PATRO.md` §3, decoded from strings (K4-02). The initialiser of
-`PatroTables` (K4-03) then builds one `CalendarInfo` per day of the 2793-day span, sharing objects:
+Tables per hub `shared/spec/PATRO.md` §3, decoded from strings. The initialiser of
+`PatroTables` then builds one `CalendarInfo` per day of the 2793-day span, sharing objects:
 one per tithi for days with only a tithi, one `EMPTY`, and a read-only index view (`EventList`)
 over a shared `Array<Named>` for days with events. PATRO §3 allows this dense per-day table because
 the benchmark shows it is faster:
@@ -119,13 +119,13 @@ the benchmark shows it is faster:
 | C# NepDate .NET 10 (hub `docs/benchmarks/dotnet.md`) | 47.93 | 51 | 3133 | 1429 |
 
 The price is about 2 ms more at first use (§4 table). It is paid once per process, and a month grid
-then costs 23 ns instead of 2.2 µs on every widget update. If K5-03 shows patro init over the §9
+then costs 23 ns instead of 2.2 µs on every widget update. If the device run shows patro init over the §9
 limit on the device, build `infoByDay` per BS year on first touch of that year instead.
 
 ### 6. Formatting and parsing
 
 Every formatter appends to a caller's `StringBuilder`; the `String` forms create one builder sized
-for the longest output (K3). `StringBuilder` and not `Appendable`: `Appendable.append` throws
+for the longest output. `StringBuilder` and not `Appendable`: `Appendable.append` throws
 `IOException`, which Java callers must catch, and an interface call can be megamorphic.
 Devanagari digits are `(0x0966 + d).toChar()`. No `String.format`, no `java.text`.
 
@@ -149,7 +149,7 @@ C# NepDate: B5 153.02 ns and 435 B, B6 21.55 ns.
 Conversion, arithmetic and parsing allocate only the returned `NepaliDate` (24 B, often removed by
 escape analysis when the caller only reads fields). `Patro.info`, `CalendarInfo.events`, the
 `append*` functions and `formatTo` into a builder with enough capacity allocate nothing. The
-`String` formatters allocate the builder and the result. ADR-0004 tests this per phase.
+`String` formatters allocate the builder and the result. The allocation tests in ADR-0004 check it.
 
 ### 8. Core boundary
 
@@ -160,7 +160,7 @@ and no `-Xfriend-paths` trick. Apps that don't depend on `nepdate-patro` carry n
 
 ### 9. Targets
 
-JMH through kotlinx-benchmark (K5-02), reference machine, Temurin 25:
+JMH through kotlinx-benchmark, reference machine, Temurin 25:
 
 | ID | Target | Measured in the experiments above | C# NepDate |
 |---|---|---|---|
@@ -170,7 +170,7 @@ JMH through kotlinx-benchmark (K5-02), reference machine, Temurin 25:
 | B6 | ≤ 30 ns | 24.0 | 21.55 |
 | B7 | ≤ 5 ns, 0 B | 0.48 | 47.93 |
 
-Android, `CompilationMode.None()`, Pixel 6a (K5-03): core init ≤ 1 ms, patro init ≤ 10 ms.
+Android, `CompilationMode.None()`, Pixel 6a: core init ≤ 1 ms, patro init ≤ 10 ms.
 
 ## Alternatives rejected
 
@@ -185,6 +185,6 @@ Android, `CompilationMode.None()`, Pixel 6a (K5-03): core init ≤ 1 ms, patro i
 
 - One 24-byte allocation per returned `NepaliDate`; a widget month grid creates 42.
 - About 15 KB of heap for the core tables, built in about 0.2 ms on desktop.
-- `nepdate-patro` first use costs about 7.5 to 9.5 ms on desktop (to be measured on a device in
-  K5-03) and then answers without allocating.
+- `nepdate-patro` first use costs about 7.5 to 9.5 ms on desktop (to be measured on a
+  device) and then answers without allocating.
 - R8 removes unused formatting code from apps.

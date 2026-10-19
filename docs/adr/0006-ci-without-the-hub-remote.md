@@ -1,9 +1,9 @@
 # ADR-0006: CI without the hub on GitHub
 
-- Status: Accepted
-- Date: 2026-10-19
-- Deciders: Sanam Pakuwal
-- Supersedes: the reusable-workflow sentence of ADR-0001 §5 and the weekly `shared-sync` line of
+- **Status:** accepted
+- **Date:** 2026-10-19
+- **Approved by:** Sanam
+- **Supersedes:** the reusable-workflow sentence of ADR-0001 §5 and the weekly `shared-sync` line of
   ADR-0005, until the hub has a GitHub remote
 
 ## Context
@@ -11,9 +11,8 @@
 ADR-0001 §5 has CI call the hub's reusable `shared-check` workflow and a weekly `shared-sync`
 workflow. Both are `uses: sanamhub/nepdate/.github/workflows/...`, and the hub has no GitHub remote
 yet. GitHub fails a workflow at startup when a reusable workflow cannot be resolved, so `ci.yml`
-ran no job on any push or pull request (run 39095046454), and `shared-sync` could never run. The
-Dokka build failed dependency verification on GitHub (run 39095046240) without anyone seeing it,
-because the `build` job that runs the same `:dokkaGenerate` gate never started.
+ran no job on any push or pull request and `shared-sync` could never run. A Dokka dependency
+verification failure went unnoticed for the same reason.
 
 ## Decision
 
@@ -38,6 +37,3 @@ because the `build` job that runs the same `:dokkaGenerate` gate never started.
   for `shared/VERSION`, not that it equals the hub. Someone who edits `shared/` and rewrites the sums
   by hand would pass CI; `--write` refuses to, and review of any `tools/shared.sha256` change
   without a `shared/VERSION` change catches it.
-- Negative controls (2026-10-19): a byte appended to `shared/spec/PARITY.md`, an extra
-  `shared/data/extra.txt` and a different `shared/VERSION` each make `./scripts/shared-sums.sh`
-  exit 1.

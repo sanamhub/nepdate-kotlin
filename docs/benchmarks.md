@@ -1,4 +1,4 @@
-# Benchmarks: `nepdate` and `nepdate-patro` vs competitors and C# NepDate
+# Benchmarks
 
 Time and allocation of the Kotlin library on operations B1 to B8 of
 [`shared/spec/BENCHMARK.md`](../shared/spec/BENCHMARK.md), measured with JMH 1.37 through the
@@ -18,16 +18,15 @@ Android AAR and is excluded (see the note below).
 | Power plan | Ultimate Performance |
 | Affinity | none |
 
-The machine was not idle during this run (other agents were building; the CPU load was 12 % before
-and 1 % after the JMH run, and 25 % around the first smoke test). The numbers are indicative and
-systematically higher than the quiet-machine numbers in ADR-0002; BENCHMARK.md section 1 asks for a
-quiet machine with the benchmark pinned to logical CPU 2, which the final release run should use.
+The machine was not idle (CPU load 12 % before the run, 25 % around the first smoke test), so the
+numbers are indicative and higher than the quiet-machine numbers in ADR-0002. The release run will
+be repeated on a quiet machine, pinned to logical CPU 2 as BENCHMARK.md section 1 asks.
 
 ## Toolchains and versions
 
 | Item | Value |
 |---|---|
-| nepdate-kotlin | commit `da6cec5`, before 0.1.0 |
+| nepdate-kotlin | before 0.1.0 |
 | JDK | Temurin 17.0.20.1 (the reference run in ADR-0002 used Temurin 25; no Temurin 25 was available) |
 | JMH | 1.37 (via kotlinx-benchmark 0.5.0) |
 | Kotlin | 2.4.20 |
@@ -106,8 +105,6 @@ not a code regression; a profile is not meaningful on a loaded machine, so none 
   `DateConverter` needs `android.util.SparseArray` and joda-time, and it ships only AAR variants,
   so a plain JVM project cannot consume it.
 - shivathapaa has no parser in `nepali-date-picker-core`, so B6 has no shivathapaa column.
-- The published `nepdate` and `nepdate-patro` POMs are unchanged by this task: `:benchmarks` is a
-  standalone module and none of its dependencies are published.
 
 ## Android APK size (R8 release builds)
 
@@ -123,11 +120,10 @@ Measured 2026-10-17 with AGP 9.4.1, compileSdk 36, minSdk 21, no core library de
 
 Both deltas are inside the size targets (nepdate at most 60 KB, nepdate + patro at most 200 KB).
 
-## Android on-device benchmarks (blocked)
+## Android on-device benchmarks
 
 `samples/android-bench/` builds the `androidx.benchmark` 1.5.0 microbenchmark and macrobenchmark
 modules (B1, B2, B5, B6, B7 on one input and the 64-input loop; cold-start core and patro init
 sections). CI only compiles them (`assembleAndroidTest`); running them needs the physical Pixel 6a
 used by `nepdate-mobile` (`./gradlew :microbenchmark:connectedCheck` and
-`:macrobenchmark:connectedCheck`), which is a human task. The medians will be copied here with the
-device, Android version and the `androidx.benchmark` JSON file once that run happens.
+`:macrobenchmark:connectedCheck`). That run has not happened yet.

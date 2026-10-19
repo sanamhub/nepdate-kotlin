@@ -1,4 +1,4 @@
-<!-- Task IDs (K1-03) or the issue (Closes #12). What changed and why, in two or three sentences. -->
+<!-- Link the issue (Closes #12). What changed and why, in two or three sentences. -->
 
 ## How tested
 

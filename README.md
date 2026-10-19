@@ -1,31 +1,33 @@
 # nepdate-kotlin
 
-Bikram Sambat (Nepali calendar) for Kotlin, Java and Android. Part of the NepDate family: shared data
-and spec live in the hub [`sanamhub/nepdate`](https://github.com/sanamhub/nepdate); the C# original
-is [NepDate](https://github.com/RajuPrasai/NepDate). The Android app in
-[`nepdate-mobile`](https://github.com/sanamhub/nepdate-mobile) is its first user.
+[![CI](https://github.com/sanamhub/nepdate-kotlin/actions/workflows/ci.yml/badge.svg)](https://github.com/sanamhub/nepdate-kotlin/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-- Two Maven Central artifacts under `io.github.sanamhub`, same version, released together:
-  `nepdate` (conversion, formatting, parsing, arithmetic, fiscal year) and `nepdate-patro`, the
-  patro (पात्रो, the Nepali almanac: tithi, public holidays and events, BS 2077-01-01 to 2084-08-20
-  today). `nepdate-patro` depends on `nepdate`; `nepdate` contains no patro data, so apps that only
-  convert dates stay small.
-- Plain Kotlin/JVM jars, no dependencies besides the Kotlin standard library (and `nepdate` for
-  `nepdate-patro`). Work on any JVM 11+
-  and on Android API 21+ without desugaring; `java.time` interop is a separate file that only loads
-  when you call it.
-- Java-friendly: static factories, overloads for default arguments, enums for months and weekdays.
-- BS 1901-01-01 to 2199-12-30 (AD 1844-04-11 to 2143-04-15). Same results as C# NepDate and every
-  other port, proved by the shared vectors.
+Bikram Sambat (the Nepali calendar) for Kotlin, Java and Android. Converts between BS and AD,
+formats and parses Nepali dates, does date arithmetic and fiscal years, and ships the patro
+(पात्रो): tithi, public holidays and events.
 
-Neither `java.time`, ThreeTen-Extra, ICU4J nor Android's `android.icu` has a Bikram Sambat
-calendar (sources in [docs/competitors.md](docs/competitors.md)). Use this library for Nepali dates.
+It is a port of [NepDate](https://github.com/RajuPrasai/NepDate) for .NET and gives the same
+results, checked against the shared test vectors in [`shared/`](shared/spec/README.md). Neither
+`java.time`, ThreeTen-Extra, ICU4J nor `android.icu` has a Bikram Sambat calendar
+([comparison](docs/competitors.md)).
+
+> **Status:** not yet on Maven Central. The API is settled and fully tested; 0.1.0 is the first
+> release.
+
+Two artifacts, same version:
+
+| Artifact | Contains | Depends on |
+|---|---|---|
+| `io.github.sanamhub:nepdate` | Conversion, formatting, parsing, arithmetic, fiscal year. BS 1901 to 2199 | `kotlin-stdlib` |
+| `io.github.sanamhub:nepdate-patro` | Tithi, public holidays and events, BS 2077-01-01 to 2084-08-20 | `nepdate` |
+
+Apps that only convert dates take `nepdate` alone and stay small. Both run on any JVM 11+ and on
+Android API 21+ without desugaring.
 
 ## Quick start
 
-Add the artifacts (same version, released together). Apps that only convert, format and parse
-dates need `nepdate` alone; `nepdate-patro` adds the patro (the Nepali almanac: tithi, public
-holidays and events).
+Once 0.1.0 is published:
 
 ```gradle
 dependencies {
@@ -58,30 +60,13 @@ Named tithi = Patro.info(date).getTithi();
 १५, २०८१`; `parseLenient` accepts month names such as `15 Shrawan 2080`. The `calendarInfo`
 Kotlin extension is `Patro.info` in Java.
 
-## Where to start
+## Documentation
 
-| You are | Read |
-|---|---|
-| an AI agent implementing a phase | [AGENTS.md](AGENTS.md) → [docs/plan/00-ROADMAP.md](docs/plan/00-ROADMAP.md) |
-| reviewing the API | [docs/API.md](docs/API.md) |
-| comparing with other Kotlin and Java libraries | [docs/competitors.md](docs/competitors.md) |
-| wondering "why is it like this?" | [docs/adr/README.md](docs/adr/README.md) |
-| looking for the algorithm or data | [shared/spec/README.md](shared/spec/README.md) (changes go to the hub) |
-
-## Layout
-
-```
-shared/                  hub copy: data/, spec/, VERSION
-settings.gradle.kts      modules :nepdate, :nepdate-patro, :codegen, :benchmarks
-gradle/libs.versions.toml
-nepdate/                 core artifact
-nepdate-patro/           patro artifact
-codegen/                 JVM app: generates the Kotlin tables from shared/data (not published)
-benchmarks/              kotlinx-benchmark (JMH) vs competitors (not published)
-samples/                 Android size and benchmark samples (separate builds)
-tools/consumer-check/    throwaway mavenLocal consumer (proves the published coordinates)
-docs/                    API.md, competitors.md, adr/, plan/, runbooks/
-```
+- [API reference](docs/API.md)
+- [Design decisions](docs/adr/README.md)
+- [Benchmarks](docs/benchmarks.md)
+- [Algorithm and data](shared/spec/README.md). The data and spec come from the
+  [NepDate hub](https://github.com/sanamhub/nepdate); report data problems there.
 
 ## License
 

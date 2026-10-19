@@ -2,7 +2,7 @@
 
 Decided in ADR-0005. Owner: maintainer. Approver: a second person.
 
-One-time setup (human):
+One-time setup:
 1. Sign in to central.sonatype.com with GitHub; the `io.github.sanamhub` namespace verifies itself.
 2. Create a Portal user token and a GPG signing key (publish the public key to
    `keyserver.ubuntu.com`). Store the four `ORG_GRADLE_PROJECT_*` values from ADR-0005 in the

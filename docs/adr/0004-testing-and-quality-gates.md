@@ -1,8 +1,8 @@
 # ADR-0004: Testing and quality gates
 
-- Status: Accepted
-- Date: 2026-10-08 (first accepted 2026-10-06; tests section extended for the patro rename and the performance work, before K0)
-- Deciders: Sanam Pakuwal
+- **Status:** accepted
+- **Date:** 2026-10-06, revised 2026-10-08 (patro rename, performance tests)
+- **Approved by:** Sanam
 
 ## Decision
 
@@ -10,8 +10,7 @@
 
 1. `ktlintCheck` (official Kotlin style) and `detekt`.
 2. `build` with `allWarningsAsErrors = true`.
-3. `test` and `koverVerify`: line coverage ≥ 90 % for `:nepdate` and `:nepdate-patro` (org target
-   80 %).
+3. `test` and `koverVerify`: line coverage ≥ 90 % for `:nepdate` and `:nepdate-patro`.
 4. `:codegen:run --args=--check`.
 5. `checkKotlinAbi` (the Kotlin Gradle plugin's built-in `abiValidation`, still Experimental, opted in
    with `@OptIn(ExperimentalAbiValidation::class)`), one dump per published module in
@@ -19,12 +18,12 @@
 6. `:nepdate:javaApiTest` and `:nepdate-patro:javaApiTest`: a Java source set per module that calls
    every public function the way a Java user would, so a missing `@JvmStatic` or `@JvmOverloads`
    fails the build.
-7. `checkCoreSplit` (hub ADR-0004, PORT-PLAN phase 4): fails if the core's generated POM names
+7. `checkCoreSplit` (hub ADR-0004): fails if the core's generated POM names
    `nepdate-patro`, if any entry of the core jar contains the bytes `World Day Against Human Trafficking`, if the patro
    jar doesn't (so the check can't pass by accident), if a core class references `java/text/`, or
    if a core class other than `NepaliDateJavaTime` references `java/time/`. After it,
    `./gradlew :nepdate:build --dry-run` must list no `:nepdate-patro:` task, so the core builds
-   and tests on its own. Task details: K4-04.
+   and tests on its own.
 8. API level check: the `ru.vyarus.animalsniffer` Gradle plugin with the
    `net.sf.androidscents.signature:android-api-level-21` signature on both published modules, so a
    call to an API missing on Android 5.0 fails the build (backs the README's "API 21+ without
@@ -38,12 +37,12 @@ tests live in `:nepdate-patro`.
 | Kind | Tool | What it covers |
 |---|---|---|
 | Vectors | `@ParameterizedTest` | every file in `shared/spec/vectors/` |
-| C# catalogue | one test per row | every row of `shared/spec/vectors/csharp-tests/catalog.tsv` tagged with the phase, named after the row `id` (`00-ROADMAP.md`, "C# test catalogue") |
+| C# catalogue | one test per row | every row of `shared/spec/vectors/csharp-tests/catalog.tsv`, as a test named after the row `id` |
 | Exhaustive | plain loops | all 109,212 serials round-trip; agreement with `java.time.LocalDate` for every serial |
-| Properties | jqwik 1.10.1 (`net.jqwik:jqwik`, a JUnit Platform engine, fixed seed in `junit-platform.properties`) | round trips, arithmetic laws, format then parse; listed per phase |
-| Fuzzing | Jazzer 0.30.0 (`com.code-intelligence:jazzer-junit`, `@FuzzTest`) | `parse`, `parseLenient`, `parseOrNull` (K3-07); in `./scripts/ci.sh` it replays the committed inputs only, a manual `fuzz.yml` job fuzzes for 10 minutes with `JAZZER_FUZZ=1` |
+| Properties | jqwik 1.10.1 (`net.jqwik:jqwik`, a JUnit Platform engine, fixed seed in `junit-platform.properties`) | round trips, arithmetic laws, format then parse |
+| Fuzzing | Jazzer 0.30.0 (`com.code-intelligence:jazzer-junit`, `@FuzzTest`) | `parse`, `parseLenient`, `parseOrNull`; in `./scripts/ci.sh` it replays the committed inputs only, a manual `fuzz.yml` job fuzzes for 10 minutes with `JAZZER_FUZZ=1` |
 | Allocation | `com.sun.management.ThreadMXBean.getThreadAllocatedBytes(Thread.currentThread().id)` on HotSpot | bytes per call on the hot paths, ADR-0002 §7 |
-| Thread safety | fresh `URLClassLoader` per trial, 16 threads behind a `CountDownLatch` | first use of the tables from many threads at once (K1-08, K4-06) |
+| Thread safety | fresh `URLClassLoader` per trial, 16 threads behind a `CountDownLatch` | first use of the tables from many threads at once |
 | Java interop | the `javaApiTest` source sets (gate 6) | every public symbol called from Java |
 | Time zones | `Clock.fixed` | `nepaliToday(clock)` across `Asia/Kathmandu`, `America/New_York` (DST) and UTC |
 
