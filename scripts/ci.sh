@@ -8,6 +8,7 @@ cd "$(dirname "$0")/.."
 # PIT is not in this list: ./scripts/mutation.sh takes about four minutes, so ci.yml runs it in
 # its own mutation job. It is not part of the per-change gate.
 gates=(
+  "exec-bits"
   "shared-sums"
   "ktlintCheck detekt"
   "build"
@@ -30,6 +31,13 @@ for gate in "${gates[@]}"; do
     plan=$(./gradlew --console=plain :nepdate:build --dry-run)
     if grep -q ":nepdate-patro:" <<<"$plan"; then
       echo "ci: :nepdate:build runs a :nepdate-patro: task"
+      exit 1
+    fi
+  elif [ "$gate" = "exec-bits" ]; then
+    # A script committed from Windows loses its executable bit, and CI then fails with exit 126.
+    echo "ci: every committed *.sh and gradlew is executable"
+    if git ls-files -s -- '*.sh' '*gradlew' | grep -v '^100755'; then
+      echo "ci: the files above are not executable in git; run git update-index --chmod=+x <file>"
       exit 1
     fi
   elif [ "$gate" = "shared-sums" ]; then
