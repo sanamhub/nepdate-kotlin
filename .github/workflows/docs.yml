@@ -1,13 +1,14 @@
 name: docs
 
+# Publishes the Dokka HTML to GitHub Pages (ADR-0001 §7). Manual only (ADR-0006): GitHub Pages is
+# not enabled on the repository yet, and the Dokka build itself runs on every push and pull request
+# as a gate of scripts/ci.sh. Run this by hand once Pages is enabled with the "GitHub Actions"
+# source.
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
@@ -17,6 +18,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: read
+      pages: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -34,7 +38,11 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs: build
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

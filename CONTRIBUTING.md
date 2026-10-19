@@ -18,7 +18,9 @@ The last line reads `ci: N/N gates passed`.
 ## Data and spec
 
 `shared/` is a copy of the hub [`sanamhub/nepdate`](https://github.com/sanamhub/nepdate). Never edit
-it: report data or spec problems there. A weekly PR syncs it.
+it: report data or spec problems there. CI checks it against `tools/shared.sha256` with
+`./scripts/shared-sums.sh`. To sync, run the hub's `tools/shared_sync.py` on this checkout, then
+`./scripts/shared-sums.sh --write <hub checkout>` and `./gradlew :codegen:run`.
 
 ## Dependencies
 
