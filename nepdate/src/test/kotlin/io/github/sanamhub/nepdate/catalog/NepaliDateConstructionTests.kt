@@ -14,7 +14,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-/** C# `Core/NepaliDateConstructionTests.cs`, phase 1. */
+/** C# `Core/NepaliDateConstructionTests.cs`. */
 class NepaliDateConstructionTests {
     private fun assertYmd(
         date: NepaliDate,

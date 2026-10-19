@@ -14,7 +14,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 /**
- * C# `Core/NepaliDateRangeTests.cs`, phase 2. The port's range is a list of days with month, year,
+ * C# `Core/NepaliDateRangeTests.cs`. The port's range is a list of days with month, year,
  * contains and size only (PARITY D-09): no empty ranges, set operations, splitting or working days.
  */
 class NepaliDateRangeTests {

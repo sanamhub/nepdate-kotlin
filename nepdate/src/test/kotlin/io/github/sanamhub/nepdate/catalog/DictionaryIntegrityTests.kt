@@ -11,7 +11,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 /**
- * C# `Core/DictionaryIntegrityTests.cs`, phase 1. C# checks its two conversion dictionaries; here
+ * C# `Core/DictionaryIntegrityTests.cs`. C# checks its two conversion dictionaries; here
  * the same facts are checked on the public API, which reads CalendarTables.
  */
 class DictionaryIntegrityTests {

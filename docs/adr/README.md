@@ -1,8 +1,8 @@
-# Architecture Decision Records (Kotlin port)
+# Architecture decision records
 
-Decisions for this repository only. Decisions that bind every port are in the hub
-(`sanamhub/nepdate`, `docs/adr/`). Immutable once Accepted and K0 is merged; supersede with a new
-ADR.
+Decisions for this repository. Decisions shared by every NepDate port are in the
+[hub](https://github.com/sanamhub/nepdate/tree/main/docs/adr). An accepted ADR is not edited; a
+later ADR supersedes it.
 
 | ADR | Title | Status |
 |---|---|---|

@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
-/** C# `Abilities/NepaliDateComparableTests.cs`, phase 1. */
+/** C# `Abilities/NepaliDateComparableTests.cs`. */
 class NepaliDateComparableTests {
     private val d1 = NepaliDate.of(2081, 1, 1)
     private val d2 = NepaliDate.of(2081, 6, 15)

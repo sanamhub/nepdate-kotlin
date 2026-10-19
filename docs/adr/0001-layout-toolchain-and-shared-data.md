@@ -1,8 +1,8 @@
 # ADR-0001: Build layout, toolchain, targets and shared data
 
-- Status: Accepted
-- Date: 2026-10-06
-- Deciders: Sanam Pakuwal
+- **Status:** accepted
+- **Date:** 2026-10-06
+- **Approved by:** Sanam
 
 ## Context
 

@@ -12,7 +12,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 /**
- * C# `Core/FiscalYearTests.cs`, phase 2. C#'s static and instance helpers map to the FiscalYear
+ * C# `Core/FiscalYearTests.cs`. C#'s static and instance helpers map to the FiscalYear
  * value (PARITY D-08); the static quarter helpers take a BS year and a month in that quarter.
  */
 class FiscalYearTests {

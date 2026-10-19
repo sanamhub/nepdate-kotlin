@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
 
 /**
  * Cold-start timing of the target app, with the nepdate-core-init and nepdate-patro-init trace
- * sections from SampleApp.onCreate. Runs on a device via :macrobenchmark:connectedCheck (human task).
+ * sections from SampleApp.onCreate. Runs on a device via :macrobenchmark:connectedCheck.
  */
 @RunWith(AndroidJUnit4.class)
 public class StartupBenchmark {

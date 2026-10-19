@@ -8,7 +8,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-/** C# `Core/NepaliDateArithmeticEdgeCaseTests.cs`, phase 2. */
+/** C# `Core/NepaliDateArithmeticEdgeCaseTests.cs`. */
 class NepaliDateArithmeticEdgeCaseTests {
     private fun ymd(date: NepaliDate) = Triple(date.year, date.monthValue, date.dayOfMonth)
 

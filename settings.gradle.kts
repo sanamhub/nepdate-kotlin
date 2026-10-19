@@ -14,7 +14,7 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         mavenCentral()
-        // JitPack hosts the two JitPack-only benchmark competitors (K5-02). exclusiveContent
+        // JitPack hosts the two JitPack-only benchmark competitors. exclusiveContent
         // keeps every other dependency resolving from Maven Central only (ADR-0001 decision 4).
         exclusiveContent {
             forRepository {

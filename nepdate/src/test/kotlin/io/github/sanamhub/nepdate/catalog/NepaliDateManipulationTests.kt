@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-/** C# `Core/NepaliDateManipulationTests.cs`, phase 2. */
+/** C# `Core/NepaliDateManipulationTests.cs`. */
 class NepaliDateManipulationTests {
     private fun ymd(date: NepaliDate) = Triple(date.year, date.monthValue, date.dayOfMonth)
 

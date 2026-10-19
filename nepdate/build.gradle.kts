@@ -14,7 +14,7 @@ dependencies {
     testImplementation(libs.jazzer.junit)
 }
 
-// K7: PIT mutates the core only. The generated tables are inputs, not code under test; PIT
+// PIT mutates the core only. The generated tables are inputs, not code under test; PIT
 // otherwise spends most of its time on Calendar_generatedKt and the Kotlin when() mappings.
 pitest {
     pitestVersion.set(libs.versions.pitestVersion.get())
@@ -43,7 +43,7 @@ pitest {
     threads.set(4)
     outputFormats.set(setOf("HTML", "XML"))
     timestampedReports.set(false)
-    // K7-03: one point below the measured score. The same properties drive scripts/mutation.sh.
+    // One point below the measured score. The same properties drive scripts/mutation.sh.
     mutationThreshold.set(providers.gradleProperty("nepdateMutationThreshold").orNull?.toInt() ?: 92)
     maxSurviving.set(providers.gradleProperty("nepdateMaxSurviving").orNull?.toInt() ?: 49)
     // The test task passes these two properties (root build.gradle.kts). PIT starts its own JVMs,

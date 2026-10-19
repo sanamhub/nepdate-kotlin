@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 /**
- * K3-07 (ADR-0004). Without JAZZER_FUZZ this replays the inputs in
+ * Parser fuzzing (ADR-0004). Without JAZZER_FUZZ this replays the inputs in
  * src/test/resources/io/github/sanamhub/nepdate/ParseFuzzTestInputs/fuzz/; with JAZZER_FUZZ=1 it
  * fuzzes (the manual fuzz.yml workflow). Same rules as ParseRandomTest.
  */

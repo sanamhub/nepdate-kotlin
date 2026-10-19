@@ -10,7 +10,7 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
 
 /**
- * C# `Core/SmartDateParserTests.cs`, phase 3. SmartDateParser is `parseLenient` (PARITY D-06): a
+ * C# `Core/SmartDateParserTests.cs`. SmartDateParser is `parseLenient` (PARITY D-06): a
  * closed month list, no fuzzy matching, no guessing of month-day order or two-digit years. Rows
  * that rely on guessing check that the port rejects the input instead.
  */

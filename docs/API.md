@@ -1,7 +1,7 @@
-# `nepdate` and `nepdate-patro` (Kotlin): public API contract (v0.1)
+# API reference
 
-The complete public surface of both artifacts for v0.1. Implement exactly this; a new public symbol needs this file
-changed in the same PR, approved by the human. Behaviour: `shared/spec/`. Conventions: ADR-0003.
+The complete public surface of `nepdate` and `nepdate-patro`. A pull request that changes it
+updates this file too. Behaviour is specified in `shared/spec/`, conventions in ADR-0003.
 Names follow `java.time.LocalDate` where a counterpart exists. Every type is immutable and
 thread-safe.
 

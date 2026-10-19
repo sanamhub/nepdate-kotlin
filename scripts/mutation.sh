@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# K7-03 mutation gate: PIT on :nepdate only, with the threshold in gradle.properties.
+# Mutation gate: PIT on :nepdate only, with the threshold in gradle.properties.
 # A run takes about four minutes, so ci.yml runs this script in its own job and scripts/ci.sh
 # leaves it out.
 set -euo pipefail

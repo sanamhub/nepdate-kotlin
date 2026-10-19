@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.ValueSource
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-/** C# `Core/NepaliDateMonthNameTests.cs`, phase 3. C#'s `NepaliMonths` enum is `Month`. */
+/** C# `Core/NepaliDateMonthNameTests.cs`. C#'s `NepaliMonths` enum is `Month`. */
 class NepaliDateMonthNameTests {
     @ParameterizedTest
     @CsvSource(

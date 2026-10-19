@@ -11,7 +11,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 /**
- * C# `Core/FiscalYearInstanceMethodTests.cs`, phase 2, on the FiscalYear value (PARITY D-08):
+ * C# `Core/FiscalYearInstanceMethodTests.cs`, on the FiscalYear value (PARITY D-08):
  * `yearOffset: n` is `FiscalYear(fy.startYear + n)`, `FiscalYearQuarters.First..Fourth` are
  * `Quarter.Q1..Q4`, and `Current` is `date.quarter`.
  */

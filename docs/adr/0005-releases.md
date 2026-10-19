@@ -1,8 +1,8 @@
 # ADR-0005: Releases
 
-- Status: Accepted
-- Date: 2026-10-06
-- Deciders: Sanam Pakuwal
+- **Status:** accepted
+- **Date:** 2026-10-06
+- **Approved by:** Sanam
 
 ## Decision
 
@@ -11,7 +11,7 @@
   exactly that version (what a Gradle project dependency publishes), which is inside the same minor
   version as hub ADR-0004 §3 asks. A data update that only touches the patro still releases both. The `io.github.sanamhub`
   namespace is verified on the Central Portal through the GitHub
-  account (human task, once).
+  account (once, by the maintainer).
 - Publish to Maven Central through the **Central Portal** (OSSRH closed on 2025-06-30) with
   `com.vanniktech.maven.publish` 0.37: `publishToMavenCentral(automaticRelease = true)`,
   `signAllPublications()`, POM with the MIT licence, SCM and developer.

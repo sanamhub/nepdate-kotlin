@@ -6,7 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertTrue
 
 /**
- * Bytes per call for K3's hot paths (ADR-0002 section 7, ADR-0004): nothing for the append forms
+ * Bytes per call for the formatting hot paths (ADR-0002 section 7, ADR-0004): nothing for the append forms
  * into a builder with room, at most one 24-byte NepaliDate for a successful parse, nothing for
  * parseOrNull on invalid input. Same method as ConversionAllocationTest.
  */

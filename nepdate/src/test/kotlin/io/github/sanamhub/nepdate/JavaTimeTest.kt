@@ -9,7 +9,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-/** K4-07: the `java.time` interop file, PORT-PLAN phase 4 acceptance criteria. */
+/** The `java.time` interop in `JavaTime.kt`. */
 class JavaTimeTest {
     @Test
     fun `today at a fixed instant differs between UTC and Kathmandu`() {

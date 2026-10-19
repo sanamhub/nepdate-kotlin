@@ -6,7 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertTrue
 
 /**
- * Bytes per call for K2's hot paths (ADR-0002 section 7, ADR-0004): at most one 24-byte NepaliDate
+ * Bytes per call for the arithmetic hot paths (ADR-0002 section 7, ADR-0004): at most one 24-byte NepaliDate
  * where a date is returned, nothing for daysUntil, contains and size. Same method as
  * ConversionAllocationTest.
  */

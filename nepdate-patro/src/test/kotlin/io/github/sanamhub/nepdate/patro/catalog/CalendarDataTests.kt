@@ -29,11 +29,11 @@ import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 /**
- * C# `Core/CalendarDataTests.cs`, phase 4. C# keeps the patro in `NepaliDate` (PARITY D-13); here it
+ * C# `Core/CalendarDataTests.cs`. C# keeps the patro in `NepaliDate` (PARITY D-13); here it
  * is `Patro.info`. Rows about C#'s internal arrays (`CalendarStrings`, `CalendarOffsets`,
- * `TithiData`, `EventData`, `HolidayData`) assert the same fact on the K4-02 tables and `PatroTables`
- * (K4-06); each says which. C#'s offsets count from BS 2001-01-01, these count from BASE_SERIAL
- * (2077-01-01).
+ * `TithiData`, `EventData`, `HolidayData`) assert the same fact on the decoded
+ * tables and `PatroTables`; each says which. C#'s offsets count from BS 2001-01-01, these count
+ * from BASE_SERIAL (2077-01-01).
  */
 class CalendarDataTests {
     private fun offset(date: NepaliDate) = serialOf(date) - BASE_SERIAL
@@ -132,7 +132,7 @@ class CalendarDataTests {
         assertEquals(294, HOLIDAY_DATA.length)
     }
 
-    // C#'s base is 2001-01-01; the K4-02 base is 2077-01-01.
+    // C#'s base is 2001-01-01; ours is 2077-01-01.
     @Test
     fun CalendarOffsets_GetOffset_BaseYear_Month1_Day1_ReturnsZero() {
         assertEquals(0, offset(d(2077, 1, 1)))

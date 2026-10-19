@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 import java.io.File
 
 /**
- * K5-01: the Kotlin snippet under `## Quick start` in README.md must be exactly the marked region
+ * The Kotlin snippet under `## Quick start` in README.md must be exactly the marked region
  * below, and the same snippet must run. The Java snippet is checked against the marked region in
  * ReadmeExamples.java, which the `javaApiTest` task compiles and runs.
  */

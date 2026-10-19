@@ -26,7 +26,7 @@ gates=(
 passed=0
 for gate in "${gates[@]}"; do
   if [ "$gate" = "CORE_ALONE" ]; then
-    # K4-05: building the core must not touch the patro module.
+    # Building the core must not touch the patro module.
     echo "ci: ./gradlew :nepdate:build --dry-run (no :nepdate-patro: task)"
     plan=$(./gradlew --console=plain :nepdate:build --dry-run)
     if grep -q ":nepdate-patro:" <<<"$plan"; then

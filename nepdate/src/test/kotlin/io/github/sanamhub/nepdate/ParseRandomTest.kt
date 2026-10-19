@@ -5,7 +5,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-/** K3-06: 200,000 random strings; the parsers return a date or throw NepDateException, nothing else. */
+/** 200,000 random strings; the parsers return a date or throw NepDateException, nothing else. */
 class ParseRandomTest {
     private val pieces: List<String> =
         ("0123456789".map { it.toString() } + "०१२३४५६७८९".map { it.toString() }) +

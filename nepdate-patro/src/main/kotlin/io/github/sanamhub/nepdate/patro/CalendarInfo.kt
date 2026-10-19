@@ -38,9 +38,9 @@ public class CalendarInfo internal constructor(
 internal val EMPTY_INFO: CalendarInfo = CalendarInfo(null, false, Collections.emptyList())
 
 /**
- * A read-only view of `all[from until to]`, so a day's events share the one event array (K4-03).
+ * A read-only view of `all[from until to]`, so a day's events share the one event array.
  * It extends the Java `AbstractList`, as `Collections.emptyList()` is Java: a Kotlin read-only list
- * cast to `MutableList` throws `ClassCastException`, where K4-04 asks for `UnsupportedOperationException`.
+ * cast to `MutableList` throws `ClassCastException`, where callers expect `UnsupportedOperationException`.
  */
 internal class EventList(
     private val all: Array<Named>,

@@ -1,6 +1,6 @@
 name: fuzz
 
-# Manual: fuzzes parse, parseLenient and parseOrNull for 10 minutes (ADR-0004, K3-07). CI only
+# Manual: fuzzes parse, parseLenient and parseOrNull for 10 minutes (ADR-0004). CI only
 # replays the committed inputs; a new finding is committed under
 # nepdate/src/test/resources/io/github/sanamhub/nepdate/ParseFuzzTestInputs/fuzz/.
 on:
