@@ -24,7 +24,7 @@ if [ "${1:-}" = "--write" ]; then
   "$python" "$hub/tools/shared_sync.py" . --check
   {
     echo "# hub $(tr -d '[:space:]' < shared/VERSION)"
-    list_files | while IFS= read -r file; do sha256sum "$file" | sed "s/ */  /"; done
+    list_files | while IFS= read -r file; do printf '%s  %s\n' "$(sha256sum < "$file" | cut -c1-64)" "$file"; done
   } > "$sums"
   echo "shared-sums: wrote $sums ($(($(wc -l < "$sums") - 1)) files)"
   exit 0
