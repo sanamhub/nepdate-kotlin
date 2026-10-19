@@ -13,7 +13,7 @@ import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
 /**
- * C# `Core/NepaliDateRangeExtendedTests.cs`, phase 2. The port's range is a list of days with month,
+ * C# `Core/NepaliDateRangeExtendedTests.cs`. The port's range is a list of days with month,
  * year, contains and size only (PARITY D-09). It has no empty range: `of` rejects an end before the
  * start, so every row built on an empty range is covered by that rule instead.
  */
@@ -41,7 +41,7 @@ class NepaliDateRangeExtendedTests {
         assertTrue(NepaliDateRange.ofYear(2080).size in 365..366)
     }
 
-    // The Current* rows use today in Nepal time (nepaliToday, K4-07).
+    // The Current* rows use today in Nepal time (nepaliToday).
     @Test
     fun CurrentMonth_StartIsFirstDayOfCurrentMonth() {
         val today = nepaliToday()

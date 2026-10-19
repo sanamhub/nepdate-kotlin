@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * K5-01: the Java snippet under `## Quick start` in README.md must be exactly the marked region
+ * The Java snippet under `## Quick start` in README.md must be exactly the marked region
  * below, and the same snippet must compile and run (this file is the javaApiTest source set).
  */
 class ReadmeExamples {

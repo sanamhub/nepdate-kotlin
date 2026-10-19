@@ -31,7 +31,7 @@ class PatroDay(
     val events: List<NamePair>,
 )
 
-/** The K4-02 tables. Offsets count days from [baseSerial]; name indexes count pairs in [names]. */
+/** The patro tables (PATRO §3). Offsets count days from [baseSerial]; name indexes count pairs in [names]. */
 class PatroTablesData(
     val baseSerial: Int,
     val span: Int,
@@ -117,7 +117,7 @@ fun parsePatroFile(
     }
 }
 
-/** Builds the K4-02 tables from the days of every file, in any order. */
+/** Builds the patro tables from the days of every file, in any order. */
 fun buildPatroTables(allDays: List<PatroDay>): PatroTablesData {
     expect(allDays.isNotEmpty()) { "$PATRO_DIR has no days" }
     val days = allDays.sortedBy { it.serial }

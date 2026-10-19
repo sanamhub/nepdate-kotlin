@@ -11,7 +11,7 @@ import java.time.zone.ZoneRulesException
 /**
  * Nepal's time zone (UTC+05:45, no daylight saving). Built from `Asia/Kathmandu` when the JDK's
  * time-zone data has it; on a JDK whose zone data is stripped down, it falls back to a fixed
- * `+05:45` offset, so "today in Nepal" still works (K4-07).
+ * `+05:45` offset, so "today in Nepal" still works.
  */
 @Suppress("SwallowedException") // the fallback is the point: a JDK without the zone data still gets Nepal time
 @JvmField

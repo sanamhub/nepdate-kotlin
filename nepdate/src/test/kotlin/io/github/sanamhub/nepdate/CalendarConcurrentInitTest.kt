@@ -8,7 +8,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 /**
- * First use of the tables from many threads at once (K1-08). Each trial loads the core into a fresh
+ * First use of the tables from many threads at once. Each trial loads the core into a fresh
  * class loader, so CalendarTables and NepaliDate's companion initialise again, and 16 threads
  * released together race on that first use.
  */

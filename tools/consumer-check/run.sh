@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# K6 consumer check: publish both artifacts to mavenLocal, then build and run a throwaway Gradle
+# Consumer check: publish both artifacts to mavenLocal, then build and run a throwaway Gradle
 # project (copied outside the repo) that consumes io.github.sanamhub:nepdate:0.1.0 and
 # io.github.sanamhub:nepdate-patro:0.1.0 from mavenLocal only. Success proves the published
 # coordinates, POMs and the README install block work together.

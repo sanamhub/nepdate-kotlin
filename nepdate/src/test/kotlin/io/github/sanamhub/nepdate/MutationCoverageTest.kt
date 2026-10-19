@@ -8,7 +8,7 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /**
- * Tests added for mutants that survived the first PIT run (K7-02). Each test names the behaviour it
+ * Tests added for mutants that survived the first PIT run. Each test names the behaviour it
  * pins, not the mutant, so it stays useful after PIT changes.
  */
 class MutationCoverageTest {

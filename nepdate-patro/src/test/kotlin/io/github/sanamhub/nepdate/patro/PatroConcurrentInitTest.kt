@@ -9,7 +9,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 /**
- * First use of the patro tables from many threads at once (K4-06). Each trial loads both jars (their
+ * First use of the patro tables from many threads at once. Each trial loads both jars (their
  * class directories) into a fresh class loader, so PatroTables initialises again, and 16 threads
  * released together call Patro.info and read the PATRO section 4 anchors.
  */

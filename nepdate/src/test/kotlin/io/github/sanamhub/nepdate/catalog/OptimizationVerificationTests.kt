@@ -20,9 +20,9 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /**
- * C# `Core/OptimizationVerificationTests.cs`, the phase 1 methods (prefixes Constructor, CompareTo,
+ * C# `Core/OptimizationVerificationTests.cs`: the conversion methods (prefixes Constructor, CompareTo,
  * Equals, GetHashCode, Operator, DayOfWeek, EnglishDate, MonthEndDay, IsDefault, IsLeapYear), the
- * phase 2 methods (prefix Subtraction) and the phase 3 methods (ToString, ToLongDateString,
+ * arithmetic methods (prefix Subtraction) and the formatting methods (ToString, ToLongDateString,
  * ToUnicodeString, UnicodeConversion, SmartDateParser).
  */
 class OptimizationVerificationTests {
@@ -260,7 +260,7 @@ class OptimizationVerificationTests {
         assertEquals(1L, lastOfPreviousYear.daysUntil(NepaliDate.of(2081, 1, 1)))
     }
 
-    // ---- Phase 3: formatting and lenient parsing (C#'s SmartDateParser is parseLenient) ----
+    // ---- Formatting and lenient parsing (C#'s SmartDateParser is parseLenient) ----
 
     @ParameterizedTest
     @CsvSource(

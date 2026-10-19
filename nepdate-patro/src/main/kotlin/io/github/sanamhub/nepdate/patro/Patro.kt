@@ -47,7 +47,7 @@ public object Patro {
         get() = HolidayList.dates
 }
 
-/** Holds the holiday dates apart from [Patro], so they are only created when someone asks (K4-03). */
+/** Holds the holiday dates apart from [Patro], so they are only created when someone asks. */
 private object HolidayList {
     val dates: List<NepaliDate> =
         Collections.unmodifiableList(

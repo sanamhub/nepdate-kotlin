@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
 
 /**
  * B1, B2, B5, B6 and B7 on one input each (and the B1 64-input loop), measured with
- * androidx.benchmark. Runs on a device via :microbenchmark:connectedCheck (human task). Results
+ * androidx.benchmark. Runs on a device via :microbenchmark:connectedCheck. Results
  * are written to a volatile field so the JIT cannot remove the measured work.
  */
 @RunWith(AndroidJUnit4.class)

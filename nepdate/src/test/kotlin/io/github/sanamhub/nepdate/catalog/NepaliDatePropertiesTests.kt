@@ -13,7 +13,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
-/** C# `Core/NepaliDatePropertiesTests.cs`, phase 1. */
+/** C# `Core/NepaliDatePropertiesTests.cs`. */
 class NepaliDatePropertiesTests {
     private val date = NepaliDate.of(2080, 5, 15)
 
@@ -39,7 +39,7 @@ class NepaliDatePropertiesTests {
 
     @Test
     fun Today_ReturnsCurrentNepaliDate() {
-        // Today in Nepal time, not the device zone (ADR-0003, K4-07).
+        // Today in Nepal time, not the device zone (ADR-0003).
         assertEquals(LocalDate.now(KATHMANDU).toNepaliDate(), nepaliToday())
     }
 

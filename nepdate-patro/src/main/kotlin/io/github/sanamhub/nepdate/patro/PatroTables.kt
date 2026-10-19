@@ -3,7 +3,7 @@ package io.github.sanamhub.nepdate.patro
 import java.util.Collections
 
 /**
- * The decoded patro tables and every day's answer, built once on first use (K4-03, ADR-0002 section 5).
+ * The decoded patro tables and every day's answer, built once on first use (ADR-0002 section 5).
  * JVM class initialisation is lazy and thread-safe (JLS 12.4.2), so no lock is needed.
  */
 internal object PatroTables {

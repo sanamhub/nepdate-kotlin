@@ -35,7 +35,7 @@ class ExhaustiveTest {
 
     @Test
     fun `table conversion agrees with Hinnant for every serial`() {
-        // This proves the multiply-shift constants of K1-03: a wrong one fails here.
+        // This proves the multiply-shift constants: a wrong one fails here.
         for (serial in 0..MAX_SERIAL) {
             val packed = packedAdOf(serial)
             val (y, m, d) = HinnantReference.civilFromDays((serial + EPOCH_UNIX_DAYS).toLong())

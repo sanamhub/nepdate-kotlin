@@ -53,7 +53,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
       - run: ./gradlew --console=plain :nepdate:test -PtestJavaVersion=11
 
-  # K7-03: PIT on the core only. Too slow for scripts/ci.sh, so it gets its own job.
+  # PIT on the core only. Too slow for scripts/ci.sh, so it gets its own job.
   mutation:
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -68,7 +68,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
       - run: ./scripts/mutation.sh
 
-  # K6-01: publish to mavenLocal, then consume both artifacts from mavenLocal in a throwaway
+  # Publish to mavenLocal, then consume both artifacts from mavenLocal in a throwaway
   # project, proving the published coordinates, POMs and the README install block work.
   consumer-check:
     runs-on: ubuntu-latest
@@ -84,7 +84,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
       - run: ./tools/consumer-check/run.sh
 
-  # K5-03: the three R8 release variants of samples/android-size, with their APK sizes printed.
+  # The three R8 release variants of samples/android-size, with their APK sizes printed.
   android-size:
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -107,7 +107,7 @@ jobs:
         run: |
           ls -l app/build/outputs/apk/bare/release/*.apk app/build/outputs/apk/core/release/*.apk app/build/outputs/apk/patro/release/*.apk
 
-  # K5-03: build (not run) the androidx.benchmark modules; the device run is a human task.
+  # Build (not run) the androidx.benchmark modules. They run on a device, by hand.
   android-bench-build:
     runs-on: ubuntu-latest
     timeout-minutes: 30

@@ -36,11 +36,11 @@ subprojects {
     }
 }
 
-// The two published libraries share one setup (K4-01). Each module applies the plugins and sets its
+// The two published libraries share one setup. Each module applies the plugins and sets its
 // own artifact id, POM name and description, and dependencies.
 val libraryProjects = setOf(":nepdate", ":nepdate-patro")
 
-// K6-03: the build toolchain, default 17 (ADR-0001). Override with -PnepdateToolchain=25 to run
+// The build toolchain, default 17 (ADR-0001). Override with -PnepdateToolchain=25 to run
 // the whole CI on a newer JDK; the JDK must be registered in org.gradle.java.installations.paths.
 val nepdateToolchain: Int = providers.gradleProperty("nepdateToolchain").orNull?.toInt() ?: 17
 
@@ -69,7 +69,7 @@ configure(subprojects.filter { it.path in libraryProjects }) {
             "testRuntimeOnly"(libs.junit.platform.launcher)
         }
 
-        // ADR-0004 gate 6: Java sources that call the public API as a Java user would (K1-07).
+        // ADR-0004 gate 6: Java sources that call the public API as a Java user would.
         val sourceSets = the<SourceSetContainer>()
         val main = sourceSets.getByName("main")
         val javaApiTest =
@@ -90,7 +90,7 @@ configure(subprojects.filter { it.path in libraryProjects }) {
             }
         tasks.named("check") {
             dependsOn(javaApiTestTask)
-            // K8-03: the committed api/<module>.api dumps are the public surface. A signature change
+            // The committed api/<module>.api dumps are the public surface. A signature change
             // fails build here as well as in the checkKotlinAbi gate of scripts/ci.sh.
             dependsOn("checkKotlinAbi")
         }
@@ -117,7 +117,7 @@ configure(subprojects.filter { it.path in libraryProjects }) {
             reports {
                 verify {
                     rule {
-                        // ADR-0004 gate 3; the org target is 80 %.
+                        // ADR-0004 gate 3.
                         minBound(90)
                     }
                 }
@@ -140,7 +140,6 @@ configure(subprojects.filter { it.path in libraryProjects }) {
         }
     }
 
-    // Publishing itself is configured in K5 (ADR-0005); the POM is set now so it can be checked.
     pluginManager.withPlugin("com.vanniktech.maven.publish") {
         configure<MavenPublishBaseExtension> {
             pom {
@@ -169,7 +168,7 @@ configure(subprojects.filter { it.path in libraryProjects }) {
         }
     }
 
-    // K5-01: Dokka HTML for both modules, with every public symbol documented. reportUndocumented
+    // Dokka HTML for both modules, with every public symbol documented. reportUndocumented
     // turns missing KDoc into a report; failOnWarning makes it fail the build.
     pluginManager.withPlugin("org.jetbrains.dokka") {
         configure<org.jetbrains.dokka.gradle.DokkaExtension> {
@@ -183,11 +182,11 @@ configure(subprojects.filter { it.path in libraryProjects }) {
     }
 }
 
-// ADR-0004 gate 7, K4-05: the core artifact carries no patro data and doesn't depend on the patro.
+// ADR-0004 gate 7: the core artifact carries no patro data and doesn't depend on the patro.
 evaluationDependsOn(":nepdate")
 evaluationDependsOn(":nepdate-patro")
 
-// K5-01: aggregate both modules' Dokka HTML into one site (`./gradlew :dokkaGenerate`). Each module
+// Aggregate both modules' Dokka HTML into one site (`./gradlew :dokkaGenerate`). Each module
 // applies org.jetbrains.dokka in its own build file; the root project collects them with dokka(...).
 configure<org.jetbrains.dokka.gradle.DokkaExtension> {
     moduleName.set("nepdate-kotlin")

@@ -41,7 +41,7 @@ class UntilTest {
     }
 
     @Test
-    fun `examples of K2-03`() {
+    fun `until examples`() {
         check(d(2081, 1, 1), d(2082, 1, 1), false, 1, 0, 0, d(2081, 1, 1).daysUntil(d(2082, 1, 1)))
         check(d(2081, 4, 32), d(2081, 6, 30), false, 0, 2, 0, 61)
         check(d(2081, 4, 15), d(2081, 5, 14), false, 0, 0, 31, 31)

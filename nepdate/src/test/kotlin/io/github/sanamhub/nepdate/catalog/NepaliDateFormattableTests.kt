@@ -8,7 +8,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 /**
- * C# `Abilities/NepaliDateFormattableTests.cs`, phase 3. C#'s `IFormattable.ToString(format, provider)`
+ * C# `Abilities/NepaliDateFormattableTests.cs`. C#'s `IFormattable.ToString(format, provider)`
  * is `format(pattern)` here (FORMATTING section 5); a null format is the empty pattern.
  */
 class NepaliDateFormattableTests {

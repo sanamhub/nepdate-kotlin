@@ -10,7 +10,7 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
 
 /**
- * C# `Extensions/StringExtensionsTests.cs`, phase 3. The port has no string extensions; C#'s
+ * C# `Extensions/StringExtensionsTests.cs`. The port has no string extensions; C#'s
  * `ToNepaliDate` is lenient parsing, so these rows call `parseLenient`.
  */
 class StringExtensionsTests {

@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 /**
- * C# `Abilities/NepaliDateParsableTests.cs`, phase 3. .NET's IParsable and ISpanParsable map to
+ * C# `Abilities/NepaliDateParsableTests.cs`. .NET's IParsable and ISpanParsable map to
  * `parse` and `parseOrNull`, which take any CharSequence; a CharBuffer stands in for a span.
  */
 class NepaliDateParsableTests {

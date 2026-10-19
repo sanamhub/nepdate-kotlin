@@ -13,7 +13,7 @@ import kotlin.test.assertNull
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
-/** K4-03 and K4-04: the decoded tables and the three queries (PATRO sections 2 to 4). */
+/** The decoded tables and the three queries (PATRO sections 2 to 4). */
 class PatroTest {
     private val info = PatroTables.infoByDay
 

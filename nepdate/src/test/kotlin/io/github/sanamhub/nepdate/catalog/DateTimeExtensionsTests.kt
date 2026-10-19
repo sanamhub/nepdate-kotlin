@@ -10,8 +10,8 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 /**
- * C# `Extensions/DateTimeExtensionsTests.cs`, phase 4. C# converts `System.DateTime`; the port
- * converts its `java.time` twin `LocalDate` (K4-07, `JavaTime.kt`). `DateTime.MinValue` and
+ * C# `Extensions/DateTimeExtensionsTests.cs`. C# converts `System.DateTime`; the port
+ * converts its `java.time` twin `LocalDate` (`JavaTime.kt`). `DateTime.MinValue` and
  * `MaxValue` (0001-01-01 and 9999-12-31) are also outside the supported range, so the port asserts
  * the same rule on `LocalDate.MIN` and `LocalDate.MAX`.
  */

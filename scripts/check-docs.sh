@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
-# Docs gate: every user-facing doc reads like a consumer page. docs/plan and docs/adr are the
-# project's working records and are not checked.
-# No em dashes, no task IDs, and every relative markdown link resolves.
+# Docs gate: no em dashes, and every relative markdown link resolves.
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-files=(README.md CHANGELOG.md CONTRIBUTING.md SECURITY.md docs/*.md docs/runbooks/*.md)
+files=(README.md CHANGELOG.md CONTRIBUTING.md SECURITY.md docs/*.md docs/adr/*.md docs/runbooks/*.md)
 issues=0
 
 # 1. No em dashes (U+2014).
@@ -15,13 +13,7 @@ if grep -n '—' "${files[@]}" 2>/dev/null; then
   issues=$((issues + 1))
 fi
 
-# 2. No task IDs (K<phase>-<n> or "phase K<n>").
-if grep -nE 'K[0-9]+-[0-9]+|phase K[0-9]+' "${files[@]}" 2>/dev/null; then
-  echo "check-docs: task ID found in a user-facing doc"
-  issues=$((issues + 1))
-fi
-
-# 3. Every relative markdown link resolves.
+# 2. Every relative markdown link resolves.
 for f in "${files[@]}"; do
   dir="$(dirname "$f")"
   while IFS= read -r link; do

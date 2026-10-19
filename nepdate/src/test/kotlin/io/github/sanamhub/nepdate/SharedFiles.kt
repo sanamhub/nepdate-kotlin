@@ -2,7 +2,7 @@ package io.github.sanamhub.nepdate
 
 import java.io.File
 
-/** Reads the hub's vectors from `shared/` (the `nepdate.shared` system property, K1-06). */
+/** Reads the hub's vectors from `shared/` (the `nepdate.shared` system property). */
 object SharedFiles {
     private val root: File =
         File(
