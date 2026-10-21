@@ -26,8 +26,9 @@ VERSION="$(grep '^version=' gradle.properties | cut -d= -f2)"
 GRADLE=("$REPO_ROOT/gradlew" --console=plain -p "$CONSUMER_DIR")
 
 echo "== prove the jars resolve from mavenLocal =="
-"${GRADLE[@]}" -q printNepdatePath | tee /dev/stderr \
-    | grep -qE "nepdate[\\/]${VERSION//./\\.}[\\/]"
+resolved="$("${GRADLE[@]}" -q printNepdatePath)"
+printf '%s\n' "$resolved" >&2
+printf '%s\n' "$resolved" | grep -qE "nepdate[\\/]${VERSION//./\\.}[\\/]"
 
 echo "== run the consumer =="
 "${GRADLE[@]}" run

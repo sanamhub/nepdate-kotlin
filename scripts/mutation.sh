@@ -6,8 +6,9 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-# The override lets the missing-report control run without deleting the real build output.
+# The report override and the cached flag exist for the controls in scripts/test-mutation.sh.
 report="${NEPDATE_MUTATION_REPORT:-nepdate/build/reports/pitest/mutations.xml}"
+cached="${NEPDATE_MUTATION_CACHED:-0}"
 threshold="$(sed -n 's/^nepdateMutationThreshold=//p' gradle.properties)"
 maxSurviving="$(sed -n 's/^nepdateMaxSurviving=//p' gradle.properties)"
 if [ -z "$threshold" ] || [ -z "$maxSurviving" ]; then
@@ -18,10 +19,15 @@ fi
 log="$(mktemp)"
 trap 'rm -f "$log"' EXIT
 
-set +e
-./gradlew --console=plain :nepdate:pitest 2>&1 | tee "$log"
-status=${PIPESTATUS[0]}
-set -e
+status=0
+if [ "$cached" = "1" ]; then
+  echo "mutation: using cached report ${report}"
+else
+  set +e
+  ./gradlew --console=plain :nepdate:pitest 2>&1 | tee "$log"
+  status=${PIPESTATUS[0]}
+  set -e
+fi
 
 if [ "$status" -ne 0 ]; then
   echo "mutation: PIT failed with exit code ${status}"
@@ -37,7 +43,14 @@ count() {
   grep -c "$1" "$report" || true
 }
 
+if ! grep -q '^<mutations' "$report" || ! grep -q '^</mutations>' "$report"; then
+  echo "mutation: report is not well-formed XML: ${report}"
+  exit 1
+fi
+
 total="$(count '<mutation ')"
+mutation_close="$(count '</mutation>')"
+statuses="$(count "status='")"
 killed="$(count "status='KILLED'")"
 timed_out="$(count "status='TIMED_OUT'")"
 survived="$(count "status='SURVIVED'")"
@@ -48,6 +61,10 @@ unclassified=$((total - detected - missed))
 
 if [ "$total" -eq 0 ]; then
   echo "mutation: report has no mutations at ${report}"
+  exit 1
+fi
+if [ "$mutation_close" -ne "$total" ] || [ "$statuses" -ne "$total" ]; then
+  echo "mutation: report is not well-formed XML: ${report}"
   exit 1
 fi
 if [ "$unclassified" -ne 0 ]; then
@@ -70,12 +87,12 @@ if [ -n "$line" ]; then
   fi
 fi
 
-if [ "$score" -lt "$threshold" ]; then
-  echo "mutation: score ${score}% is below threshold ${threshold}%"
-  exit 1
-fi
 if [ "$missed" -gt "$maxSurviving" ]; then
   echo "mutation: ${missed} missed mutations exceeds max surviving ${maxSurviving}"
+  exit 1
+fi
+if [ "$score" -lt "$threshold" ]; then
+  echo "mutation: score ${score}% is below threshold ${threshold}%"
   exit 1
 fi
 
