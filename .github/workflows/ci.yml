@@ -70,9 +70,15 @@ jobs:
       - run: ./scripts/mutation.sh
 
   # Publish to mavenLocal, then consume both artifacts from mavenLocal in a throwaway
-  # project, proving the published coordinates, POMs and the README install block work.
+  # project, proving the published coordinates, POMs and the README install block work. Windows is
+  # in the matrix because verify-published.yml runs the same script there against Maven Central,
+  # and a path problem should show up on a pull request, not after a release.
   consumer-check:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -83,7 +89,8 @@ jobs:
           distribution: temurin
           java-version: "17"
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
-      - run: ./tools/consumer-check/run.sh
+      - shell: bash
+        run: bash tools/consumer-check/run.sh
 
   # The three R8 release variants of samples/android-size, with their APK sizes printed.
   android-size:

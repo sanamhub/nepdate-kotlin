@@ -1,3 +1,4 @@
+import com.vanniktech.maven.publish.DeploymentValidation
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -142,6 +143,17 @@ configure(subprojects.filter { it.path in libraryProjects }) {
 
     pluginManager.withPlugin("com.vanniktech.maven.publish") {
         configure<MavenPublishBaseExtension> {
+            // ADR-0005. Without these two calls the plugin registers no Central task and signs
+            // nothing, and a release would fail only after the production approval. VALIDATED makes
+            // publishAndReleaseToMavenCentral wait for the Portal's validation, so a rejected upload
+            // (a bad signature, a missing javadoc jar) fails the job instead of passing silently.
+            publishToMavenCentral(automaticRelease = true, validateDeployment = DeploymentValidation.VALIDATED)
+            // Signing needs the in-memory key, which only the production environment has. CI's
+            // publishToMavenLocal runs without it; release.yml checks that every file has its .asc
+            // before anything is uploaded, so a missing key cannot ship unsigned artifacts.
+            if (providers.gradleProperty("signingInMemoryKey").isPresent) {
+                signAllPublications()
+            }
             pom {
                 inceptionYear.set("2026")
                 url.set("https://github.com/sanamhub/nepdate-kotlin")

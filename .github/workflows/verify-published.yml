@@ -1,0 +1,73 @@
+name: verify-published
+
+# Resolves a released version from Maven Central the way a user does, with no mavenLocal, and runs
+# one conversion and one patro lookup on every runner OS. It also checks the main jar's signature
+# against the release key fetched by fingerprint. release.yml calls it after the release (a release
+# made with GITHUB_TOKEN fires no release event, so a trigger would never run). Run it by hand from
+# main to re-verify any released version: the check script comes from the ref the run is on.
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: released version without the v, for example 0.1.0-beta.1
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      version:
+        description: released version without the v, for example 0.1.0-beta.1
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  consumer:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    # Central can take 10 to 30 minutes to serve a new release; the script waits up to 45.
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - name: Consumer from Maven Central
+        shell: bash
+        env:
+          VERSION: ${{ inputs.version }}
+        run: bash tools/consumer-check/run.sh --published "$VERSION" --wait-minutes 45
+
+  signature:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      VERSION: ${{ inputs.version }}
+      SIGNING_KEY_FINGERPRINT: 44ED6E4129D97536CAE086175B979A307721A17B
+    steps:
+      - name: Signatures on Maven Central are by the release key
+        run: |
+          set -euo pipefail
+          gpg --batch --keyserver hkps://keyserver.ubuntu.com --recv-keys "$SIGNING_KEY_FINGERPRINT"
+          for artifact in nepdate nepdate-patro; do
+            base="https://repo1.maven.org/maven2/io/github/sanamhub/$artifact/$VERSION/$artifact-$VERSION"
+            for i in $(seq 1 45); do
+              curl -sf -o "$artifact.jar" "$base.jar" && curl -sf -o "$artifact.jar.asc" "$base.jar.asc" && break
+              echo "waiting ($i/45) for $base.jar"
+              sleep 60
+            done
+            status="$(gpg --batch --status-fd 1 --verify "$artifact.jar.asc" "$artifact.jar" 2>/dev/null)"
+            if ! printf '%s\n' "$status" | grep -q "^\[GNUPG:\] VALIDSIG $SIGNING_KEY_FINGERPRINT "; then
+              echo "::error::$artifact-$VERSION.jar on Maven Central is not signed by $SIGNING_KEY_FINGERPRINT"
+              exit 1
+            fi
+            echo "$artifact-$VERSION.jar: signed by $SIGNING_KEY_FINGERPRINT"
+          done
