@@ -21,6 +21,7 @@ gates=(
   "CORE_ALONE"
   "animalsnifferMain"
   "check-docs"
+  "release-check"
 )
 
 passed=0
@@ -47,6 +48,12 @@ for gate in "${gates[@]}"; do
   elif [ "$gate" = "check-docs" ]; then
     echo "ci: ./scripts/check-docs.sh"
     ./scripts/check-docs.sh
+  elif [ "$gate" = "release-check" ]; then
+    # The release preflight's own cases, then the repository: the Gradle version has its dated
+    # changelog section, so a version bump without one fails here, not after a tag.
+    echo "ci: ./scripts/test-release-check.sh && ./scripts/release-check.sh"
+    ./scripts/test-release-check.sh
+    ./scripts/release-check.sh
   else
     echo "ci: ./gradlew $gate"
     # shellcheck disable=SC2086 # each gate is a list of Gradle arguments

@@ -43,12 +43,23 @@ class ReadmeExamplesTest {
         assertEquals(normalize(markedRegion(javaSource)), normalize(javaBlock), "README java block")
     }
 
+    /**
+     * The README install block is the consumer check's dependencies block at the version in
+     * gradle.properties, so a version bump that forgets the README fails here.
+     */
     @Test
     fun readmeInstallBlockMatchesConsumer() {
         val readme = File(repoRoot(), "README.md").readText()
-        val gradleBlock = firstFencedBlock(readme, "## Quick start", "gradle")
+        val installBlock = firstFencedBlock(readme, "## Install", "kotlin")
         val consumerBuild = File(repoRoot(), "tools/consumer-check/build.gradle.kts").readText()
-        assertEquals(normalize(gradleBlock), normalize(dependenciesBlock(consumerBuild)), "README gradle block")
+        val version =
+            File(repoRoot(), "gradle.properties")
+                .readLines()
+                .first { it.startsWith("version=") }
+                .substringAfter("=")
+                .trim()
+        val expected = dependenciesBlock(consumerBuild).replace("\$nepdateVersion", version)
+        assertEquals(normalize(expected), normalize(installBlock), "README install block")
     }
 
     private fun dependenciesBlock(source: String): String {

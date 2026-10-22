@@ -6,7 +6,9 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-First release, planned as 0.1.0.
+## [0.1.0-beta.1] - 2026-10-22
+
+First public pre-release. The API may still change before 0.1.0.
 
 ### Added
 - `NepaliDate` for BS 1901-01-01 to 2199-12-30: `of`, `ofOrNull`, `ofGregorian`, `ofEpochDay`,

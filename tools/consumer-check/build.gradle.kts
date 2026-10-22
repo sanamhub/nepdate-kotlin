@@ -3,9 +3,13 @@ plugins {
     application
 }
 
+// run.sh passes the version under test, so the check follows gradle.properties or the released tag
+// instead of naming one.
+val nepdateVersion = providers.gradleProperty("nepdateVersion").get()
+
 dependencies {
-    implementation("io.github.sanamhub:nepdate:0.1.0")
-    implementation("io.github.sanamhub:nepdate-patro:0.1.0")
+    implementation("io.github.sanamhub:nepdate:$nepdateVersion")
+    implementation("io.github.sanamhub:nepdate-patro:$nepdateVersion") // only for tithi, holidays, events
 }
 
 application {
@@ -17,7 +21,7 @@ tasks.named<JavaExec>("run") {
     systemProperty("file.encoding", "UTF-8")
 }
 
-// Prints where the nepdate jars resolved from, so the run script can prove mavenLocal served them.
+// Prints where the nepdate jars resolved from, so run.sh can prove which repository served them.
 tasks.register("printNepdatePath") {
     doLast {
         configurations.runtimeClasspath.get().files
