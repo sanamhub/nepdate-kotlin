@@ -95,6 +95,7 @@ Kotlin extension is `Patro.info` in Java.
 | Building, gates and pull requests | [CONTRIBUTING.md](https://github.com/sanamhub/nepdate-kotlin/blob/main/CONTRIBUTING.md) |
 | Reporting a vulnerability | [SECURITY.md](https://github.com/sanamhub/nepdate-kotlin/blob/main/SECURITY.md) |
 | Algorithm and data | [shared/spec/README.md](https://github.com/sanamhub/nepdate-kotlin/blob/main/shared/spec/README.md), from the [NepDate hub](https://github.com/sanamhub/nepdate) |
+| Guides and examples | [nepdate.com/docs/kotlin](https://nepdate.com/docs/kotlin/) |
 | A wrong date, holiday or tithi | the hub's [data error form](https://github.com/sanamhub/nepdate/issues/new/choose) |
 | The other languages | [sanamhub/nepdate](https://github.com/sanamhub/nepdate#packages) |
 

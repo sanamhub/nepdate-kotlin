@@ -1,0 +1,39 @@
+name: Bug report
+description: A wrong date, a crash or an exception you didn't expect.
+labels: ["bug"]
+body:
+  - type: textarea
+    id: input
+    attributes:
+      label: Input
+      description: The call and its arguments, as a short Kotlin or Java snippet.
+      placeholder: NepaliDate.ofGregorian(2026, 10, 9)
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual
+      description: The result, or the exception with its message.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: nepdate-kotlin version
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: input
+    id: runtime
+    attributes:
+      label: JDK version, or Android version and device
+      placeholder: Temurin 21, Android 15 on a Pixel 8
+    validations:
+      required: true
