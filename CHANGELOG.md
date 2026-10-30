@@ -6,6 +6,12 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- `verify-published.yml` also runs weekly with the newest version from Maven Central, once with
+  Gradle (Kotlin DSL) and once with Maven, and daily against Central's metadata. A failure is one
+  issue labelled `published-check`.
+
 ## [0.1.0-beta.1] - 2026-10-22
 
 First public pre-release. The API may still change before 0.1.0.

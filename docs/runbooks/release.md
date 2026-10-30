@@ -41,6 +41,12 @@ One-time setup (done for 0.1.0-beta.1):
    Maven Central only (no `mavenLocal`), waiting up to 45 minutes, and checks one conversion and one
    patro event. A separate job checks the jars' signatures on `repo1.maven.org`. To re-check a
    version later, run `verify-published.yml` from `main` with that version.
+
+   The same workflow runs on a schedule: every Monday one Linux runner installs the newest version
+   from Maven Central once with Gradle (Kotlin DSL) and once with Maven, and every day a
+   metadata-only check confirms that Central still lists both artifacts and answers for their pom
+   and jar, without downloading either. A failed scheduled run opens or updates one issue labelled
+   `published-check`; create that label once. A green scheduled run is silent.
 7. Add an empty `## [Unreleased]` to the changelog if the release commit did not keep one.
 
 Rolling back: Maven Central can't delete a version. Release `X.Y.(Z+1)` with the fix and note it.

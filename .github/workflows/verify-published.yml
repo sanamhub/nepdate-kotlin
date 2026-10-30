@@ -5,25 +5,68 @@ name: verify-published
 # against the release key fetched by fingerprint. release.yml calls it after the release (a release
 # made with GITHUB_TOKEN fires no release event, so a trigger would never run). Run it by hand from
 # main to re-verify any released version: the check script comes from the ref the run is on.
+#
+# Scheduled runs keep the published artifacts honest after the release page goes quiet. Every
+# Monday one Linux runner installs the newest version from Maven Central once with Gradle (Kotlin
+# DSL) and once with Maven, and every day a metadata-only check confirms that Central still lists
+# both artifacts and answers for their pom and jar, without downloading either. A failure opens or
+# updates one issue labelled published-check. The check jobs read Central and nothing else; only
+# the report job writes.
+
 on:
   workflow_call:
     inputs:
       version:
-        description: released version without the v, for example 0.1.0-beta.1
-        required: true
+        description: released version without the v, or latest for the newest release
+        required: false
+        default: latest
         type: string
   workflow_dispatch:
     inputs:
       version:
-        description: released version without the v, for example 0.1.0-beta.1
-        required: true
+        description: released version without the v, or latest for the newest release
+        required: false
+        default: latest
         type: string
+  schedule:
+    # The weekly install check, Monday 09:29 UTC.
+    - cron: "29 9 * * 1"
+    # The daily metadata check, which downloads no jar.
+    - cron: "57 3 * * *"
 
 permissions:
   contents: read
 
 jobs:
+  # One place resolves latest, so every job of a run checks the same version.
+  resolve:
+    name: resolve the version
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      version: ${{ steps.resolve.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Resolve
+        id: resolve
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          version="${INPUT_VERSION:-latest}"
+          if [ "$version" = latest ]; then
+            version="$(bash tools/consumer-check/run.sh --published latest --resolve)"
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Resolved version: \`$version\`" >> "$GITHUB_STEP_SUMMARY"
+
+  # A release or a manual run: the consumer on every runner OS.
   consumer:
+    name: verify ${{ needs.resolve.outputs.version }}
+    if: github.event_name != 'schedule'
+    needs: resolve
     strategy:
       fail-fast: false
       matrix:
@@ -41,16 +84,34 @@ jobs:
           java-version: "17"
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
       - name: Consumer from Maven Central
+        id: check
         shell: bash
         env:
-          VERSION: ${{ inputs.version }}
-        run: bash tools/consumer-check/run.sh --published "$VERSION" --wait-minutes 45
+          VERSION: ${{ needs.resolve.outputs.version }}
+        run: |
+          set -o pipefail
+          bash tools/consumer-check/run.sh --published "$VERSION" --wait-minutes 45 2>&1 | tee verify.log
+      - name: Step summary
+        if: always()
+        env:
+          VERSION: ${{ needs.resolve.outputs.version }}
+          OUTCOME: ${{ steps.check.outcome }}
+        run: |
+          {
+            echo "### verify-published"
+            echo
+            echo "- Version: \`$VERSION\`"
+            echo "- Result: **$OUTCOME**"
+          } >> "$GITHUB_STEP_SUMMARY"
 
   signature:
+    name: signature ${{ needs.resolve.outputs.version }}
+    if: github.event_name != 'schedule'
+    needs: resolve
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      VERSION: ${{ inputs.version }}
+      VERSION: ${{ needs.resolve.outputs.version }}
       SIGNING_KEY_FINGERPRINT: 44ED6E4129D97536CAE086175B979A307721A17B
     steps:
       - name: Signatures on Maven Central are by the release key
@@ -71,3 +132,126 @@ jobs:
             fi
             echo "$artifact-$VERSION.jar: signed by $SIGNING_KEY_FINGERPRINT"
           done
+
+  # The weekly check: Linux only, once with Gradle (Kotlin DSL) and once with Maven.
+  weekly:
+    name: weekly ${{ needs.resolve.outputs.version }}
+    if: github.event_name == 'schedule' && github.event.schedule == '29 9 * * 1'
+    needs: resolve
+    strategy:
+      fail-fast: false
+      matrix:
+        manager: [gradle, maven]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - name: Consumer from Maven Central
+        id: check
+        shell: bash
+        env:
+          VERSION: ${{ needs.resolve.outputs.version }}
+          MANAGER: ${{ matrix.manager }}
+        run: |
+          set -o pipefail
+          bash tools/consumer-check/run.sh --published "$VERSION" --manager "$MANAGER" \
+            --wait-minutes 5 2>&1 | tee verify.log
+      - name: Step summary
+        if: always()
+        env:
+          VERSION: ${{ needs.resolve.outputs.version }}
+          MANAGER: ${{ matrix.manager }}
+          OUTCOME: ${{ steps.check.outcome }}
+        run: |
+          {
+            echo "### verify-published (weekly)"
+            echo
+            echo "- Version: \`$VERSION\`"
+            echo "- Manager: \`$MANAGER\`"
+            echo "- Result: **$OUTCOME**"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Keep the failing output
+        if: failure()
+        run: tail -n 40 verify.log > failure.txt || true
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: failure()
+        with:
+          name: failure-weekly-${{ matrix.manager }}
+          path: failure.txt
+          if-no-files-found: ignore
+          retention-days: 7
+
+  # The daily check: Central still lists both artifacts and answers for their pom and jar, with no
+  # download, so it cannot look like test traffic to Central.
+  metadata:
+    name: metadata ${{ needs.resolve.outputs.version }}
+    if: github.event_name == 'schedule' && github.event.schedule == '57 3 * * *'
+    needs: resolve
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Check the Central listing
+        id: check
+        shell: bash
+        env:
+          VERSION: ${{ needs.resolve.outputs.version }}
+        run: |
+          set -o pipefail
+          bash tools/consumer-check/run.sh --published "$VERSION" --metadata 2>&1 | tee metadata.log
+      - name: Step summary
+        if: always()
+        env:
+          VERSION: ${{ needs.resolve.outputs.version }}
+          OUTCOME: ${{ steps.check.outcome }}
+        run: |
+          {
+            echo "### verify-published (metadata)"
+            echo
+            echo "- Version: \`$VERSION\`"
+            echo "- Result: **$OUTCOME**"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Keep the failing output
+        if: failure()
+        run: tail -n 40 metadata.log > failure.txt || true
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: failure()
+        with:
+          name: failure-metadata
+          path: failure.txt
+          if-no-files-found: ignore
+          retention-days: 7
+
+  # The only job with write access. It reads the artifacts the check jobs kept and opens or updates
+  # one issue; it never installs a package.
+  report:
+    name: report
+    if: failure() && github.event_name == 'schedule'
+    needs: [resolve, consumer, signature, weekly, metadata]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: failure-*
+          path: failures
+      - name: Open or update the issue
+        env:
+          VERSION: ${{ needs.resolve.outputs.version }}
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/published-issue.sh io.github.sanamhub:nepdate "${VERSION:-latest}" failures
