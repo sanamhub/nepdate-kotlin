@@ -114,7 +114,7 @@ jobs:
             for suffix in .jar -sources.jar -javadoc.jar .pom .module; do
               want+="$artifact-$VERSION$suffix"$'\n'"$artifact-$VERSION$suffix.asc"$'\n'
             done
-            got="$(cd "$dir" && ls -1 | grep -v '^maven-metadata' | sort)"
+            got="$(for file in "$dir"/*; do basename "$file"; done | grep -v '^maven-metadata' | sort)"
             if [ "$got" != "$(printf '%s' "$want" | sort)" ]; then
               echo "::error::$dir does not hold exactly the expected files"
               diff <(printf '%s' "$want" | sort) <(printf '%s\n' "$got") || true
