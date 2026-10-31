@@ -9,7 +9,6 @@ cd "$(dirname "$0")/.."
 # its own mutation job. It is not part of the per-change gate.
 gates=(
   "exec-bits"
-  "shared-sums"
   "ktlintCheck detekt"
   "build"
   "test koverVerify"
@@ -41,10 +40,6 @@ for gate in "${gates[@]}"; do
       echo "ci: the files above are not executable in git; run git update-index --chmod=+x <file>"
       exit 1
     fi
-  elif [ "$gate" = "shared-sums" ]; then
-    # ADR-0006: shared/ matches the sums recorded for the hub commit in shared/VERSION.
-    echo "ci: ./scripts/shared-sums.sh"
-    ./scripts/shared-sums.sh
   elif [ "$gate" = "check-docs" ]; then
     echo "ci: ./scripts/check-docs.sh"
     ./scripts/check-docs.sh

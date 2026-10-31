@@ -19,22 +19,35 @@ class PatroTest {
 
     @Test
     fun `decoded tables hold the PATRO section 3 counts`() {
-        assertEquals(2793, info.size)
-        assertEquals(64285, BASE_SERIAL)
-        assertEquals(2190, info.count { it.tithi != null })
-        assertEquals(294, info.count { it.isPublicHoliday })
-        assertEquals(1671, info.count { it.events.isNotEmpty() })
-        assertEquals(3032, info.sumOf { it.events.size })
-        assertEquals(753, PatroTables.pairs.size)
-        assertEquals(753, PatroTables.pairs.toSet().size)
-        assertEquals(3032, PatroTables.events.size)
+        assertEquals(PatroSummary.number("days"), info.size)
+        assertEquals(PatroSummary.number("first_serial"), BASE_SERIAL)
+        assertEquals(PatroSummary.number("tithi_days"), info.count { it.tithi != null })
+        assertEquals(PatroSummary.number("holidays"), info.count { it.isPublicHoliday })
+        assertEquals(PatroSummary.number("event_days"), info.count { it.events.isNotEmpty() })
+        assertEquals(PatroSummary.number("events"), info.sumOf { it.events.size })
+        assertEquals(PatroSummary.number("names"), PatroTables.pairs.size)
+        assertEquals(PatroSummary.number("names"), PatroTables.pairs.toSet().size)
+        assertEquals(PatroSummary.number("event_names"), PatroTables.events.toSet().size)
+        assertEquals(PatroSummary.number("tithi_names"), info.mapNotNull { it.tithi }.toSet().size)
+        assertEquals(
+            PatroSummary.number("name_bytes"),
+            PatroTables.pairs.sumOf { pair ->
+                pair.nepali.toByteArray(Charsets.UTF_8).size + pair.english.toByteArray(Charsets.UTF_8).size
+            },
+        )
+        assertEquals(PatroSummary.number("events"), PatroTables.events.size)
     }
 
     @Test
     fun `days share CalendarInfo objects`() {
         val distinct = Collections.newSetFromMap(IdentityHashMap<CalendarInfo, Boolean>())
         distinct.addAll(info)
-        assertTrue(distinct.size <= 1671 + 294 + 32 + 1, "${distinct.size} distinct instances")
+        val bound =
+            PatroSummary.number("event_days") +
+                PatroSummary.number("holidays") +
+                PatroSummary.number("tithi_names") +
+                1
+        assertTrue(distinct.size <= bound, "${distinct.size} distinct instances")
         val tithiOnly = info.filter { it.tithi != null && !it.isPublicHoliday && it.events.isEmpty() }
         assertTrue(tithiOnly.isNotEmpty())
         for (day in tithiOnly) assertSame(tithiOnly.first { it.tithi === day.tithi }, day)
@@ -49,8 +62,9 @@ class PatroTest {
         val withTithi = info.indices.filter { info[it].tithi != null }
         assertEquals(TITHI_FIRST_OFFSET, withTithi.first())
         assertEquals((withTithi.first()..withTithi.last()).toList(), withTithi)
-        assertEquals(serialOf(d(2078, 1, 2)) - BASE_SERIAL, TITHI_FIRST_OFFSET)
-        assertEquals(serialOf(d(2083, 12, 30)) - BASE_SERIAL, withTithi.last())
+        assertEquals(serialOf(summaryDay("tithi_first_day")) - BASE_SERIAL, TITHI_FIRST_OFFSET)
+        assertEquals(serialOf(summaryDay("tithi_last_day")) - BASE_SERIAL, withTithi.last())
+        assertEquals(PatroSummary.number("tithi_days"), withTithi.size)
     }
 
     @Test
@@ -67,17 +81,21 @@ class PatroTest {
     }
 
     @Test
-    fun `coverage is 2077-01-01 to 2084-08-20`() {
-        assertEquals(d(2077, 1, 1), Patro.coverage.start)
-        assertEquals(d(2084, 8, 20), Patro.coverage.endInclusive)
-        assertEquals(SPAN, Patro.coverage.size)
+    fun `coverage is the summary's first day to last day`() {
+        assertEquals(summaryDay("first_day"), Patro.coverage.start)
+        assertEquals(summaryDay("last_day"), Patro.coverage.endInclusive)
+        assertEquals(PatroSummary.number("first_serial"), serialOf(Patro.coverage.start))
+        assertEquals(PatroSummary.number("last_serial"), serialOf(Patro.coverage.endInclusive))
+        assertEquals(PatroSummary.number("days"), Patro.coverage.size)
+        assertEquals(PatroSummary.number("first_year"), Patro.coverage.start.year)
+        assertEquals(PatroSummary.number("last_year"), Patro.coverage.endInclusive.year)
         assertSame(Patro.coverage, Patro.coverage)
     }
 
     @Test
     fun `public holidays ascend from 2077-01-01 to 2084-08-18`() {
         val holidays = Patro.publicHolidays
-        assertEquals(294, holidays.size)
+        assertEquals(PatroSummary.number("holidays"), holidays.size)
         assertEquals(d(2077, 1, 1), holidays.first())
         assertEquals(d(2084, 8, 18), holidays.last())
         assertEquals(holidays.sorted(), holidays)

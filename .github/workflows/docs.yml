@@ -1,9 +1,9 @@
 name: docs
 
-# Publishes the Dokka HTML to GitHub Pages (ADR-0001 §7). Manual only (ADR-0006): GitHub Pages is
-# not enabled on the repository yet, and the Dokka build itself runs on every push and pull request
-# as a gate of scripts/ci.sh. Run this by hand once Pages is enabled with the "GitHub Actions"
-# source.
+# Publishes the Dokka HTML to GitHub Pages (ADR-0001 §7). Manual only (ADR-0006 section 4): GitHub
+# Pages is not enabled on the repository yet, and the Dokka build itself runs on every push and
+# pull request as a gate of scripts/ci.sh. Run this by hand once Pages is enabled with the "GitHub
+# Actions" source.
 on:
   workflow_dispatch:
 

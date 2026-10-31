@@ -15,9 +15,12 @@ const val CALENDAR_OUTPUT = "nepdate/src/main/kotlin/io/github/sanamhub/nepdate/
 /** Generated files under [root], relative path to content. */
 fun generate(root: Path): Map<String, String> {
     val calendar = parseCalendar(root.resolve(CALENDAR_JSON).readText())
+    val summary = readPatroSummary(root)
+    val patro = buildPatroTables(readPatroDays(root, calendar))
+    validatePatroSummary(patro, summary, calendar)
     return mapOf(
         CALENDAR_OUTPUT to renderCalendar(calendar),
-        PATRO_OUTPUT to renderPatro(buildPatroTables(readPatroDays(root, calendar))),
+        PATRO_OUTPUT to renderPatro(patro),
     )
 }
 

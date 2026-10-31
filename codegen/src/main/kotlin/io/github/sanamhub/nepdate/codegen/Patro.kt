@@ -12,7 +12,6 @@ const val PATRO_DIR = "shared/data/patro"
 const val PATRO_OUTPUT = "nepdate-patro/src/main/kotlin/io/github/sanamhub/nepdate/patro/Patro.generated.kt"
 
 private const val SCHEMA = 1
-private const val MAX_TITHI_PAIRS = 32
 private const val VALUES_PER_LITERAL = 20
 private const val FIRST_SURROGATE = 0xD800
 private val DATE_KEY = Regex("""(\d{4})-(\d{2})-(\d{2})""")
@@ -134,7 +133,6 @@ fun buildPatroTables(allDays: List<PatroDay>): PatroTablesData {
 
     val index = LinkedHashMap<NamePair, Int>()
     for (day in tithiDays) index.getOrPut(day.tithi!!) { index.size }
-    expect(index.size <= MAX_TITHI_PAIRS) { "${index.size} distinct tithi pairs, at most $MAX_TITHI_PAIRS" }
     for (day in days) for (event in day.events) index.getOrPut(event) { index.size }
 
     val eventDays = days.filter { it.events.isNotEmpty() }

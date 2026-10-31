@@ -7,7 +7,7 @@ import java.util.Collections
  * JVM class initialisation is lazy and thread-safe (JLS 12.4.2), so no lock is needed.
  */
 internal object PatroTables {
-    /** The 753 distinct name pairs; index i is the pair at `NAMES[2 * i]`, `NAMES[2 * i + 1]`. */
+    /** The distinct name pairs; index i is the pair at `NAMES[2 * i]`, `NAMES[2 * i + 1]`. */
     @JvmField val pairs: Array<Named>
 
     /** Every event in file order, sharing the [pairs] objects. */
@@ -16,11 +16,14 @@ internal object PatroTables {
     /** One answer per day from BASE_SERIAL, [SPAN] entries. */
     @JvmField val infoByDay: Array<CalendarInfo>
 
+    /** Distinct tithi pairs: the tithi indexes are `0` until this count. */
+    private val tithiPairs: Int = TITHI_INDEX_DATA.maxOf { it.code } - '0'.code + 1
+
     init {
         pairs = Array(NAMES.size / 2) { Named(NAMES[2 * it], NAMES[2 * it + 1]) }
         events = Array(EVENT_NAME_DATA.length) { pairs[EVENT_NAME_DATA[it].code] }
 
-        val tithiOnly = arrayOfNulls<CalendarInfo>(MAX_TITHI_PAIRS)
+        val tithiOnly = arrayOfNulls<CalendarInfo>(tithiPairs)
         var holiday = 0
         var eventDay = 0
         infoByDay =
@@ -53,6 +56,4 @@ internal object PatroTables {
                 }
             }
     }
-
-    private const val MAX_TITHI_PAIRS = 32
 }

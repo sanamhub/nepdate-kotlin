@@ -24,8 +24,12 @@ class CodegenTest {
             .first { Files.exists(it.resolve("shared/VERSION")) }
 
     private val calendarJson: String = repoRoot.resolve(CALENDAR_JSON).readText()
+    private val summaryJson: String = repoRoot.resolve(PATRO_SUMMARY).readText()
 
-    private fun copyShared(json: String = calendarJson) {
+    private fun copyShared(
+        json: String = calendarJson,
+        summary: String = summaryJson,
+    ) {
         val target = root.resolve(CALENDAR_JSON)
         target.parent.createDirectories()
         target.writeText(json)
@@ -34,6 +38,9 @@ class CodegenTest {
         Files.list(repoRoot.resolve(PATRO_DIR)).use { files ->
             files.forEach { Files.copy(it, patro.resolve(it.fileName.toString())) }
         }
+        val summaryTarget = root.resolve(PATRO_SUMMARY)
+        summaryTarget.parent.createDirectories()
+        summaryTarget.writeText(summary)
     }
 
     private fun json(transform: (String) -> String) = transform(calendarJson)
@@ -91,6 +98,24 @@ class CodegenTest {
     fun `check fails when the file is missing`() {
         copyShared()
         assertEquals(1, runCodegen(root, check = true))
+        assertFalse(Files.exists(root.resolve(CALENDAR_OUTPUT)))
+    }
+
+    @Test
+    fun `a missing summary asks for a resync`() {
+        copyShared()
+        Files.delete(root.resolve(PATRO_SUMMARY))
+        val error = assertFailsWith<CodegenException> { runCodegen(root, check = false) }
+        assertTrue("re-sync shared/" in error.message!!, error.message)
+        assertFalse(Files.exists(root.resolve(CALENDAR_OUTPUT)))
+    }
+
+    @Test
+    fun `a summary that disagrees with the data names the field and both values`() {
+        copyShared(summary = summaryJson.replace(Regex(""""names": \d+"""), "\"names\": 0"))
+        val error = assertFailsWith<CodegenException> { runCodegen(root, check = false) }
+        assertTrue("names is 0" in error.message!!, error.message)
+        assertTrue("data gives" in error.message!!, error.message)
         assertFalse(Files.exists(root.resolve(CALENDAR_OUTPUT)))
     }
 

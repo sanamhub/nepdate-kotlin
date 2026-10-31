@@ -12,13 +12,57 @@ import io.github.sanamhub.nepdate.Lang;
 import io.github.sanamhub.nepdate.NepDateException;
 import io.github.sanamhub.nepdate.NepaliDate;
 import io.github.sanamhub.nepdate.NepaliDateRange;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 /**
  * Calls every public symbol of nepdate-patro the way a Java user would (ADR-0004 gate 6).
  */
 class JavaApiTest {
+    private static final Map<String, String> SUMMARY = readSummary();
+
+    /** The hub's patro counts, the same vendored file the Kotlin tests read. */
+    private static Map<String, String> readSummary() {
+        String shared = System.getProperty("nepdate.shared");
+        if (shared == null) throw new IllegalStateException("nepdate.shared is not set; run the tests through Gradle");
+        Path path = Paths.get(shared, "spec", "vectors", "patro-summary.json");
+        Map<String, String> fields = new HashMap<>();
+        try {
+            for (String line : Files.readAllLines(path, StandardCharsets.UTF_8)) {
+                String text = line.trim();
+                if (text.endsWith(",")) text = text.substring(0, text.length() - 1);
+                int colon = text.indexOf(':');
+                if (colon < 0) continue;
+                String key = text.substring(0, colon).trim().replace("\"", "");
+                String value = text.substring(colon + 1).trim().replace("\"", "");
+                fields.put(key, value);
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException("reading " + path + "; re-sync shared/ from the hub", e);
+        }
+        return Map.copyOf(fields);
+    }
+
+    private static int summaryNumber(String field) {
+        String text = SUMMARY.get(field);
+        if (text == null) throw new IllegalStateException("patro-summary.json has no " + field);
+        return Integer.parseInt(text);
+    }
+
+    private static String summaryText(String field) {
+        String text = SUMMARY.get(field);
+        if (text == null) throw new IllegalStateException("patro-summary.json has no " + field);
+        return text;
+    }
+
     @Test
     void patroQueries() throws NepDateException {
         NepaliDate newYear = NepaliDate.of(2081, 1, 1);
@@ -51,10 +95,13 @@ class JavaApiTest {
     @Test
     void coverageAndHolidays() throws NepDateException {
         NepaliDateRange coverage = Patro.getCoverage();
-        assertEquals(NepaliDate.of(2077, 1, 1), coverage.getStart());
-        assertEquals(NepaliDate.of(2084, 8, 20), coverage.getEndInclusive());
+        assertEquals(NepaliDate.parse(summaryText("first_day")), coverage.getStart());
+        assertEquals(NepaliDate.parse(summaryText("last_day")), coverage.getEndInclusive());
+        assertEquals(summaryNumber("days"), coverage.size());
         List<NepaliDate> holidays = Patro.getPublicHolidays();
-        assertEquals(294, holidays.size());
+        assertEquals(summaryNumber("holidays"), holidays.size());
+        assertFalse(holidays.isEmpty());
+        assertTrue(holidays.stream().allMatch(date -> Patro.info(date).isPublicHoliday()));
         assertThrows(UnsupportedOperationException.class, () -> holidays.add(NepaliDate.MIN));
     }
 }

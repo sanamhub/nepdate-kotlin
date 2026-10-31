@@ -14,6 +14,7 @@ class PatroCodegenTest {
             .first { Files.exists(it.resolve("shared/VERSION")) }
 
     private val calendar = parseCalendar(repoRoot.resolve(CALENDAR_JSON).readText())
+    private val summary = readPatroSummary(repoRoot)
     private val days = readPatroDays(repoRoot, calendar)
     private val tables = buildPatroTables(days)
 
@@ -23,30 +24,35 @@ class PatroCodegenTest {
         d: Int,
     ) = serialOf(calendar, y, m, d)!!
 
+    private fun day(text: String): Triple<Int, Int, Int> {
+        val parts = text.split('-').map { it.toInt() }
+        return Triple(parts[0], parts[1], parts[2])
+    }
+
+    private fun serial(text: String): Int {
+        val (y, m, d) = day(text)
+        return serial(y, m, d)
+    }
+
     private fun tithi(i: Int) = NamePair("np$i", "en$i")
 
     @Test
     fun `serials follow ALGORITHM section 4`() {
         assertEquals(0, serial(1901, 1, 1))
-        assertEquals(64285, serial(2077, 1, 1))
+        assertEquals(summary.firstSerial, serial(summary.firstDay))
         assertEquals(null, serialOf(calendar, 2081, 4, 33))
         assertEquals(null, serialOf(calendar, 1900, 12, 30))
     }
 
     @Test
     fun `tables hold the PATRO section 3 counts`() {
-        assertEquals(64285, tables.baseSerial)
-        assertEquals(2793, tables.span)
-        assertEquals(serial(2084, 8, 20), tables.baseSerial + tables.span - 1)
-        assertEquals(serial(2078, 1, 2) - 64285, tables.tithiFirstOffset)
-        assertEquals(2190, tables.tithiIndex.size)
-        assertEquals(294, tables.holidays.size)
-        assertEquals(1671, tables.eventDays.size)
-        assertEquals(1672, tables.eventStart.size)
-        assertEquals(3032, tables.eventStart.last())
-        assertEquals(3032, tables.eventNames.size)
-        assertEquals(753, tables.names.size)
-        assertTrue(tables.tithiIndex.all { it in 0 until 32 })
+        validatePatroSummary(tables, summary, calendar)
+        assertEquals(summary.lastSerial, tables.baseSerial + tables.span - 1)
+        assertEquals(summary.lastSerial, serial(summary.lastDay))
+        assertEquals(serial(summary.tithiFirstDay) - summary.firstSerial, tables.tithiFirstOffset)
+        assertEquals(summary.eventDays + 1, tables.eventStart.size)
+        assertEquals(summary.events, tables.eventStart.last())
+        assertTrue(tables.tithiIndex.all { it in 0 until summary.tithiNames })
         assertEquals(tables.holidays.sorted(), tables.holidays)
         assertEquals(tables.eventDays.sorted(), tables.eventDays)
     }
@@ -67,13 +73,10 @@ class PatroCodegenTest {
     }
 
     @Test
-    fun `more than 32 tithi pairs fail`() {
-        assertEquals(32, buildPatroTables((0 until 32).map { PatroDay(it, tithi(it), false, emptyList()) }).names.size)
-        val error =
-            assertFailsWith<CodegenException> {
-                buildPatroTables((0 until 33).map { PatroDay(it, tithi(it), false, emptyList()) })
-            }
-        assertTrue("33" in error.message!!, error.message)
+    fun `a summary that disagrees names the field and both values`() {
+        val error = assertFailsWith<CodegenException> { validatePatroSummary(tables, summary.copy(names = summary.names + 1), calendar) }
+        assertTrue("names is ${summary.names + 1}" in error.message!!, error.message)
+        assertTrue("data gives ${summary.names}" in error.message!!, error.message)
     }
 
     @Test

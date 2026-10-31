@@ -4,6 +4,8 @@ on:
   pull_request:
   push:
     branches: [main]
+  # shared-sync starts CI this way on the PR it opens with GITHUB_TOKEN.
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -11,9 +13,6 @@ permissions:
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
-
-# The shared-data check runs inside scripts/ci.sh (./scripts/shared-sums.sh, ADR-0006). The hub's
-# reusable shared-check returns when sanamhub/nepdate exists on GitHub.
 
 jobs:
   build:
@@ -35,6 +34,12 @@ jobs:
           java-version: ${{ matrix.java }}
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
       - run: ./scripts/ci.sh
+
+  # Fails when shared/ differs from the hub at the commit in shared/VERSION (ADR-0007).
+  shared-check:
+    permissions:
+      contents: read
+    uses: sanamhub/nepdate/.github/workflows/shared-check.yml@f94d67c0c85de7909cf54d7e4e96f226ca750129 # main 2026-10-31
 
   # The bytecode targets Java 11 (ADR-0001): Gradle runs on 17, the tests on an 11 runtime.
   test-java-11:

@@ -469,7 +469,7 @@ internal const val EVENT_NAME_DATA: String =
     "\u0149\u0147\u01CA\u01CB\u02EE\u01CD\u014D\u01CE\u014E\u0252\u014F\u01CF\u0153\u0154\u01DD\u0151\u01D2\u0156\u0152\u0155" +
     "\u01D0\u01D3\u0157\u0252\u0158\u0218\u0159\u01D4\u01DD\u02C5\u015D\u015E\u0298\u01D5\u015F\u0160\u0252\u0177\u0163\u0202" +
     "\u021B\u021C\u01D6\u029C\u01D7\u0161\u0167\u0168\u021D\u0162\u021E\u0177\u0252\u016A\u016D\u0222\u01DD\u02EF\u0171\u02A3" +
-    "\u0227\u0175\u0174\u02F0\u02A5\u02D1\u00C3\u01DD\u01BB\u01DD\u02C2\u01DD"
+    "\u0227\u0175\u0174\u02F0\u02A5\u02F1\u00C3\u01DD\u01BB\u01DD\u02C2\u01DD"
 
 /** Distinct (Nepali, English) pairs flattened: the tithi pairs first, then the event pairs. */
 internal val NAMES: Array<String> =
@@ -1980,4 +1980,6 @@ internal val NAMES: Array<String> =
         "Ghode Jatra (Kathmandu Valley Holiday)",
         "विश्व ज्योतिष स्थापना दिवस",
         "World Astrology Day",
+        "नयाँ वर्ष २०८४",
+        "New Year 2084",
     )
