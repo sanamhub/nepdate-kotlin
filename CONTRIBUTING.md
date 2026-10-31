@@ -8,7 +8,7 @@ design can be agreed before you write code. Report security problems as describe
 
 Calendar data and the conversion rules come from the [NepDate hub](https://github.com/sanamhub/nepdate),
 copied into `shared/`. A wrong date, tithi or holiday is a data problem: report it there. Never
-edit `shared/` here; CI checks it against `tools/shared.sha256`.
+edit `shared/` here; CI checks it against the hub at the commit in `shared/VERSION`.
 
 ## Setup
 
@@ -58,5 +58,4 @@ Check the new checksums in the diff.
 
 ## Syncing the shared data
 
-Run the hub's `tools/shared_sync.py` on this checkout, then
-`./scripts/shared-sums.sh --write <hub checkout>` and `./gradlew :codegen:run`.
+Run the hub's `tools/shared_sync.py` on this checkout, then `./gradlew :codegen:run`.

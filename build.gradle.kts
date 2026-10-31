@@ -88,6 +88,7 @@ configure(subprojects.filter { it.path in libraryProjects }) {
                 testClassesDirs = javaApiTest.output.classesDirs
                 classpath = javaApiTest.runtimeClasspath
                 useJUnitPlatform()
+                systemProperty("nepdate.shared", rootProject.file("shared").absolutePath)
             }
         tasks.named("check") {
             dependsOn(javaApiTestTask)

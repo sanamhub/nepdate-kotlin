@@ -12,6 +12,7 @@ import io.github.sanamhub.nepdate.patro.EVENT_NAME_DATA
 import io.github.sanamhub.nepdate.patro.EVENT_START_DATA
 import io.github.sanamhub.nepdate.patro.HOLIDAY_DATA
 import io.github.sanamhub.nepdate.patro.Patro
+import io.github.sanamhub.nepdate.patro.PatroSummary
 import io.github.sanamhub.nepdate.patro.PatroTables
 import io.github.sanamhub.nepdate.patro.SPAN
 import io.github.sanamhub.nepdate.patro.TITHI_FIRST_OFFSET
@@ -69,10 +70,10 @@ class CalendarDataTests {
         assertStrictlyIncreasing(starts)
     }
 
-    // CalendarOffsets.TotalDays is the span: SPAN == 2793.
+    // CalendarOffsets.TotalDays is the span, which is the summary's days.
     @Test
     fun CalendarOffsets_TotalDays_MatchesExpectedCount() {
-        assertEquals(2793, SPAN)
+        assertEquals(PatroSummary.number("days"), SPAN)
     }
 
     // The tithi days are one contiguous run inside the span, so their offsets ascend by one.
@@ -85,13 +86,13 @@ class CalendarDataTests {
 
     @Test
     fun TithiData_AllPoolIds_AreInRange() {
-        assertTrue(TITHI_INDEX_DATA.all { it.code - '0'.code in 0 until 32 })
+        assertTrue(TITHI_INDEX_DATA.all { it.code - '0'.code in 0 until PatroSummary.number("tithi_names") })
     }
 
     @Test
     fun TithiData_EntryCount_Matches2190() {
-        assertEquals(2190, TITHI_INDEX_DATA.length)
-        assertEquals(2190, PatroTables.infoByDay.count { it.tithi != null })
+        assertEquals(PatroSummary.number("tithi_days"), TITHI_INDEX_DATA.length)
+        assertEquals(PatroSummary.number("tithi_days"), PatroTables.infoByDay.count { it.tithi != null })
     }
 
     @Test
@@ -117,8 +118,8 @@ class CalendarDataTests {
 
     @Test
     fun EventData_DayCount_Matches1671() {
-        assertEquals(1671, EVENT_DAY_DATA.length)
-        assertEquals(1671, PatroTables.infoByDay.count { it.events.isNotEmpty() })
+        assertEquals(PatroSummary.number("event_days"), EVENT_DAY_DATA.length)
+        assertEquals(PatroSummary.number("event_days"), PatroTables.infoByDay.count { it.events.isNotEmpty() })
     }
 
     @Test
@@ -129,7 +130,7 @@ class CalendarDataTests {
 
     @Test
     fun HolidayData_Count_Matches294() {
-        assertEquals(294, HOLIDAY_DATA.length)
+        assertEquals(PatroSummary.number("holidays"), HOLIDAY_DATA.length)
     }
 
     // C#'s base is 2001-01-01; ours is 2077-01-01.
@@ -267,7 +268,7 @@ class CalendarDataTests {
     @Test
     fun HolidayCount_ViaApi_Matches294() {
         val all = NepaliDateRange.of(d(2001, 1, 1), d(2089, 12, 1).lastDayOfMonth())
-        assertEquals(294, all.count { Patro.info(it).isPublicHoliday })
+        assertEquals(PatroSummary.number("holidays"), all.count { Patro.info(it).isPublicHoliday })
     }
 
     // C# returns empty arrays, never null; Kotlin's List<Named> can't be null, so this checks both kinds of day.

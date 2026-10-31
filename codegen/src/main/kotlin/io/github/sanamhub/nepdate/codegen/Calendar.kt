@@ -21,7 +21,8 @@ private val LENGTHS = 29..32
 /** A problem in `shared/data` that stops generation; the message names the field or year. */
 class CodegenException(
     message: String,
-) : Exception(message)
+    cause: Throwable? = null,
+) : Exception(message, cause)
 
 /** Month lengths of BS 1901 to 2199 from `bs-calendar.json`, validated. */
 class CalendarData(

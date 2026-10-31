@@ -11,4 +11,6 @@ later ADR supersedes it.
 | [0003](0003-api-conventions-errors-and-parity.md) | API conventions, errors and parity mapping | Accepted |
 | [0004](0004-testing-and-quality-gates.md) | Testing and quality gates | Accepted |
 | [0005](0005-releases.md) | Releases | Accepted |
-| [0006](0006-ci-without-the-hub-remote.md) | CI without the hub on GitHub | Accepted |
+| [0006](0006-ci-without-the-hub-remote.md) | CI without the hub on GitHub | Superseded by 0007 |
+| [0007](0007-the-reusable-shared-check.md) | The reusable shared check, without the sums | Accepted |
+| [0008](0008-patro-counts-from-the-hub-summary.md) | Read the patro counts from the hub's summary | Accepted |
