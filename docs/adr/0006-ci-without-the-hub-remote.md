@@ -1,6 +1,6 @@
 # ADR-0006: CI without the hub on GitHub
 
-- **Status:** accepted
+- **Status:** superseded by [ADR-0007](0007-the-reusable-shared-check.md)
 - **Date:** 2026-10-19
 - **Approved by:** Sanam
 - **Supersedes:** the reusable-workflow sentence of ADR-0001 §5 and the weekly `shared-sync` line of

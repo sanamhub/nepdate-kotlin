@@ -1,6 +1,6 @@
 # ADR-0001: Build layout, toolchain, targets and shared data
 
-- **Status:** accepted
+- **Status:** accepted (amended by ADR-0008)
 - **Date:** 2026-10-06
 - **Approved by:** Sanam
 
