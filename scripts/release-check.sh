@@ -6,10 +6,24 @@
 #
 #   scripts/release-check.sh [TAG] [REPO_DIR]
 #   scripts/release-check.sh v0.1.0-beta.1
+#   scripts/release-check.sh --print [REPO_DIR]
+#
+# --print prints the Gradle version after the same validation, for the CI job that passes the
+# port's version to the hub's version check.
 set -euo pipefail
 
-tag="${1:-}"
-root="${2:-.}"
+print_mode=0
+if [ "${1:-}" = "--print" ]; then
+  print_mode=1
+  shift
+fi
+if [ "$print_mode" -eq 1 ]; then
+  tag=""
+  root="${1:-.}"
+else
+  tag="${1:-}"
+  root="${2:-.}"
+fi
 
 version="$(grep '^version=' "$root/gradle.properties" | cut -d= -f2 | tr -d '[:space:]')"
 
@@ -32,4 +46,8 @@ if ! awk -v v="$version" '
   echo "release-check: CHANGELOG.md has no '## [$version] - YYYY-MM-DD' section"
   exit 1
 fi
-echo "release-check: $version ok"
+if [ "$print_mode" -eq 1 ]; then
+  printf '%s\n' "$version"
+else
+  echo "release-check: $version ok"
+fi
