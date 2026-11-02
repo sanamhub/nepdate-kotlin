@@ -49,6 +49,16 @@ expect fail 0.1.0         v0.1.0         '## [0.1.0] - 2026-10\n'
 expect fail 0.1.0         v0.1.0         '## [0.1.0] - soon\n'
 expect fail 0.1.0         v0.1.0         '### [0.1.0] - 2026-10-21\n'
 
+# --print prints the Gradle version after the same validation.
+printf 'group=io.github.sanamhub\nversion=0.1.0-beta.1\n' > "$dir/gradle.properties"
+printf '%b' "$beta" > "$dir/CHANGELOG.md"
+printed="$(bash "$check" --print "$dir")"
+cases=$((cases + 1))
+if [ "$printed" != "0.1.0-beta.1" ]; then
+  echo "FAIL: --print gave '$printed', want 0.1.0-beta.1"
+  failures=$((failures + 1))
+fi
+
 if [ "$failures" -ne 0 ]; then
   echo "test-release-check: $failures of $cases case(s) failed"
   exit 1

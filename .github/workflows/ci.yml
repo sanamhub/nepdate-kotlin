@@ -35,11 +35,36 @@ jobs:
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
       - run: ./scripts/ci.sh
 
-  # Fails when shared/ differs from the hub at the commit in shared/VERSION (ADR-0007).
+  version:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Read the Gradle version
+        id: version
+        run: |
+          set -euo pipefail
+          # Assigned first: a failing command inside echo's argument would not stop the step.
+          if ! version="$(bash scripts/release-check.sh --print)"; then
+            echo "$version" >&2
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+  # Fails when shared/ differs from the hub at the commit in shared/VERSION (ADR-0007), and when
+  # the Gradle version is on another MAJOR.MINOR line.
   shared-check:
+    needs: version
     permissions:
       contents: read
-    uses: sanamhub/nepdate/.github/workflows/shared-check.yml@f94d67c0c85de7909cf54d7e4e96f226ca750129 # main 2026-10-31
+    uses: sanamhub/nepdate/.github/workflows/shared-check.yml@f636b7d476bc5959eb5689a950b73c8943860eef # main 2026-11-01
+    with:
+      sdk: kotlin
+      version: ${{ needs.version.outputs.version }}
 
   # The bytecode targets Java 11 (ADR-0001): Gradle runs on 17, the tests on an 11 runtime.
   test-java-11:
