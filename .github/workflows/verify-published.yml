@@ -72,6 +72,10 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
+    # Windows runners default to PowerShell; every run: block here is bash.
+    defaults:
+      run:
+        shell: bash
     # Central can take 10 to 30 minutes to serve a new release; the script waits up to 45.
     timeout-minutes: 60
     steps:
