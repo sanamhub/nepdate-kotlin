@@ -1,0 +1,1293 @@
+# JMH version: 1.37
+# VM version: JDK 17.0.20.1, OpenJDK 64-Bit Server VM, 17.0.20.1+1
+# VM invoker: D:\devcache\gradle\jdks\eclipse_adoptium-17-amd64-windows.2\bin\java.exe
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.benchmark.LocalDateFloorBenchmark.localDateOfEpochDayFields
+
+# Run progress: 0.00% complete, ETA 00:03:15
+# Fork: 1 of 1
+# Warmup Iteration   1: 7.459 ns/op
+# Warmup Iteration   2: 7.051 ns/op
+# Warmup Iteration   3: 7.289 ns/op
+# Warmup Iteration   4: 7.334 ns/op
+# Warmup Iteration   5: 7.602 ns/op
+Iteration   1: 7.424 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   2: 7.466 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   3: 7.456 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   4: 7.489 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   5: 7.371 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   6: 7.377 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   7: 7.435 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   8: 7.365 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   9: 7.335 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration  10: 7.611 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+
+
+Result "io.github.sanamhub.nepdate.benchmark.LocalDateFloorBenchmark.localDateOfEpochDayFields":
+  7.433 ±(99.9%) 0.121 ns/op [Average]
+  (min, avg, max) = (7.335, 7.433, 7.611), stdev = 0.080
+  CI (99.9%): [7.311, 7.554] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.LocalDateFloorBenchmark.localDateOfEpochDayFields:gc.alloc.rate":
+  0.005 ±(99.9%) 0.001 MB/sec [Average]
+  (min, avg, max) = (0.005, 0.005, 0.006), stdev = 0.001
+  CI (99.9%): [0.005, 0.006] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.LocalDateFloorBenchmark.localDateOfEpochDayFields:gc.alloc.rate.norm":
+  ? 10?? B/op
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.LocalDateFloorBenchmark.localDateOfEpochDayFields:gc.count":
+  ? 0 counts
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.20.1, OpenJDK 64-Bit Server VM, 17.0.20.1+1
+# VM invoker: D:\devcache\gradle\jdks\eclipse_adoptium-17-amd64-windows.2\bin\java.exe
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.benchmark.LocalDateFloorBenchmark.localDateOfToEpochDay
+
+# Run progress: 7.69% complete, ETA 00:03:08
+# Fork: 1 of 1
+# Warmup Iteration   1: 5.306 ns/op
+# Warmup Iteration   2: 5.126 ns/op
+# Warmup Iteration   3: 5.013 ns/op
+# Warmup Iteration   4: 5.067 ns/op
+# Warmup Iteration   5: 5.044 ns/op
+Iteration   1: 5.032 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   2: 5.032 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   3: 5.021 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   4: 4.998 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   5: 5.126 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   6: 5.035 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   7: 5.055 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   8: 5.020 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   9: 5.195 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration  10: 5.005 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+
+
+Result "io.github.sanamhub.nepdate.benchmark.LocalDateFloorBenchmark.localDateOfToEpochDay":
+  5.052 ±(99.9%) 0.093 ns/op [Average]
+  (min, avg, max) = (4.998, 5.052, 5.195), stdev = 0.062
+  CI (99.9%): [4.959, 5.145] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.LocalDateFloorBenchmark.localDateOfToEpochDay:gc.alloc.rate":
+  0.005 ±(99.9%) 0.001 MB/sec [Average]
+  (min, avg, max) = (0.005, 0.005, 0.006), stdev = 0.001
+  CI (99.9%): [0.005, 0.006] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.LocalDateFloorBenchmark.localDateOfToEpochDay:gc.alloc.rate.norm":
+  ? 10?? B/op
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.LocalDateFloorBenchmark.localDateOfToEpochDay:gc.count":
+  ? 0 counts
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.20.1, OpenJDK 64-Bit Server VM, 17.0.20.1+1
+# VM invoker: D:\devcache\gradle\jdks\eclipse_adoptium-17-amd64-windows.2\bin\java.exe
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b1BsToAd
+
+# Run progress: 15.38% complete, ETA 00:02:52
+# Fork: 1 of 1
+# Warmup Iteration   1: 17.044 ns/op
+# Warmup Iteration   2: 16.252 ns/op
+# Warmup Iteration   3: 15.117 ns/op
+# Warmup Iteration   4: 15.239 ns/op
+# Warmup Iteration   5: 15.591 ns/op
+Iteration   1: 15.516 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   2: 15.607 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   3: 16.007 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   4: 15.636 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   5: 15.421 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   6: 15.369 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   7: 15.363 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   8: 15.637 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   9: 15.923 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration  10: 15.786 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+
+
+Result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b1BsToAd":
+  15.626 ±(99.9%) 0.337 ns/op [Average]
+  (min, avg, max) = (15.363, 15.626, 16.007), stdev = 0.223
+  CI (99.9%): [15.289, 15.964] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b1BsToAd:gc.alloc.rate":
+  0.006 ±(99.9%) 0.001 MB/sec [Average]
+  (min, avg, max) = (0.005, 0.006, 0.006), stdev = 0.001
+  CI (99.9%): [0.005, 0.006] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b1BsToAd:gc.alloc.rate.norm":
+  ? 10?? B/op
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b1BsToAd:gc.count":
+  ? 0 counts
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.20.1, OpenJDK 64-Bit Server VM, 17.0.20.1+1
+# VM invoker: D:\devcache\gradle\jdks\eclipse_adoptium-17-amd64-windows.2\bin\java.exe
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b2AdToBs
+
+# Run progress: 23.08% complete, ETA 00:02:36
+# Fork: 1 of 1
+# Warmup Iteration   1: 7.123 ns/op
+# Warmup Iteration   2: 6.583 ns/op
+# Warmup Iteration   3: 6.833 ns/op
+# Warmup Iteration   4: 6.918 ns/op
+# Warmup Iteration   5: 6.859 ns/op
+Iteration   1: 6.891 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   2: 6.903 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   3: 6.832 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   4: 6.883 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   5: 6.918 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   6: 6.984 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   7: 6.909 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   8: 6.938 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   9: 6.926 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration  10: 7.099 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+
+
+Result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b2AdToBs":
+  6.928 ±(99.9%) 0.108 ns/op [Average]
+  (min, avg, max) = (6.832, 6.928, 7.099), stdev = 0.072
+  CI (99.9%): [6.820, 7.037] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b2AdToBs:gc.alloc.rate":
+  0.005 ±(99.9%) 0.001 MB/sec [Average]
+  (min, avg, max) = (0.005, 0.005, 0.006), stdev = 0.001
+  CI (99.9%): [0.005, 0.006] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b2AdToBs:gc.alloc.rate.norm":
+  ? 10?? B/op
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b2AdToBs:gc.count":
+  ? 0 counts
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.20.1, OpenJDK 64-Bit Server VM, 17.0.20.1+1
+# VM invoker: D:\devcache\gradle\jdks\eclipse_adoptium-17-amd64-windows.2\bin\java.exe
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b2eAdToBsEscapes
+
+# Run progress: 30.77% complete, ETA 00:02:20
+# Fork: 1 of 1
+# Warmup Iteration   1: 7.201 ns/op
+# Warmup Iteration   2: 6.880 ns/op
+# Warmup Iteration   3: 7.082 ns/op
+# Warmup Iteration   4: 6.972 ns/op
+# Warmup Iteration   5: 7.008 ns/op
+Iteration   1: 7.018 ns/op
+                 gc.alloc.rate:      3260.655 MB/sec
+                 gc.alloc.rate.norm: 24.000 B/op
+                 gc.count:           24.000 counts
+                 gc.time:            3.000 ms
+
+Iteration   2: 6.964 ns/op
+                 gc.alloc.rate:      3285.970 MB/sec
+                 gc.alloc.rate.norm: 24.000 B/op
+                 gc.count:           25.000 counts
+                 gc.time:            4.000 ms
+
+Iteration   3: 7.437 ns/op
+                 gc.alloc.rate:      3076.598 MB/sec
+                 gc.alloc.rate.norm: 24.000 B/op
+                 gc.count:           23.000 counts
+                 gc.time:            3.000 ms
+
+Iteration   4: 7.226 ns/op
+                 gc.alloc.rate:      3166.954 MB/sec
+                 gc.alloc.rate.norm: 24.000 B/op
+                 gc.count:           23.000 counts
+                 gc.time:            3.000 ms
+
+Iteration   5: 6.953 ns/op
+                 gc.alloc.rate:      3291.199 MB/sec
+                 gc.alloc.rate.norm: 24.000 B/op
+                 gc.count:           25.000 counts
+                 gc.time:            3.000 ms
+
+Iteration   6: 6.906 ns/op
+                 gc.alloc.rate:      3313.308 MB/sec
+                 gc.alloc.rate.norm: 24.000 B/op
+                 gc.count:           25.000 counts
+                 gc.time:            3.000 ms
+
+Iteration   7: 6.988 ns/op
+                 gc.alloc.rate:      3274.626 MB/sec
+                 gc.alloc.rate.norm: 24.000 B/op
+                 gc.count:           24.000 counts
+                 gc.time:            3.000 ms
+
+Iteration   8: 6.917 ns/op
+                 gc.alloc.rate:      3307.848 MB/sec
+                 gc.alloc.rate.norm: 24.000 B/op
+                 gc.count:           25.000 counts
+                 gc.time:            3.000 ms
+
+Iteration   9: 6.941 ns/op
+                 gc.alloc.rate:      3296.846 MB/sec
+                 gc.alloc.rate.norm: 24.000 B/op
+                 gc.count:           24.000 counts
+                 gc.time:            3.000 ms
+
+Iteration  10: 6.976 ns/op
+                 gc.alloc.rate:      3279.533 MB/sec
+                 gc.alloc.rate.norm: 24.000 B/op
+                 gc.count:           25.000 counts
+                 gc.time:            3.000 ms
+
+
+
+Result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b2eAdToBsEscapes":
+  7.033 ±(99.9%) 0.254 ns/op [Average]
+  (min, avg, max) = (6.906, 7.033, 7.437), stdev = 0.168
+  CI (99.9%): [6.778, 7.287] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b2eAdToBsEscapes:gc.alloc.rate":
+  3255.354 ±(99.9%) 113.597 MB/sec [Average]
+  (min, avg, max) = (3076.598, 3255.354, 3313.308), stdev = 75.137
+  CI (99.9%): [3141.757, 3368.951] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b2eAdToBsEscapes:gc.alloc.rate.norm":
+  24.000 ±(99.9%) 0.001 B/op [Average]
+  (min, avg, max) = (24.000, 24.000, 24.000), stdev = 0.001
+  CI (99.9%): [24.000, 24.000] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b2eAdToBsEscapes:gc.count":
+  243.000 ±(99.9%) 0.001 counts [Sum]
+  (min, avg, max) = (23.000, 24.300, 25.000), stdev = 0.823
+  CI (99.9%): [243.000, 243.000] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b2eAdToBsEscapes:gc.time":
+  31.000 ±(99.9%) 0.001 ms [Sum]
+  (min, avg, max) = (3.000, 3.100, 4.000), stdev = 0.316
+  CI (99.9%): [31.000, 31.000] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.20.1, OpenJDK 64-Bit Server VM, 17.0.20.1+1
+# VM invoker: D:\devcache\gradle\jdks\eclipse_adoptium-17-amd64-windows.2\bin\java.exe
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b3AddDays
+
+# Run progress: 38.46% complete, ETA 00:02:05
+# Fork: 1 of 1
+# Warmup Iteration   1: 3.303 ns/op
+# Warmup Iteration   2: 3.109 ns/op
+# Warmup Iteration   3: 3.350 ns/op
+# Warmup Iteration   4: 3.279 ns/op
+# Warmup Iteration   5: 3.312 ns/op
+Iteration   1: 3.271 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   2: 3.283 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   3: 3.290 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   4: 3.368 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   5: 3.379 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   6: 3.308 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   7: 3.289 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   8: 3.523 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   9: 3.309 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration  10: 3.316 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+
+
+Result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b3AddDays":
+  3.334 ±(99.9%) 0.114 ns/op [Average]
+  (min, avg, max) = (3.271, 3.334, 3.523), stdev = 0.075
+  CI (99.9%): [3.220, 3.447] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b3AddDays:gc.alloc.rate":
+  0.005 ±(99.9%) 0.001 MB/sec [Average]
+  (min, avg, max) = (0.005, 0.005, 0.006), stdev = 0.001
+  CI (99.9%): [0.005, 0.006] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b3AddDays:gc.alloc.rate.norm":
+  ? 10?? B/op
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b3AddDays:gc.count":
+  ? 0 counts
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.20.1, OpenJDK 64-Bit Server VM, 17.0.20.1+1
+# VM invoker: D:\devcache\gradle\jdks\eclipse_adoptium-17-amd64-windows.2\bin\java.exe
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b4AddMonthsClamp
+
+# Run progress: 46.15% complete, ETA 00:01:49
+# Fork: 1 of 1
+# Warmup Iteration   1: 5.430 ns/op
+# Warmup Iteration   2: 5.264 ns/op
+# Warmup Iteration   3: 5.021 ns/op
+# Warmup Iteration   4: 5.243 ns/op
+# Warmup Iteration   5: 5.166 ns/op
+Iteration   1: 5.164 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   2: 5.123 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   3: 5.073 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   4: 5.077 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   5: 5.077 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   6: 5.041 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   7: 5.092 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   8: 5.038 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   9: 5.083 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration  10: 5.055 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+
+
+Result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b4AddMonthsClamp":
+  5.082 ±(99.9%) 0.057 ns/op [Average]
+  (min, avg, max) = (5.038, 5.082, 5.164), stdev = 0.038
+  CI (99.9%): [5.025, 5.140] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b4AddMonthsClamp:gc.alloc.rate":
+  0.005 ±(99.9%) 0.001 MB/sec [Average]
+  (min, avg, max) = (0.005, 0.005, 0.006), stdev = 0.001
+  CI (99.9%): [0.005, 0.006] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b4AddMonthsClamp:gc.alloc.rate.norm":
+  ? 10?? B/op
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b4AddMonthsClamp:gc.count":
+  ? 0 counts
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.20.1, OpenJDK 64-Bit Server VM, 17.0.20.1+1
+# VM invoker: D:\devcache\gradle\jdks\eclipse_adoptium-17-amd64-windows.2\bin\java.exe
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b5LongNepali
+
+# Run progress: 53.85% complete, ETA 00:01:33
+# Fork: 1 of 1
+# Warmup Iteration   1: 92.905 ns/op
+# Warmup Iteration   2: 82.057 ns/op
+# Warmup Iteration   3: 83.907 ns/op
+# Warmup Iteration   4: 83.286 ns/op
+# Warmup Iteration   5: 86.332 ns/op
+Iteration   1: 83.061 ns/op
+                 gc.alloc.rate:      3201.445 MB/sec
+                 gc.alloc.rate.norm: 278.875 B/op
+                 gc.count:           23.000 counts
+                 gc.time:            3.000 ms
+
+Iteration   2: 84.678 ns/op
+                 gc.alloc.rate:      3139.950 MB/sec
+                 gc.alloc.rate.norm: 278.875 B/op
+                 gc.count:           24.000 counts
+                 gc.time:            4.000 ms
+
+Iteration   3: 83.986 ns/op
+                 gc.alloc.rate:      3165.653 MB/sec
+                 gc.alloc.rate.norm: 278.875 B/op
+                 gc.count:           23.000 counts
+                 gc.time:            3.000 ms
+
+Iteration   4: 84.662 ns/op
+                 gc.alloc.rate:      3140.894 MB/sec
+                 gc.alloc.rate.norm: 278.875 B/op
+                 gc.count:           23.000 counts
+                 gc.time:            4.000 ms
+
+Iteration   5: 84.206 ns/op
+                 gc.alloc.rate:      3157.882 MB/sec
+                 gc.alloc.rate.norm: 278.875 B/op
+                 gc.count:           24.000 counts
+                 gc.time:            3.000 ms
+
+Iteration   6: 84.174 ns/op
+                 gc.alloc.rate:      3158.725 MB/sec
+                 gc.alloc.rate.norm: 278.875 B/op
+                 gc.count:           23.000 counts
+                 gc.time:            4.000 ms
+
+Iteration   7: 185.597 ns/op
+                 gc.alloc.rate:      1426.337 MB/sec
+                 gc.alloc.rate.norm: 278.876 B/op
+                 gc.count:           11.000 counts
+                 gc.time:            2.000 ms
+
+Iteration   8: 157.629 ns/op
+                 gc.alloc.rate:      1686.646 MB/sec
+                 gc.alloc.rate.norm: 278.876 B/op
+                 gc.count:           12.000 counts
+                 gc.time:            2.000 ms
+
+Iteration   9: 161.557 ns/op
+                 gc.alloc.rate:      1645.950 MB/sec
+                 gc.alloc.rate.norm: 278.876 B/op
+                 gc.count:           13.000 counts
+                 gc.time:            1.000 ms
+
+Iteration  10: 104.639 ns/op
+                 gc.alloc.rate:      2540.470 MB/sec
+                 gc.alloc.rate.norm: 278.876 B/op
+                 gc.count:           19.000 counts
+                 gc.time:            3.000 ms
+
+
+
+Result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b5LongNepali":
+  111.419 ±(99.9%) 61.035 ns/op [Average]
+  (min, avg, max) = (83.061, 111.419, 185.597), stdev = 40.371
+  CI (99.9%): [50.384, 172.454] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b5LongNepali:gc.alloc.rate":
+  2626.395 ±(99.9%) 1127.740 MB/sec [Average]
+  (min, avg, max) = (1426.337, 2626.395, 3201.445), stdev = 745.930
+  CI (99.9%): [1498.656, 3754.135] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b5LongNepali:gc.alloc.rate.norm":
+  278.876 ±(99.9%) 0.001 B/op [Average]
+  (min, avg, max) = (278.875, 278.876, 278.876), stdev = 0.001
+  CI (99.9%): [278.875, 278.876] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b5LongNepali:gc.count":
+  195.000 ±(99.9%) 0.001 counts [Sum]
+  (min, avg, max) = (11.000, 19.500, 24.000), stdev = 5.380
+  CI (99.9%): [195.000, 195.000] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b5LongNepali:gc.time":
+  29.000 ±(99.9%) 0.001 ms [Sum]
+  (min, avg, max) = (1.000, 2.900, 4.000), stdev = 0.994
+  CI (99.9%): [29.000, 29.000] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.20.1, OpenJDK 64-Bit Server VM, 17.0.20.1+1
+# VM invoker: D:\devcache\gradle\jdks\eclipse_adoptium-17-amd64-windows.2\bin\java.exe
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b6StrictParse
+
+# Run progress: 61.54% complete, ETA 00:01:18
+# Fork: 1 of 1
+# Warmup Iteration   1: 25.442 ns/op
+# Warmup Iteration   2: 24.637 ns/op
+# Warmup Iteration   3: 25.301 ns/op
+# Warmup Iteration   4: 25.968 ns/op
+# Warmup Iteration   5: 25.754 ns/op
+Iteration   1: 25.812 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   2: 28.283 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   3: 25.574 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   4: 26.753 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   5: 26.818 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   6: 27.613 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   7: 25.726 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   8: 25.879 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   9: 25.778 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration  10: 25.728 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+
+
+Result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b6StrictParse":
+  26.396 ±(99.9%) 1.417 ns/op [Average]
+  (min, avg, max) = (25.574, 26.396, 28.283), stdev = 0.938
+  CI (99.9%): [24.979, 27.814] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b6StrictParse:gc.alloc.rate":
+  0.005 ±(99.9%) 0.001 MB/sec [Average]
+  (min, avg, max) = (0.005, 0.005, 0.006), stdev = 0.001
+  CI (99.9%): [0.005, 0.006] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b6StrictParse:gc.alloc.rate.norm":
+  ? 10?? B/op
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b6StrictParse:gc.count":
+  ? 0 counts
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.20.1, OpenJDK 64-Bit Server VM, 17.0.20.1+1
+# VM invoker: D:\devcache\gradle\jdks\eclipse_adoptium-17-amd64-windows.2\bin\java.exe
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b7PatroInfo
+
+# Run progress: 69.23% complete, ETA 00:01:02
+# Fork: 1 of 1
+# Warmup Iteration   1: 2.321 ns/op
+# Warmup Iteration   2: 2.279 ns/op
+# Warmup Iteration   3: 2.266 ns/op
+# Warmup Iteration   4: 2.258 ns/op
+# Warmup Iteration   5: 2.280 ns/op
+Iteration   1: 2.285 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   2: 2.274 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   3: 2.357 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   4: 2.317 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   5: 2.307 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   6: 2.269 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   7: 2.312 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   8: 2.273 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration   9: 2.271 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+Iteration  10: 2.299 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?? B/op
+                 gc.count:           ? 0 counts
+
+
+
+Result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b7PatroInfo":
+  2.296 ±(99.9%) 0.042 ns/op [Average]
+  (min, avg, max) = (2.269, 2.296, 2.357), stdev = 0.028
+  CI (99.9%): [2.254, 2.339] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b7PatroInfo:gc.alloc.rate":
+  0.006 ±(99.9%) 0.001 MB/sec [Average]
+  (min, avg, max) = (0.005, 0.006, 0.006), stdev = 0.001
+  CI (99.9%): [0.005, 0.006] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b7PatroInfo:gc.alloc.rate.norm":
+  ? 10?? B/op
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b7PatroInfo:gc.count":
+  ? 0 counts
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.20.1, OpenJDK 64-Bit Server VM, 17.0.20.1+1
+# VM invoker: D:\devcache\gradle\jdks\eclipse_adoptium-17-amd64-windows.2\bin\java.exe
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b8MonthGrid
+
+# Run progress: 76.92% complete, ETA 00:00:46
+# Fork: 1 of 1
+# Warmup Iteration   1: 76.016 ns/op
+# Warmup Iteration   2: 73.359 ns/op
+# Warmup Iteration   3: 72.533 ns/op
+# Warmup Iteration   4: 72.963 ns/op
+# Warmup Iteration   5: 73.539 ns/op
+Iteration   1: 74.269 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?³ B/op
+                 gc.count:           ? 0 counts
+
+Iteration   2: 72.681 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?³ B/op
+                 gc.count:           ? 0 counts
+
+Iteration   3: 71.592 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?³ B/op
+                 gc.count:           ? 0 counts
+
+Iteration   4: 72.149 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?³ B/op
+                 gc.count:           ? 0 counts
+
+Iteration   5: 73.013 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?³ B/op
+                 gc.count:           ? 0 counts
+
+Iteration   6: 72.601 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?³ B/op
+                 gc.count:           ? 0 counts
+
+Iteration   7: 75.515 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?³ B/op
+                 gc.count:           ? 0 counts
+
+Iteration   8: 72.314 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?³ B/op
+                 gc.count:           ? 0 counts
+
+Iteration   9: 72.816 ns/op
+                 gc.alloc.rate:      0.006 MB/sec
+                 gc.alloc.rate.norm: ? 10?³ B/op
+                 gc.count:           ? 0 counts
+
+Iteration  10: 72.985 ns/op
+                 gc.alloc.rate:      0.005 MB/sec
+                 gc.alloc.rate.norm: ? 10?³ B/op
+                 gc.count:           ? 0 counts
+
+
+
+Result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b8MonthGrid":
+  72.993 ±(99.9%) 1.702 ns/op [Average]
+  (min, avg, max) = (71.592, 72.993, 75.515), stdev = 1.126
+  CI (99.9%): [71.291, 74.695] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b8MonthGrid:gc.alloc.rate":
+  0.006 ±(99.9%) 0.001 MB/sec [Average]
+  (min, avg, max) = (0.005, 0.006, 0.006), stdev = 0.001
+  CI (99.9%): [0.005, 0.006] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b8MonthGrid:gc.alloc.rate.norm":
+  ? 10?³ B/op
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.NepDateBenchmark.b8MonthGrid:gc.count":
+  ? 0 counts
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.20.1, OpenJDK 64-Bit Server VM, 17.0.20.1+1
+# VM invoker: D:\devcache\gradle\jdks\eclipse_adoptium-17-amd64-windows.2\bin\java.exe
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.benchmark.ShivathapaaBenchmark.b1BsToAd
+
+# Run progress: 84.62% complete, ETA 00:00:31
+# Fork: 1 of 1
+# Warmup Iteration   1: 747.624 ns/op
+# Warmup Iteration   2: 691.429 ns/op
+# Warmup Iteration   3: 681.764 ns/op
+# Warmup Iteration   4: 715.656 ns/op
+# Warmup Iteration   5: 697.850 ns/op
+Iteration   1: 700.804 ns/op
+                 gc.alloc.rate:      206.819 MB/sec
+                 gc.alloc.rate.norm: 152.004 B/op
+                 gc.count:           2.000 counts
+                 gc.time:            4.000 ms
+
+Iteration   2: 718.724 ns/op
+                 gc.alloc.rate:      201.586 MB/sec
+                 gc.alloc.rate.norm: 152.004 B/op
+                 gc.count:           1.000 counts
+                 gc.time:            2.000 ms
+
+Iteration   3: 701.022 ns/op
+                 gc.alloc.rate:      206.755 MB/sec
+                 gc.alloc.rate.norm: 152.004 B/op
+                 gc.count:           2.000 counts
+                 gc.time:            5.000 ms
+
+Iteration   4: 693.666 ns/op
+                 gc.alloc.rate:      208.946 MB/sec
+                 gc.alloc.rate.norm: 152.004 B/op
+                 gc.count:           1.000 counts
+                 gc.time:            2.000 ms
+
+Iteration   5: 692.696 ns/op
+                 gc.alloc.rate:      209.239 MB/sec
+                 gc.alloc.rate.norm: 152.004 B/op
+                 gc.count:           2.000 counts
+                 gc.time:            5.000 ms
+
+Iteration   6: 690.347 ns/op
+                 gc.alloc.rate:      209.931 MB/sec
+                 gc.alloc.rate.norm: 152.004 B/op
+                 gc.count:           2.000 counts
+                 gc.time:            3.000 ms
+
+Iteration   7: 691.596 ns/op
+                 gc.alloc.rate:      209.572 MB/sec
+                 gc.alloc.rate.norm: 152.004 B/op
+                 gc.count:           1.000 counts
+                 gc.time:            ? 0 ms
+
+Iteration   8: 688.658 ns/op
+                 gc.alloc.rate:      210.431 MB/sec
+                 gc.alloc.rate.norm: 152.004 B/op
+                 gc.count:           2.000 counts
+                 gc.time:            1.000 ms
+
+Iteration   9: 696.194 ns/op
+                 gc.alloc.rate:      208.188 MB/sec
+                 gc.alloc.rate.norm: 152.004 B/op
+                 gc.count:           1.000 counts
+                 gc.time:            ? 0 ms
+
+Iteration  10: 695.782 ns/op
+                 gc.alloc.rate:      208.246 MB/sec
+                 gc.alloc.rate.norm: 152.004 B/op
+                 gc.count:           2.000 counts
+                 gc.time:            ? 0 ms
+
+
+
+Result "io.github.sanamhub.nepdate.benchmark.ShivathapaaBenchmark.b1BsToAd":
+  696.949 ±(99.9%) 13.116 ns/op [Average]
+  (min, avg, max) = (688.658, 696.949, 718.724), stdev = 8.676
+  CI (99.9%): [683.833, 710.065] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.ShivathapaaBenchmark.b1BsToAd:gc.alloc.rate":
+  207.971 ±(99.9%) 3.861 MB/sec [Average]
+  (min, avg, max) = (201.586, 207.971, 210.431), stdev = 2.554
+  CI (99.9%): [204.110, 211.833] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.ShivathapaaBenchmark.b1BsToAd:gc.alloc.rate.norm":
+  152.004 ±(99.9%) 0.001 B/op [Average]
+  (min, avg, max) = (152.004, 152.004, 152.004), stdev = 0.001
+  CI (99.9%): [152.004, 152.004] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.ShivathapaaBenchmark.b1BsToAd:gc.count":
+  16.000 ±(99.9%) 0.001 counts [Sum]
+  (min, avg, max) = (1.000, 1.600, 2.000), stdev = 0.516
+  CI (99.9%): [16.000, 16.000] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.ShivathapaaBenchmark.b1BsToAd:gc.time":
+  22.000 ±(99.9%) 0.001 ms [Sum]
+  (min, avg, max) = (? 0, 2.200, 5.000), stdev = 1.989
+  CI (99.9%): [22.000, 22.000] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 17.0.20.1, OpenJDK 64-Bit Server VM, 17.0.20.1+1
+# VM invoker: D:\devcache\gradle\jdks\eclipse_adoptium-17-amd64-windows.2\bin\java.exe
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 5 iterations, 1 s each
+# Measurement: 10 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: io.github.sanamhub.nepdate.benchmark.ShivathapaaBenchmark.b2AdToBs
+
+# Run progress: 92.31% complete, ETA 00:00:15
+# Fork: 1 of 1
+# Warmup Iteration   1: 822.187 ns/op
+# Warmup Iteration   2: 726.456 ns/op
+# Warmup Iteration   3: 728.839 ns/op
+# Warmup Iteration   4: 699.567 ns/op
+# Warmup Iteration   5: 690.072 ns/op
+Iteration   1: 685.924 ns/op
+                 gc.alloc.rate:      613.024 MB/sec
+                 gc.alloc.rate.norm: 441.004 B/op
+                 gc.count:           5.000 counts
+                 gc.time:            1.000 ms
+
+Iteration   2: 683.370 ns/op
+                 gc.alloc.rate:      615.309 MB/sec
+                 gc.alloc.rate.norm: 441.004 B/op
+                 gc.count:           4.000 counts
+                 gc.time:            1.000 ms
+
+Iteration   3: 744.133 ns/op
+                 gc.alloc.rate:      565.098 MB/sec
+                 gc.alloc.rate.norm: 441.004 B/op
+                 gc.count:           5.000 counts
+                 gc.time:            ? 0 ms
+
+Iteration   4: 692.088 ns/op
+                 gc.alloc.rate:      607.595 MB/sec
+                 gc.alloc.rate.norm: 441.004 B/op
+                 gc.count:           4.000 counts
+                 gc.time:            1.000 ms
+
+Iteration   5: 688.683 ns/op
+                 gc.alloc.rate:      610.484 MB/sec
+                 gc.alloc.rate.norm: 441.004 B/op
+                 gc.count:           5.000 counts
+                 gc.time:            1.000 ms
+
+Iteration   6: 687.770 ns/op
+                 gc.alloc.rate:      611.409 MB/sec
+                 gc.alloc.rate.norm: 441.004 B/op
+                 gc.count:           4.000 counts
+                 gc.time:            ? 0 ms
+
+Iteration   7: 689.960 ns/op
+                 gc.alloc.rate:      609.467 MB/sec
+                 gc.alloc.rate.norm: 441.004 B/op
+                 gc.count:           5.000 counts
+                 gc.time:            1.000 ms
+
+Iteration   8: 689.848 ns/op
+                 gc.alloc.rate:      609.465 MB/sec
+                 gc.alloc.rate.norm: 441.004 B/op
+                 gc.count:           4.000 counts
+                 gc.time:            1.000 ms
+
+Iteration   9: 691.848 ns/op
+                 gc.alloc.rate:      607.805 MB/sec
+                 gc.alloc.rate.norm: 441.004 B/op
+                 gc.count:           5.000 counts
+                 gc.time:            ? 0 ms
+
+Iteration  10: 693.326 ns/op
+                 gc.alloc.rate:      606.321 MB/sec
+                 gc.alloc.rate.norm: 441.004 B/op
+                 gc.count:           4.000 counts
+                 gc.time:            2.000 ms
+
+
+
+Result "io.github.sanamhub.nepdate.benchmark.ShivathapaaBenchmark.b2AdToBs":
+  694.695 ±(99.9%) 26.648 ns/op [Average]
+  (min, avg, max) = (683.370, 694.695, 744.133), stdev = 17.626
+  CI (99.9%): [668.047, 721.343] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.ShivathapaaBenchmark.b2AdToBs:gc.alloc.rate":
+  605.598 ±(99.9%) 21.890 MB/sec [Average]
+  (min, avg, max) = (565.098, 605.598, 615.309), stdev = 14.479
+  CI (99.9%): [583.708, 627.487] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.ShivathapaaBenchmark.b2AdToBs:gc.alloc.rate.norm":
+  441.004 ±(99.9%) 0.001 B/op [Average]
+  (min, avg, max) = (441.004, 441.004, 441.004), stdev = 0.001
+  CI (99.9%): [441.004, 441.004] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.ShivathapaaBenchmark.b2AdToBs:gc.count":
+  45.000 ±(99.9%) 0.001 counts [Sum]
+  (min, avg, max) = (4.000, 4.500, 5.000), stdev = 0.527
+  CI (99.9%): [45.000, 45.000] (assumes normal distribution)
+
+Secondary result "io.github.sanamhub.nepdate.benchmark.ShivathapaaBenchmark.b2AdToBs:gc.time":
+  8.000 ±(99.9%) 0.001 ms [Sum]
+  (min, avg, max) = (? 0, 0.800, 2.000), stdev = 0.632
+  CI (99.9%): [8.000, 8.000] (assumes normal distribution)
+
+
+# Run complete. Total time: 00:03:23
+
+REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+experiments, perform baseline and negative tests that provide experimental control, make sure
+the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+Do not assume the numbers tell you what you want them to tell.
+
+NOTE: Current JVM experimentally supports Compiler Blackholes, and they are in use. Please exercise
+extra caution when trusting the results, look into the generated code to check the benchmark still
+works, and factor in a small probability of new VM bugs. Additionally, while comparisons between
+different JVMs are already problematic, the performance difference caused by different Blackhole
+modes can be very significant. Please make sure you use the consistent Blackhole mode for comparisons.
+
+Benchmark                                                             Mode  Cnt     Score      Error   Units
+LocalDateFloorBenchmark.localDateOfEpochDayFields                     avgt   10     7.433 ±    0.121   ns/op
+LocalDateFloorBenchmark.localDateOfEpochDayFields:gc.alloc.rate       avgt   10     0.005 ±    0.001  MB/sec
+LocalDateFloorBenchmark.localDateOfEpochDayFields:gc.alloc.rate.norm  avgt   10    ? 10??               B/op
+LocalDateFloorBenchmark.localDateOfEpochDayFields:gc.count            avgt   10       ? 0             counts
+LocalDateFloorBenchmark.localDateOfToEpochDay                         avgt   10     5.052 ±    0.093   ns/op
+LocalDateFloorBenchmark.localDateOfToEpochDay:gc.alloc.rate           avgt   10     0.005 ±    0.001  MB/sec
+LocalDateFloorBenchmark.localDateOfToEpochDay:gc.alloc.rate.norm      avgt   10    ? 10??               B/op
+LocalDateFloorBenchmark.localDateOfToEpochDay:gc.count                avgt   10       ? 0             counts
+NepDateBenchmark.b1BsToAd                                             avgt   10    15.626 ±    0.337   ns/op
+NepDateBenchmark.b1BsToAd:gc.alloc.rate                               avgt   10     0.006 ±    0.001  MB/sec
+NepDateBenchmark.b1BsToAd:gc.alloc.rate.norm                          avgt   10    ? 10??               B/op
+NepDateBenchmark.b1BsToAd:gc.count                                    avgt   10       ? 0             counts
+NepDateBenchmark.b2AdToBs                                             avgt   10     6.928 ±    0.108   ns/op
+NepDateBenchmark.b2AdToBs:gc.alloc.rate                               avgt   10     0.005 ±    0.001  MB/sec
+NepDateBenchmark.b2AdToBs:gc.alloc.rate.norm                          avgt   10    ? 10??               B/op
+NepDateBenchmark.b2AdToBs:gc.count                                    avgt   10       ? 0             counts
+NepDateBenchmark.b2eAdToBsEscapes                                     avgt   10     7.033 ±    0.254   ns/op
+NepDateBenchmark.b2eAdToBsEscapes:gc.alloc.rate                       avgt   10  3255.354 ±  113.597  MB/sec
+NepDateBenchmark.b2eAdToBsEscapes:gc.alloc.rate.norm                  avgt   10    24.000 ±    0.001    B/op
+NepDateBenchmark.b2eAdToBsEscapes:gc.count                            avgt   10   243.000             counts
+NepDateBenchmark.b2eAdToBsEscapes:gc.time                             avgt   10    31.000                 ms
+NepDateBenchmark.b3AddDays                                            avgt   10     3.334 ±    0.114   ns/op
+NepDateBenchmark.b3AddDays:gc.alloc.rate                              avgt   10     0.005 ±    0.001  MB/sec
+NepDateBenchmark.b3AddDays:gc.alloc.rate.norm                         avgt   10    ? 10??               B/op
+NepDateBenchmark.b3AddDays:gc.count                                   avgt   10       ? 0             counts
+NepDateBenchmark.b4AddMonthsClamp                                     avgt   10     5.082 ±    0.057   ns/op
+NepDateBenchmark.b4AddMonthsClamp:gc.alloc.rate                       avgt   10     0.005 ±    0.001  MB/sec
+NepDateBenchmark.b4AddMonthsClamp:gc.alloc.rate.norm                  avgt   10    ? 10??               B/op
+NepDateBenchmark.b4AddMonthsClamp:gc.count                            avgt   10       ? 0             counts
+NepDateBenchmark.b5LongNepali                                         avgt   10   111.419 ±   61.035   ns/op
+NepDateBenchmark.b5LongNepali:gc.alloc.rate                           avgt   10  2626.395 ± 1127.740  MB/sec
+NepDateBenchmark.b5LongNepali:gc.alloc.rate.norm                      avgt   10   278.876 ±    0.001    B/op
+NepDateBenchmark.b5LongNepali:gc.count                                avgt   10   195.000             counts
+NepDateBenchmark.b5LongNepali:gc.time                                 avgt   10    29.000                 ms
+NepDateBenchmark.b6StrictParse                                        avgt   10    26.396 ±    1.417   ns/op
+NepDateBenchmark.b6StrictParse:gc.alloc.rate                          avgt   10     0.005 ±    0.001  MB/sec
+NepDateBenchmark.b6StrictParse:gc.alloc.rate.norm                     avgt   10    ? 10??               B/op
+NepDateBenchmark.b6StrictParse:gc.count                               avgt   10       ? 0             counts
+NepDateBenchmark.b7PatroInfo                                          avgt   10     2.296 ±    0.042   ns/op
+NepDateBenchmark.b7PatroInfo:gc.alloc.rate                            avgt   10     0.006 ±    0.001  MB/sec
+NepDateBenchmark.b7PatroInfo:gc.alloc.rate.norm                       avgt   10    ? 10??               B/op
+NepDateBenchmark.b7PatroInfo:gc.count                                 avgt   10       ? 0             counts
+NepDateBenchmark.b8MonthGrid                                          avgt   10    72.993 ±    1.702   ns/op
+NepDateBenchmark.b8MonthGrid:gc.alloc.rate                            avgt   10     0.006 ±    0.001  MB/sec
+NepDateBenchmark.b8MonthGrid:gc.alloc.rate.norm                       avgt   10    ? 10?³               B/op
+NepDateBenchmark.b8MonthGrid:gc.count                                 avgt   10       ? 0             counts
+ShivathapaaBenchmark.b1BsToAd                                         avgt   10   696.949 ±   13.116   ns/op
+ShivathapaaBenchmark.b1BsToAd:gc.alloc.rate                           avgt   10   207.971 ±    3.861  MB/sec
+ShivathapaaBenchmark.b1BsToAd:gc.alloc.rate.norm                      avgt   10   152.004 ±    0.001    B/op
+ShivathapaaBenchmark.b1BsToAd:gc.count                                avgt   10    16.000             counts
+ShivathapaaBenchmark.b1BsToAd:gc.time                                 avgt   10    22.000                 ms
+ShivathapaaBenchmark.b2AdToBs                                         avgt   10   694.695 ±   26.648   ns/op
+ShivathapaaBenchmark.b2AdToBs:gc.alloc.rate                           avgt   10   605.598 ±   21.890  MB/sec
+ShivathapaaBenchmark.b2AdToBs:gc.alloc.rate.norm                      avgt   10   441.004 ±    0.001    B/op
+ShivathapaaBenchmark.b2AdToBs:gc.count                                avgt   10    45.000             counts
+ShivathapaaBenchmark.b2AdToBs:gc.time                                 avgt   10     8.000                 ms
+
+Benchmark result is saved to docs\raw\2026-11-02\jmh.json

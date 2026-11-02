@@ -17,8 +17,6 @@ pitestVersion = "1.30.1"
 pitestGradleVersion = "1.19.0"
 pitestJunit5Version = "1.2.3"
 shivathapaa = "3.3.0"
-adbs = "v4.0.0"
-aagitoex = "0.0.1-beta01"
 
 [libraries]
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
@@ -30,8 +28,6 @@ animalsniffer-android-signature = { module = "net.sf.androidscents.signature:and
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 jmh-core = { module = "org.openjdk.jmh:jmh-core", version.ref = "jmh" }
 nepali-date-picker-core = { module = "io.github.shivathapaa:nepali-date-picker-core", version.ref = "shivathapaa" }
-adbs-core = { module = "com.github.dhiraj-var.adbs:adbs-core", version.ref = "adbs" }
-aagitoex-nepdate = { module = "io.github.aagitoex:nepdate", version.ref = "aagitoex" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
