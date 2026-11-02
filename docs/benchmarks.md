@@ -68,9 +68,8 @@ The `java.time` floors, for reference (not competitors): `LocalDate.of(y, m, d).
 5.05 ns/op and `LocalDate.ofEpochDay(e)` with its fields read is 7.43 ns/op, both 0 B/op.
 
 "agrees" is the result of `:benchmarks:agreement` over the same 64 dates in both directions.
-shivathapaa differs on 3 of 64 in each direction: BS 2086-07-23, 2088-01-04 and 2089-06-10. This
-library is the only measured library that agrees with `shared/data`, and it is faster on B1, B2 and
-B7.
+shivathapaa differs on 3 of 64 in each direction: BS 2086-07-23, 2088-01-04 and 2089-06-10. NepDate
+agrees with `shared/data` on all 64 dates and is faster on B1 and B2.
 
 ## Targets
 
