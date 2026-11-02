@@ -24,8 +24,6 @@ dependencies {
         exclude(group = "org.jetbrains.compose.runtime")
         exclude(group = "androidx.compose.runtime")
     }
-    implementation(libs.adbs.core)
-    implementation(libs.aagitoex.nepdate)
 }
 
 benchmark {

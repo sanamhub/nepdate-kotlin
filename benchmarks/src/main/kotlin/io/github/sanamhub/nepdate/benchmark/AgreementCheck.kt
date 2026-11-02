@@ -1,12 +1,7 @@
 package io.github.sanamhub.nepdate.benchmark
 
-import com.nepalidate.ADBS.NepaliDateConverter.AdBs
 import dev.shivathapaa.nepalidatepickerkmp.calendar_model.NepaliDateConverter
-import io.github.aagitoex.nepdate.Converter
-import io.github.aagitoex.nepdate.NepDate
 import io.github.sanamhub.nepdate.NepaliDate
-import java.time.LocalDate
-import java.util.Calendar
 
 /**
  * For each competitor, converts the 64 BENCHMARK section 2 dates both ways and prints whether the
@@ -39,34 +34,6 @@ fun main() {
         adToBs = { (y, m, d) ->
             val bs = NepaliDateConverter.convertEnglishToNepali(y, m, d)
             intArrayOf(bs.year, bs.month, bs.dayOfMonth)
-        },
-    )
-    check(
-        "aagitoex",
-        expectedAd,
-        expectedBs,
-        bsToAd = { (y, m, d) ->
-            val ad = NepDate(y, m, d).ad
-            intArrayOf(ad.year, ad.monthValue, ad.dayOfMonth)
-        },
-        adToBs = { (y, m, d) ->
-            val bs = Converter.fromADToBS(LocalDate.of(y, m, d))
-            intArrayOf(bs.year, bs.month, bs.day)
-        },
-    )
-    check(
-        "adbs",
-        expectedAd,
-        expectedBs,
-        bsToAd = { (y, m, d) ->
-            val date = AdBs().convertBsToAd("%02d%02d%04d".format(d, m, y))
-            val calendar = Calendar.getInstance().apply { time = date }
-            intArrayOf(calendar[Calendar.YEAR], calendar[Calendar.MONTH] + 1, calendar[Calendar.DAY_OF_MONTH])
-        },
-        adToBs = { (y, m, d) ->
-            val out = AdBs().convertAdToBs("%02d-%02d-%04d".format(d, m, y))
-            val parts = out.split('-')
-            intArrayOf(parts[0].toInt(), parts[1].toInt(), parts[2].toInt())
         },
     )
 }
