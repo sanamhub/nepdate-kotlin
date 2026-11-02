@@ -6,6 +6,8 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.0-rc.1] - 2026-11-03
+
 ### Changed
 
 - `verify-published.yml` also runs weekly with the newest version from Maven Central, once with
