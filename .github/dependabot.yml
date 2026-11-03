@@ -1,6 +1,7 @@
 version: 2
 updates:
-  # Keeps the pinned action SHAs current. Gradle dependencies are updated by hand, because each
+  # Keeps the pinned action SHAs current. The cooldown gives a bad release two weeks to be pulled.
+  # Gradle dependencies are updated by hand, because each
   # update needs gradle/verification-metadata.xml regenerated (CONTRIBUTING.md).
   - package-ecosystem: github-actions
     directory: /
@@ -8,4 +9,4 @@ updates:
       interval: weekly
     open-pull-requests-limit: 5
     cooldown:
-      default-days: 7
+      default-days: 14
