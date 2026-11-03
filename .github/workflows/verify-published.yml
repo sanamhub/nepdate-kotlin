@@ -122,7 +122,7 @@ jobs:
         run: |
           set -euo pipefail
           gpg --batch --keyserver hkps://keyserver.ubuntu.com --recv-keys "$SIGNING_KEY_FINGERPRINT"
-          for artifact in nepdate nepdate-patro; do
+          for artifact in nepdate nepdate-patro nepdate-serialization; do
             base="https://repo1.maven.org/maven2/io/github/sanamhub/$artifact/$VERSION/$artifact-$VERSION"
             for i in $(seq 1 45); do
               curl -sf -o "$artifact.jar" "$base.jar" && curl -sf -o "$artifact.jar.asc" "$base.jar.asc" && break

@@ -42,7 +42,7 @@ public class NepaliDate private constructor(
     }
 
     /**
-     * The year, for `val (year, month, day) = date` (ND19).
+     * The year, for `val (year, month, day) = date`, the port's form of the C# `Deconstruct`.
      *
      * @return [year]
      */

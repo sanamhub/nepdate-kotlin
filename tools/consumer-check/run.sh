@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Consumer check: build and run a throwaway project (copied outside the repo) that depends on
-# io.github.sanamhub:nepdate and io.github.sanamhub:nepdate-patro, converts one date and reads one
-# patro event, and checks the printed lines.
+# io.github.sanamhub:nepdate, :nepdate-patro and :nepdate-serialization, converts one date, reads
+# one patro event and reads the serializer's descriptor, and checks the printed lines.
 #
 #   tools/consumer-check/run.sh                              publish to mavenLocal, resolve from there
 #   tools/consumer-check/run.sh --published 0.1.0-beta.1 [--wait-minutes 45]
@@ -75,7 +75,7 @@ if [ "$mode" = metadata ]; then
     echo "consumer-check: --metadata needs a version"
     exit 2
   fi
-  for artifact in nepdate nepdate-patro; do
+  for artifact in nepdate nepdate-patro nepdate-serialization; do
     xml="$(fetch "${CENTRAL}/${GROUP_PATH}/${artifact}/maven-metadata.xml")"
     if ! printf '%s' "$xml" | tr -d '\n' | grep -q "<version>${VERSION}</version>"; then
       echo "consumer-check: Maven Central does not list ${artifact} ${VERSION}"
@@ -115,6 +115,10 @@ check_output() {
     echo "consumer-check: the patro line is wrong" >&2
     return 1
   fi
+  if ! printf '%s\n' "$output" | tr -d '\r' | grep -q '^serializer: io.github.sanamhub.nepdate.NepaliDate$'; then
+    echo "consumer-check: the serializer line is wrong" >&2
+    return 1
+  fi
 }
 
 # Maven builds the same Kotlin program from one pom, so the check does not depend on a Gradle
@@ -150,6 +154,11 @@ run_maven() {
     <dependency>
       <groupId>io.github.sanamhub</groupId>
       <artifactId>nepdate-patro</artifactId>
+      <version>${VERSION}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.github.sanamhub</groupId>
+      <artifactId>nepdate-serialization</artifactId>
       <version>${VERSION}</version>
     </dependency>
   </dependencies>
@@ -235,7 +244,7 @@ while true; do
 done
 printf '%s\n' "$resolved" >&2
 # Both jars must be on the classpath at exactly this version.
-for artifact in nepdate nepdate-patro; do
+for artifact in nepdate nepdate-patro nepdate-serialization; do
   if ! printf '%s\n' "$resolved" | grep -qE "[\\/]$artifact-${VERSION//./\\.}\.jar\$"; then
     echo "consumer-check: $artifact-$VERSION.jar is not on the classpath" >&2
     exit 1

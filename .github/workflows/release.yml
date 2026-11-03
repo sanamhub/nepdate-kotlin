@@ -100,7 +100,7 @@ jobs:
               exit 1
             fi
           done
-      - name: Sign and stage both artifacts in mavenLocal
+      - name: Sign and stage all three artifacts in mavenLocal
         run: ./gradlew --console=plain publishToMavenLocal
       - name: Exactly the expected files, each signed by the release key
         # Central rejects a deployment without sources, javadoc or signatures, but only after the
@@ -108,7 +108,7 @@ jobs:
         run: |
           set -euo pipefail
           gpg --batch --keyserver hkps://keyserver.ubuntu.com --recv-keys "$SIGNING_KEY_FINGERPRINT"
-          for artifact in nepdate nepdate-patro; do
+          for artifact in nepdate nepdate-patro nepdate-serialization; do
             dir="$HOME/.m2/repository/io/github/sanamhub/$artifact/$VERSION"
             want=""
             for suffix in .jar -sources.jar -javadoc.jar .pom .module; do
@@ -129,7 +129,7 @@ jobs:
             done
             echo "$artifact $VERSION: 10 files, 5 signatures by the release key"
           done
-      - name: Publish both artifacts to Maven Central
+      - name: Publish all three artifacts to Maven Central
         # The build waits for the Central Portal's validation (DeploymentValidation.VALIDATED), so a
         # rejected deployment fails this step.
         run: ./gradlew --console=plain publishAndReleaseToMavenCentral
@@ -158,6 +158,7 @@ jobs:
             echo '```kotlin'
             echo "implementation(\"io.github.sanamhub:nepdate:$VERSION\")"
             echo "implementation(\"io.github.sanamhub:nepdate-patro:$VERSION\") // tithi, holidays, events"
+            echo "implementation(\"io.github.sanamhub:nepdate-serialization:$VERSION\") // only for kotlinx.serialization"
             echo '```'
             echo
             echo "Maven:"
