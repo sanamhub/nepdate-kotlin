@@ -4,6 +4,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -186,5 +187,48 @@ class MutationCoverageTest {
         assertEquals("2081/04/05", date.toShortString())
         assertEquals("2081/4/5", date.toShortString(pad = false))
         assertEquals("5/4/2081", date.toShortString(DateOrder.DMY, Separator.SLASH, pad = false))
+    }
+
+    @Test
+    fun `ranges that share one day overlap and intersect in that day`() {
+        val first = NepaliDate.of(2081, 4, 1)..NepaliDate.of(2081, 4, 10)
+        val second = NepaliDate.of(2081, 4, 10)..NepaliDate.of(2081, 4, 20)
+        assertTrue(first.overlaps(second))
+        assertTrue(second.overlaps(first))
+        val shared = NepaliDate.of(2081, 4, 10)
+        assertEquals(shared..shared, first.intersect(second))
+    }
+
+    @Test
+    fun `different values have different hash codes`() {
+        val date = NepaliDate.of(2081, 4, 15)
+        val next = NepaliDate.of(2081, 4, 16)
+        assertNotEquals(date.hashCode(), next.hashCode())
+        assertNotEquals(FiscalYear(2080).hashCode(), FiscalYear(2081).hashCode())
+        assertNotEquals((date..next).hashCode(), (date..date).hashCode())
+        assertNotEquals(date.until(next).hashCode(), date.until(NepaliDate.of(2081, 5, 16)).hashCode())
+    }
+
+    @Test
+    fun `the zone overloads tell today from days further away`() {
+        val zone = KATHMANDU
+        // Read the clock on both sides, and retry when midnight passes between the reads.
+        repeat(3) {
+            val before = nepaliToday(zone)
+            val isToday = before.isToday(zone)
+            val yesterday = before.plusDays(-1).isYesterday(zone)
+            val tomorrow = before.plusDays(1).isTomorrow(zone)
+            val notYesterday = before.plusDays(1).isYesterday(zone)
+            val notTomorrow = before.plusDays(-1).isTomorrow(zone)
+            if (nepaliToday(zone) == before) {
+                assertTrue(isToday)
+                assertTrue(yesterday)
+                assertTrue(tomorrow)
+                assertFalse(notYesterday)
+                assertFalse(notTomorrow)
+                assertFalse(before.plusDays(10).isToday(zone))
+                return
+            }
+        }
     }
 }
