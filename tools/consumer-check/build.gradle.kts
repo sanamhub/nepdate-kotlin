@@ -10,6 +10,7 @@ val nepdateVersion = providers.gradleProperty("nepdateVersion").get()
 dependencies {
     implementation("io.github.sanamhub:nepdate:$nepdateVersion")
     implementation("io.github.sanamhub:nepdate-patro:$nepdateVersion") // only for tithi, holidays, events
+    implementation("io.github.sanamhub:nepdate-serialization:$nepdateVersion") // only for kotlinx.serialization
 }
 
 application {

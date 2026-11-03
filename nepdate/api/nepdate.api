@@ -129,6 +129,9 @@ public final class io/github/sanamhub/nepdate/NepaliDate : java/lang/Comparable 
 	public static synthetic fun appendShortString$default (Lio/github/sanamhub/nepdate/NepaliDate;Ljava/lang/StringBuilder;Lio/github/sanamhub/nepdate/DateOrder;Lio/github/sanamhub/nepdate/Separator;ZLio/github/sanamhub/nepdate/Lang;ILjava/lang/Object;)Ljava/lang/StringBuilder;
 	public fun compareTo (Lio/github/sanamhub/nepdate/NepaliDate;)I
 	public synthetic fun compareTo (Ljava/lang/Object;)I
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun component3 ()I
 	public final fun daysUntil (Lio/github/sanamhub/nepdate/NepaliDate;)J
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun firstDayOfMonth ()Lio/github/sanamhub/nepdate/NepaliDate;
@@ -138,6 +141,7 @@ public final class io/github/sanamhub/nepdate/NepaliDate : java/lang/Comparable 
 	public final fun formatTo (Ljava/lang/StringBuilder;Ljava/lang/String;)Ljava/lang/StringBuilder;
 	public final fun formatTo (Ljava/lang/StringBuilder;Ljava/lang/String;Lio/github/sanamhub/nepdate/Lang;)Ljava/lang/StringBuilder;
 	public static synthetic fun formatTo$default (Lio/github/sanamhub/nepdate/NepaliDate;Ljava/lang/StringBuilder;Ljava/lang/String;Lio/github/sanamhub/nepdate/Lang;ILjava/lang/Object;)Ljava/lang/StringBuilder;
+	public static final fun fromYmd (I)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun getDayOfMonth ()I
 	public final fun getDayOfWeek ()Lio/github/sanamhub/nepdate/Weekday;
 	public final fun getDayOfYear ()I
@@ -152,6 +156,7 @@ public final class io/github/sanamhub/nepdate/NepaliDate : java/lang/Comparable 
 	public fun hashCode ()I
 	public final fun lastDayOfMonth ()Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun lengthOfMonth ()I
+	public final fun minus (Lio/github/sanamhub/nepdate/NepaliDate;)Lio/github/sanamhub/nepdate/DateDiff;
 	public final fun minusDays (J)Lio/github/sanamhub/nepdate/NepaliDate;
 	public static final fun of (III)Lio/github/sanamhub/nepdate/NepaliDate;
 	public static final fun of (ILio/github/sanamhub/nepdate/Month;I)Lio/github/sanamhub/nepdate/NepaliDate;
@@ -160,6 +165,7 @@ public final class io/github/sanamhub/nepdate/NepaliDate : java/lang/Comparable 
 	public static final fun ofOrNull (III)Lio/github/sanamhub/nepdate/NepaliDate;
 	public static final fun parse (Ljava/lang/CharSequence;)Lio/github/sanamhub/nepdate/NepaliDate;
 	public static final fun parseLenient (Ljava/lang/CharSequence;)Lio/github/sanamhub/nepdate/NepaliDate;
+	public static final fun parseLenientOrNull (Ljava/lang/CharSequence;)Lio/github/sanamhub/nepdate/NepaliDate;
 	public static final fun parseOrNull (Ljava/lang/CharSequence;)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun plusDays (J)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun plusMonths (J)Lio/github/sanamhub/nepdate/NepaliDate;
@@ -168,6 +174,7 @@ public final class io/github/sanamhub/nepdate/NepaliDate : java/lang/Comparable 
 	public final fun plusYears (J)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun plusYears (JLio/github/sanamhub/nepdate/MonthOverflow;)Lio/github/sanamhub/nepdate/NepaliDate;
 	public static synthetic fun plusYears$default (Lio/github/sanamhub/nepdate/NepaliDate;JLio/github/sanamhub/nepdate/MonthOverflow;ILjava/lang/Object;)Lio/github/sanamhub/nepdate/NepaliDate;
+	public final fun rangeTo (Lio/github/sanamhub/nepdate/NepaliDate;)Lio/github/sanamhub/nepdate/NepaliDateRange;
 	public final fun toEpochDay ()J
 	public final fun toIsoString ()Ljava/lang/String;
 	public final fun toLongString ()Ljava/lang/String;
@@ -183,10 +190,13 @@ public final class io/github/sanamhub/nepdate/NepaliDate : java/lang/Comparable 
 	public final fun toShortString (Lio/github/sanamhub/nepdate/DateOrder;Lio/github/sanamhub/nepdate/Separator;ZLio/github/sanamhub/nepdate/Lang;)Ljava/lang/String;
 	public static synthetic fun toShortString$default (Lio/github/sanamhub/nepdate/NepaliDate;Lio/github/sanamhub/nepdate/DateOrder;Lio/github/sanamhub/nepdate/Separator;ZLio/github/sanamhub/nepdate/Lang;ILjava/lang/Object;)Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
+	public final fun toYmd ()I
 	public final fun until (Lio/github/sanamhub/nepdate/NepaliDate;)Lio/github/sanamhub/nepdate/DateDiff;
+	public final fun yearLength ()I
 }
 
 public final class io/github/sanamhub/nepdate/NepaliDate$Companion {
+	public final fun fromYmd (I)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun of (III)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun of (ILio/github/sanamhub/nepdate/Month;I)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun ofEpochDay (J)Lio/github/sanamhub/nepdate/NepaliDate;
@@ -194,41 +204,90 @@ public final class io/github/sanamhub/nepdate/NepaliDate$Companion {
 	public final fun ofOrNull (III)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun parse (Ljava/lang/CharSequence;)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun parseLenient (Ljava/lang/CharSequence;)Lio/github/sanamhub/nepdate/NepaliDate;
+	public final fun parseLenientOrNull (Ljava/lang/CharSequence;)Lio/github/sanamhub/nepdate/NepaliDate;
 	public final fun parseOrNull (Ljava/lang/CharSequence;)Lio/github/sanamhub/nepdate/NepaliDate;
 }
 
 public final class io/github/sanamhub/nepdate/NepaliDateJavaTime {
 	public static final field KATHMANDU Ljava/time/ZoneId;
+	public static final fun currentCalendarYear (Lio/github/sanamhub/nepdate/NepaliDateRange$Companion;)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public static final fun currentCalendarYear (Lio/github/sanamhub/nepdate/NepaliDateRange$Companion;Ljava/time/Clock;)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public static final fun currentCalendarYear (Lio/github/sanamhub/nepdate/NepaliDateRange$Companion;Ljava/time/ZoneId;)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public static synthetic fun currentCalendarYear$default (Lio/github/sanamhub/nepdate/NepaliDateRange$Companion;Ljava/time/ZoneId;ILjava/lang/Object;)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public static final fun currentFiscalYear (Lio/github/sanamhub/nepdate/NepaliDateRange$Companion;)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public static final fun currentFiscalYear (Lio/github/sanamhub/nepdate/NepaliDateRange$Companion;Ljava/time/Clock;)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public static final fun currentFiscalYear (Lio/github/sanamhub/nepdate/NepaliDateRange$Companion;Ljava/time/ZoneId;)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public static synthetic fun currentFiscalYear$default (Lio/github/sanamhub/nepdate/NepaliDateRange$Companion;Ljava/time/ZoneId;ILjava/lang/Object;)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public static final fun currentMonth (Lio/github/sanamhub/nepdate/NepaliDateRange$Companion;)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public static final fun currentMonth (Lio/github/sanamhub/nepdate/NepaliDateRange$Companion;Ljava/time/Clock;)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public static final fun currentMonth (Lio/github/sanamhub/nepdate/NepaliDateRange$Companion;Ljava/time/ZoneId;)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public static synthetic fun currentMonth$default (Lio/github/sanamhub/nepdate/NepaliDateRange$Companion;Ljava/time/ZoneId;ILjava/lang/Object;)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public static final fun isToday (Lio/github/sanamhub/nepdate/NepaliDate;Ljava/time/Clock;)Z
+	public static final fun isToday (Lio/github/sanamhub/nepdate/NepaliDate;Ljava/time/ZoneId;)Z
+	public static final fun isTomorrow (Lio/github/sanamhub/nepdate/NepaliDate;Ljava/time/Clock;)Z
+	public static final fun isTomorrow (Lio/github/sanamhub/nepdate/NepaliDate;Ljava/time/ZoneId;)Z
+	public static final fun isYesterday (Lio/github/sanamhub/nepdate/NepaliDate;Ljava/time/Clock;)Z
+	public static final fun isYesterday (Lio/github/sanamhub/nepdate/NepaliDate;Ljava/time/ZoneId;)Z
 	public static final fun nepaliToday ()Lio/github/sanamhub/nepdate/NepaliDate;
 	public static final fun nepaliToday (Ljava/time/Clock;)Lio/github/sanamhub/nepdate/NepaliDate;
 	public static final fun nepaliToday (Ljava/time/ZoneId;)Lio/github/sanamhub/nepdate/NepaliDate;
 	public static synthetic fun nepaliToday$default (Ljava/time/ZoneId;ILjava/lang/Object;)Lio/github/sanamhub/nepdate/NepaliDate;
+	public static final fun toEnglishDatesFromDates (Ljava/lang/Iterable;)Ljava/util/List;
+	public static final fun toEnglishDatesFromStrings (Ljava/lang/Iterable;)Ljava/util/List;
 	public static final fun toLocalDate (Lio/github/sanamhub/nepdate/NepaliDate;)Ljava/time/LocalDate;
 	public static final fun toNepaliDate (Ljava/time/LocalDate;)Lio/github/sanamhub/nepdate/NepaliDate;
+	public static final fun toNepaliDates (Ljava/lang/Iterable;)Ljava/util/List;
 }
 
 public final class io/github/sanamhub/nepdate/NepaliDateRange : kotlin/collections/AbstractList, java/util/RandomAccess {
 	public static final field Companion Lio/github/sanamhub/nepdate/NepaliDateRange$Companion;
 	public fun contains (Lio/github/sanamhub/nepdate/NepaliDate;)Z
 	public final fun contains (Ljava/lang/Object;)Z
+	public final fun containsRange (Lio/github/sanamhub/nepdate/NepaliDateRange;)Z
+	public final fun datesWithInterval (I)Ljava/util/List;
+	public fun equals (Ljava/lang/Object;)Z
+	public static final fun fromDayCount (Lio/github/sanamhub/nepdate/NepaliDate;I)Lio/github/sanamhub/nepdate/NepaliDateRange;
 	public fun get (I)Lio/github/sanamhub/nepdate/NepaliDate;
 	public synthetic fun get (I)Ljava/lang/Object;
 	public final fun getEndInclusive ()Lio/github/sanamhub/nepdate/NepaliDate;
 	public fun getSize ()I
 	public final fun getStart ()Lio/github/sanamhub/nepdate/NepaliDate;
+	public fun hashCode ()I
 	public fun indexOf (Lio/github/sanamhub/nepdate/NepaliDate;)I
 	public final fun indexOf (Ljava/lang/Object;)I
+	public final fun intersect (Lio/github/sanamhub/nepdate/NepaliDateRange;)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public final fun isAdjacentTo (Lio/github/sanamhub/nepdate/NepaliDateRange;)Z
 	public fun lastIndexOf (Lio/github/sanamhub/nepdate/NepaliDate;)I
 	public final fun lastIndexOf (Ljava/lang/Object;)I
+	public final fun minus (Lio/github/sanamhub/nepdate/NepaliDateRange;)Ljava/util/List;
 	public static final fun of (Lio/github/sanamhub/nepdate/NepaliDate;Lio/github/sanamhub/nepdate/NepaliDate;)Lio/github/sanamhub/nepdate/NepaliDateRange;
 	public static final fun ofMonth (II)Lio/github/sanamhub/nepdate/NepaliDateRange;
 	public static final fun ofYear (I)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public final fun overlaps (Lio/github/sanamhub/nepdate/NepaliDateRange;)Z
+	public static final fun singleDay (Lio/github/sanamhub/nepdate/NepaliDate;)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public final fun splitByFiscalQuarter ()Ljava/util/List;
+	public final fun splitByMonth ()Ljava/util/List;
+	public final fun toFormattedString ()Ljava/lang/String;
+	public final fun toFormattedString (Lio/github/sanamhub/nepdate/DateOrder;)Ljava/lang/String;
+	public final fun toFormattedString (Lio/github/sanamhub/nepdate/DateOrder;Lio/github/sanamhub/nepdate/Separator;)Ljava/lang/String;
+	public final fun toFormattedString (Lio/github/sanamhub/nepdate/DateOrder;Lio/github/sanamhub/nepdate/Separator;Lio/github/sanamhub/nepdate/Lang;)Ljava/lang/String;
+	public static synthetic fun toFormattedString$default (Lio/github/sanamhub/nepdate/NepaliDateRange;Lio/github/sanamhub/nepdate/DateOrder;Lio/github/sanamhub/nepdate/Separator;Lio/github/sanamhub/nepdate/Lang;ILjava/lang/Object;)Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+	public final fun union (Lio/github/sanamhub/nepdate/NepaliDateRange;)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public final fun weekendDays ()Ljava/util/List;
+	public final fun weekendDays (Z)Ljava/util/List;
+	public static synthetic fun weekendDays$default (Lio/github/sanamhub/nepdate/NepaliDateRange;ZILjava/lang/Object;)Ljava/util/List;
+	public final fun workingDays ()Ljava/util/List;
+	public final fun workingDays (Z)Ljava/util/List;
+	public static synthetic fun workingDays$default (Lio/github/sanamhub/nepdate/NepaliDateRange;ZILjava/lang/Object;)Ljava/util/List;
 }
 
 public final class io/github/sanamhub/nepdate/NepaliDateRange$Companion {
+	public final fun fromDayCount (Lio/github/sanamhub/nepdate/NepaliDate;I)Lio/github/sanamhub/nepdate/NepaliDateRange;
 	public final fun of (Lio/github/sanamhub/nepdate/NepaliDate;Lio/github/sanamhub/nepdate/NepaliDate;)Lio/github/sanamhub/nepdate/NepaliDateRange;
 	public final fun ofMonth (II)Lio/github/sanamhub/nepdate/NepaliDateRange;
 	public final fun ofYear (I)Lio/github/sanamhub/nepdate/NepaliDateRange;
+	public final fun singleDay (Lio/github/sanamhub/nepdate/NepaliDate;)Lio/github/sanamhub/nepdate/NepaliDateRange;
 }
 
 public final class io/github/sanamhub/nepdate/NepaliDigits {

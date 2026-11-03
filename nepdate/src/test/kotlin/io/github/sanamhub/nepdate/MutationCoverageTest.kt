@@ -4,6 +4,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -186,5 +187,87 @@ class MutationCoverageTest {
         assertEquals("2081/04/05", date.toShortString())
         assertEquals("2081/4/5", date.toShortString(pad = false))
         assertEquals("5/4/2081", date.toShortString(DateOrder.DMY, Separator.SLASH, pad = false))
+    }
+
+    @Test
+    fun `ranges that share one day overlap and intersect in that day`() {
+        val first = NepaliDate.of(2081, 4, 1)..NepaliDate.of(2081, 4, 10)
+        val second = NepaliDate.of(2081, 4, 10)..NepaliDate.of(2081, 4, 20)
+        assertTrue(first.overlaps(second))
+        assertTrue(second.overlaps(first))
+        val shared = NepaliDate.of(2081, 4, 10)
+        assertEquals(shared..shared, first.intersect(second))
+    }
+
+    @Test
+    fun `different values have different hash codes`() {
+        val date = NepaliDate.of(2081, 4, 15)
+        val next = NepaliDate.of(2081, 4, 16)
+        assertNotEquals(date.hashCode(), next.hashCode())
+        assertNotEquals(FiscalYear(2080).hashCode(), FiscalYear(2081).hashCode())
+        assertNotEquals((date..next).hashCode(), (date..date).hashCode())
+        assertNotEquals(date.until(next).hashCode(), date.until(NepaliDate.of(2081, 5, 16)).hashCode())
+    }
+
+    @Test
+    fun `the zone overloads tell today from days further away`() {
+        val zone = KATHMANDU
+        // Read the clock on both sides, and retry when midnight passes between the reads.
+        repeat(3) {
+            val before = nepaliToday(zone)
+            val isToday = before.isToday(zone)
+            val yesterday = before.plusDays(-1).isYesterday(zone)
+            val tomorrow = before.plusDays(1).isTomorrow(zone)
+            val notYesterday = before.plusDays(1).isYesterday(zone)
+            val notTomorrow = before.plusDays(-1).isTomorrow(zone)
+            if (nepaliToday(zone) == before) {
+                assertTrue(isToday)
+                assertTrue(yesterday)
+                assertTrue(tomorrow)
+                assertFalse(notYesterday)
+                assertFalse(notTomorrow)
+                assertFalse(before.plusDays(10).isToday(zone))
+                return
+            }
+        }
+    }
+
+    @Test
+    fun `hash codes depend only on the values, so every run gives the same number`() {
+        val later = NepaliDate.of(2081, 4, 15)
+        val earlier = NepaliDate.of(2080, 2, 12)
+        val back = later.until(earlier)
+        assertEquals(listOf(1, 2, 3), listOf(back.years, back.months, back.days))
+        assertTrue(back.isNegative)
+        assertEquals(955757, back.hashCode())
+        assertEquals(32237, earlier.until(later).hashCode())
+        assertEquals(2093967, (earlier..later).hashCode())
+    }
+
+    @Test
+    fun `ranges that differ only in their first day hash differently`() {
+        val last = NepaliDate.of(2081, 4, 20)
+        val hashes = (1..19).map { (NepaliDate.of(2081, 4, it)..last).hashCode() }.toSet()
+        assertEquals(19, hashes.size)
+    }
+
+    @Test
+    fun `a one-day range is one fiscal quarter piece and keeps its weekend day`() {
+        var saturday = NepaliDate.of(2081, 4, 1)
+        while (saturday.dayOfWeek != Weekday.SATURDAY) saturday = saturday.plusDays(1)
+        val sunday = saturday.plusDays(1)
+        assertEquals(listOf(saturday..saturday), (saturday..saturday).splitByFiscalQuarter())
+        assertEquals(listOf(saturday), (saturday..saturday).weekendDays(includeSunday = false))
+        assertEquals(listOf(sunday), (sunday..sunday).weekendDays(includeSunday = true))
+        assertEquals(listOf(saturday, sunday), (saturday.plusDays(-3)..sunday).weekendDays())
+    }
+
+    @Test
+    fun `batch conversions accept an iterable that is not a collection`() {
+        val dates = listOf(NepaliDate.of(2081, 4, 15), NepaliDate.of(2081, 4, 16))
+        val locals = dates.map { it.toLocalDate() }
+        assertEquals(locals, toEnglishDates(Iterable { dates.iterator() }))
+        assertEquals(locals, toEnglishDates(Iterable { listOf("2081/04/15", "2081/04/16").iterator() }))
+        assertEquals(dates, toNepaliDates(Iterable { locals.iterator() }))
     }
 }

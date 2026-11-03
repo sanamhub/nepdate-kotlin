@@ -1,46 +1,51 @@
 package io.github.sanamhub.nepdate
 
-/** The twelve BS months, Baishakh (1) to Chaitra (12). */
-public enum class Month {
+/**
+ * The twelve BS months, Baishakh (1) to Chaitra (12).
+ *
+ * The number is declared on each constant rather than taken from the declaration order, so Java
+ * callers and serialized values keep their meaning if the constants are ever reordered.
+ */
+public enum class Month(
+    /** The month number, 1..12. */
+    public val value: Int,
+) {
     /** Month 1, बैशाख. */
-    BAISHAKH,
+    BAISHAKH(1),
 
     /** Month 2, जेठ. */
-    JESTHA,
+    JESTHA(2),
 
     /** Month 3, असार. */
-    ASHAD,
+    ASHAD(3),
 
     /** Month 4, साउन. */
-    SHRAWAN,
+    SHRAWAN(4),
 
     /** Month 5, भदौ. */
-    BHADRA,
+    BHADRA(5),
 
     /** Month 6, असोज. */
-    ASHOJ,
+    ASHOJ(6),
 
     /** Month 7, कार्तिक. */
-    KARTIK,
+    KARTIK(7),
 
     /** Month 8, मंसिर. */
-    MANGSIR,
+    MANGSIR(8),
 
     /** Month 9, पुष. */
-    POUSH,
+    POUSH(9),
 
     /** Month 10, माघ. */
-    MAGH,
+    MAGH(10),
 
     /** Month 11, फागुन. */
-    FALGUN,
+    FALGUN(11),
 
     /** Month 12, चैत. */
-    CHAITRA,
+    CHAITRA(12),
     ;
-
-    /** The month number, 1..12. */
-    public val value: Int get() = ordinal + 1
 
     /**
      * The month's name (FORMATTING section 1).

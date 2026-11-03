@@ -1,7 +1,7 @@
 # ADR-0003: API conventions, errors and parity mapping
 
 - **Status:** accepted
-- **Date:** 2026-10-06
+- **Date:** 2026-10-06, parity table revised 2026-11-03 for the hub decisions of 2026-11-02
 - **Approved by:** Sanam
 
 ## Decision
@@ -14,27 +14,26 @@ throwing functions, enums for months and weekdays. No `value class`, `suspend`, 
 in the public API.
 
 **Errors:** `NepDateException` extends `IllegalArgumentException` (what `LocalDate.of` callers
-already catch) and carries a `kind` enum. Kotlin callers who prefer nulls use `ofOrNull` and
-`parseOrNull`.
+already catch) and carries a `kind` enum. Kotlin callers who prefer nulls use `ofOrNull`,
+`parseOrNull` and `parseLenientOrNull`.
 
-**Time zones:** `nepaliToday()` defaults to Nepal time. `LocalDate.toNepaliDate()` has no zone
-question; for an `Instant` the caller picks the zone with `atZone(...)`; the library never assumes the
-device zone.
+**Time zones:** `nepaliToday()` defaults to Nepal time, and every clock member also takes a
+`java.time.Clock` so tests and callers can fix the date. `LocalDate.toNepaliDate()` has no zone
+question; for an `Instant` the caller picks the zone with `atZone(...)`; the library never assumes
+the device zone. Every `java.time` call lives in `JavaTime.kt`, which `checkCoreSplit` enforces.
 
 **Parity** (`shared/spec/PARITY.md`, applies unchanged):
 
 | ID | Kotlin |
 |---|---|
-| D-01 | private constructor; invalid dates throw or return `null` |
+| D-01 | private constructor; invalid dates throw or return `null`; a range is never empty |
 | D-02, D-03 | `plusMonths(n, overflow)`, `plusDays(n)`, integers only |
 | D-04 | `Month.shortName` returns `Asa` / `Aso` |
-| D-05, D-06 | `parse`, `parseOrNull` (strict), `parseLenient` |
-| D-07 | `daysUntil(other): Long` |
-| D-08 | `FiscalYear` with `start`, `end`, `range(quarter)` |
-| D-09 | `NepaliDateRange` as a `List` only |
-| D-10 | not ported |
-| D-11 | `toIsoString()` gives `"YYYY-MM-DD"`; no serialization library dependency |
-| D-12 | `lengthOfMonth()`; year length via `NepaliDateRange.ofYear(y).size` |
+| D-05, D-06 | `parse`, `parseOrNull` (strict), `parseLenient`, `parseLenientOrNull` |
+| D-07 | `daysUntil(other): Long` is `other - this`; `minus(other): DateDiff` is `this - other` |
+| D-08 | `FiscalYear` with `start`, `end`, `range()`, `range(quarter)` |
+| D-11 | `toIsoString()` gives `"YYYY-MM-DD"`; `fromYmd`/`toYmd` for the integer; `NepaliDateSerializer` in the optional `nepdate-serialization` artifact; the core stays dependency free |
+| D-12 | `yearLength()` gives the BS year length; `lengthOfMonth()` the month |
 | D-13 | artifact `nepdate-patro`, package `io.github.sanamhub.nepdate.patro` (hub ADR-0004); `NepaliDate.calendarInfo` is an extension from that artifact only; `Patro` holds `coverage` and `publicHolidays` |
-| D-14 | not ported; `nepaliToday()` and `plusDays(±1)` |
-| D-15 | `lang` parameter on every formatter |
+| D-15 | `lang` parameter on every formatter, including the range string form |
+| D-16 | ranges and their helpers never throw at 2199-12-30 |

@@ -24,7 +24,7 @@ class PatternFormatTest {
     @Test
     fun `every row of format-pattern tsv except the D-04 rows`() {
         val rows = SharedFiles.tsv("spec/vectors/csharp-golden/format-pattern.tsv")
-        assertEquals(451, rows.size)
+        assertEquals(452, rows.size)
         var d04 = 0
         for (row in rows) {
             val (y, m, d) = SharedFiles.ymd(row.getValue("bs"))
@@ -49,9 +49,9 @@ class PatternFormatTest {
         assertEquals("4/15/2081", date.format("M/d/yyyy"))
         assertEquals("2081BS", date.format("yyyy'BS'"))
         assertEquals("2081MM-dd", date.format("""yyyy\M\M-\d\d"""))
-        // A backslash at the very end writes nothing (hub e2f9778 fixed the reference to match).
-        assertEquals("2081", date.format("""yyyy\"""))
-        assertEquals("", date.format("""\"""))
+        // A backslash at the very end of the pattern writes a backslash (FORMATTING section 5).
+        assertEquals("""2081\""", date.format("""yyyy\"""))
+        assertEquals("""\""", date.format("""\"""))
         assertEquals("Shr 2081", date.format("MMM yyyy"))
         assertEquals("15.04.81", date.format("dd.MM.yy"))
     }
@@ -77,7 +77,7 @@ class PatternFormatTest {
         // Literal characters are never localised, even digits.
         assertEquals("12 ०५", date.format("'12' dd", Lang.NEPALI))
         assertEquals("x", date.format("""\x"""))
-        assertEquals("2081", date.format("""yyyy\"""))
+        assertEquals("""2081\""", date.format("""yyyy\"""))
         assertEquals("2081 open", date.format("yyyy' open"))
         assertEquals("2081:", date.format("yyyy:"))
     }

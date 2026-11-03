@@ -26,11 +26,13 @@ jqwik = { module = "net.jqwik:jqwik", version.ref = "jqwik" }
 jazzer-junit = { module = "com.code-intelligence:jazzer-junit", version.ref = "jazzer" }
 animalsniffer-android-signature = { module = "net.sf.androidscents.signature:android-api-level-21", version.ref = "android-api-21" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
 jmh-core = { module = "org.openjdk.jmh:jmh-core", version.ref = "jmh" }
 nepali-date-picker-core = { module = "io.github.shivathapaa:nepali-date-picker-core", version.ref = "shivathapaa" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint-plugin" }
 detekt = { id = "dev.detekt", version.ref = "detekt" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }

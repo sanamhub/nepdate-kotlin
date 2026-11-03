@@ -3,6 +3,7 @@
 package io.github.sanamhub.nepdate.catalog
 
 import io.github.sanamhub.nepdate.FiscalYear
+import io.github.sanamhub.nepdate.Month
 import io.github.sanamhub.nepdate.NepDateException
 import io.github.sanamhub.nepdate.NepaliDate
 import io.github.sanamhub.nepdate.NepaliDateRange
@@ -11,11 +12,12 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /**
- * C# `Core/NepaliDateRangeTests.cs`. The port's range is a list of days with month, year,
- * contains and size only (PARITY D-09): no empty ranges, set operations, splitting or working days.
+ * C# `Core/NepaliDateRangeTests.cs`. The port's range is never empty (PARITY D-01), so the C# cases
+ * that build one are cases that must fail here.
  */
 class NepaliDateRangeTests {
     private fun d(
@@ -29,12 +31,11 @@ class NepaliDateRangeTests {
         val range = NepaliDateRange.of(d(2080, 1, 1), d(2080, 1, 15))
         assertEquals(d(2080, 1, 1), range.start)
         assertEquals(d(2080, 1, 15), range.endInclusive)
-        assertFalse(range.isEmpty())
         assertEquals(15, range.size)
     }
 
     // C# makes an empty range when the end is before the start; the port has no empty range
-    // (PARITY D-09) and rejects it.
+    // (PARITY D-01) and rejects it.
     @Test
     fun Constructor_EndBeforeStart_CreatesEmptyRange() {
         val error = assertFailsWith<NepDateException> { NepaliDateRange.of(d(2080, 1, 15), d(2080, 1, 1)) }
@@ -44,17 +45,16 @@ class NepaliDateRangeTests {
     @Test
     fun SingleDay_CreatesRangeWithOneDay() {
         val date = d(2080, 1, 1)
-        val range = NepaliDateRange.of(date, date)
+        val range = NepaliDateRange.singleDay(date)
         assertEquals(date, range.start)
         assertEquals(date, range.endInclusive)
         assertEquals(1, range.size)
     }
 
-    // No FromDayCount (PARITY D-09): of(start, start.plusDays(days - 1)) builds the same range.
     @Test
     fun FromDayCount_CreatesCorrectRange() {
         val start = d(2080, 1, 1)
-        val range = NepaliDateRange.of(start, start.plusDays(10 - 1))
+        val range = NepaliDateRange.fromDayCount(start, 10)
         assertEquals(start, range.start)
         assertEquals(start.plusDays(9), range.endInclusive)
         assertEquals(10, range.size)
@@ -84,33 +84,101 @@ class NepaliDateRangeTests {
         assertFalse(NepaliDateRange.of(d(2080, 1, 1), d(2080, 1, 15)).contains(d(2080, 1, 20)))
     }
 
-    // No Contains(range) (PARITY D-09); List.containsAll answers the same question.
     @Test
     fun Contains_RangeFullyContained_ReturnsTrue() {
         val outer = NepaliDateRange.of(d(2080, 1, 1), d(2080, 1, 30))
         val inner = NepaliDateRange.of(d(2080, 1, 10), d(2080, 1, 20))
-        assertTrue(outer.containsAll(inner))
+        assertTrue(outer.containsRange(inner))
+        assertFalse(inner.containsRange(outer))
     }
 
-    // Not ported, PARITY D-09 (no set operations or splitting): Overlaps_RangesOverlap_ReturnsTrue,
-    // Overlaps_RangesDontOverlap_ReturnsFalse, IsAdjacentTo_AdjacentRanges_ReturnsTrue,
-    // Intersect_OverlappingRanges_ReturnsIntersection, Union_OverlappingRanges_ReturnsUnion,
-    // Except_RemovingRangeFromMiddle_ReturnsTwoRanges, SplitByMonth_RangeAcrossMonths_SplitsCorrectly,
-    // Demo_RangeOperations.
+    @Test
+    fun Overlaps_RangesOverlap_ReturnsTrue() {
+        val first = NepaliDateRange.of(d(2080, 1, 1), d(2080, 1, 15))
+        val second = NepaliDateRange.of(d(2080, 1, 10), d(2080, 1, 25))
+        assertTrue(first.overlaps(second))
+        assertTrue(second.overlaps(first))
+    }
 
-    // No WorkingDays (PARITY D-09: "iterate and filter for working days"); the row filters.
+    @Test
+    fun Overlaps_RangesDontOverlap_ReturnsFalse() {
+        val first = NepaliDateRange.of(d(2080, 1, 1), d(2080, 1, 15))
+        val second = NepaliDateRange.of(d(2080, 1, 16), d(2080, 1, 25))
+        assertFalse(first.overlaps(second))
+    }
+
+    @Test
+    fun IsAdjacentTo_AdjacentRanges_ReturnsTrue() {
+        val first = NepaliDateRange.of(d(2080, 1, 1), d(2080, 1, 15))
+        val second = NepaliDateRange.of(d(2080, 1, 16), d(2080, 1, 25))
+        assertTrue(first.isAdjacentTo(second))
+        assertTrue(second.isAdjacentTo(first))
+        assertFalse(first.overlaps(second))
+    }
+
+    @Test
+    fun Intersect_OverlappingRanges_ReturnsIntersection() {
+        val first = NepaliDateRange.of(d(2080, 1, 1), d(2080, 1, 15))
+        val second = NepaliDateRange.of(d(2080, 1, 10), d(2080, 1, 25))
+        assertEquals(NepaliDateRange.of(d(2080, 1, 10), d(2080, 1, 15)), first.intersect(second))
+    }
+
+    @Test
+    fun Union_OverlappingRanges_ReturnsUnion() {
+        val first = NepaliDateRange.of(d(2080, 1, 1), d(2080, 1, 15))
+        val second = NepaliDateRange.of(d(2080, 1, 10), d(2080, 1, 25))
+        assertEquals(NepaliDateRange.of(d(2080, 1, 1), d(2080, 1, 25)), first.union(second))
+    }
+
+    @Test
+    fun Except_RemovingRangeFromMiddle_ReturnsTwoRanges() {
+        val range = NepaliDateRange.of(d(2080, 1, 1), d(2080, 1, 30))
+        val removed = NepaliDateRange.of(d(2080, 1, 10), d(2080, 1, 20))
+        assertEquals(
+            listOf(
+                NepaliDateRange.of(d(2080, 1, 1), d(2080, 1, 9)),
+                NepaliDateRange.of(d(2080, 1, 21), d(2080, 1, 30)),
+            ),
+            range.minus(removed),
+        )
+    }
+
+    @Test
+    fun SplitByMonth_RangeAcrossMonths_SplitsCorrectly() {
+        val range = NepaliDateRange.of(d(2080, 1, 15), d(2080, 2, 10))
+        val pieces = range.splitByMonth()
+        assertEquals(2, pieces.size)
+        assertEquals(range.start, pieces.first().start)
+        assertEquals(d(2080, 1, 1).lastDayOfMonth(), pieces.first().endInclusive)
+        assertEquals(d(2080, 2, 1), pieces.last().start)
+        assertEquals(range.endInclusive, pieces.last().endInclusive)
+    }
+
     @Test
     fun WorkingDays_ReturnsCorrectDays() {
         val start = d(2080, 1, 1)
-        val range = NepaliDateRange.of(start, start.plusDays(13))
-        val expectedSaturdays = (0 until 14).count { (start.dayOfWeek.ordinal + it) % 7 == Weekday.SATURDAY.ordinal }
-        val working = range.filter { it.dayOfWeek != Weekday.SATURDAY }
-        assertEquals(14 - expectedSaturdays, working.size)
+        val range = NepaliDateRange.fromDayCount(start, 14)
+        assertEquals(range.toList().filter { it.dayOfWeek != Weekday.SATURDAY }, range.workingDays())
+        assertEquals(range.workingDays().size, 14 - range.weekendDays(includeSunday = false).size)
     }
 
     @Test
     fun Enumeration_EnumeratesAllDaysInRange() {
         val days = NepaliDateRange.of(d(2080, 1, 1), d(2080, 1, 10)).toList()
         assertEquals((1..10).map { d(2080, 1, it) }, days)
+    }
+
+    @Test
+    fun Demo_RangeOperations() {
+        // The C# demo: a fiscal year, one month inside it, and what is left when the month goes.
+        val fiscal = FiscalYear(2080).range()
+        val month = NepaliDateRange.ofMonth(2080, Month.MAGH.value)
+        assertTrue(fiscal.containsRange(month))
+        val rest = fiscal.minus(month)
+        assertEquals(2, rest.size)
+        assertEquals(fiscal.start, rest.first().start)
+        assertEquals(fiscal.endInclusive, rest.last().endInclusive)
+        assertNull(rest.first().intersect(month))
+        assertEquals(fiscal, rest.first().union(rest.last()).union(month))
     }
 }
