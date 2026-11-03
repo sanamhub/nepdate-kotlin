@@ -7,6 +7,8 @@ Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.0-rc.1] - 2026-11-03
+
 The rest of the C# `NepDate` surface, so that every row of the hub's `spec/API.md` is present in
 Kotlin. The public API grows and one toString and one format behaviour change; see "Breaking
 changes" below.
