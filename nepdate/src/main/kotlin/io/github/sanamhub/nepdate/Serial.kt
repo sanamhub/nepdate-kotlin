@@ -30,6 +30,9 @@ internal fun packedMonth(packed: Int): Int = (packed ushr 6) and 0xF
 
 internal fun packedDay(packed: Int): Int = packed and 0x3F
 
+/** The weekday of [serial] (ALGORITHM section 7: 0 = Sunday). */
+internal fun weekdayOfSerial(serial: Int): Weekday = Weekday.entries[(serial + EPOCH_WEEKDAY) % 7]
+
 /** Serial of a valid BS date. */
 internal fun toSerial(
     year: Int,

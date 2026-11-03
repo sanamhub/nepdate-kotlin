@@ -14,7 +14,9 @@ object SharedFiles {
 
     /**
      * Rows of a CSV or TSV file as header-to-cell maps. Splits on [separator] only and never trims
-     * a cell: some parse.tsv inputs start or end with a space. Lines starting with `#` are comments.
+     * a cell: some parse.tsv inputs start or end with a space; `serialization.tsv` holds literal
+     * JSON text, quotes included, so a quote-aware reader would be wrong. Lines starting with `#`
+     * are comments.
      */
     fun rows(
         relative: String,
@@ -38,4 +40,23 @@ object SharedFiles {
         val parts = text.split('-')
         return Triple(parts[0].toInt(), parts[1].toInt(), parts[2].toInt())
     }
+
+    /** "2081-04-15" to the date. */
+    fun date(text: String): NepaliDate {
+        val (y, m, d) = ymd(text)
+        return NepaliDate.of(y, m, d)
+    }
+
+    /** "2081-04-10..2081-04-20" to the range. */
+    fun range(text: String): NepaliDateRange {
+        val parts = text.split("..")
+        check(parts.size == 2) { "'$text' is not a range" }
+        return NepaliDateRange.of(date(parts[0]), date(parts[1]))
+    }
+
+    /** "a;b;c" to the dates; `none` to an empty list. */
+    fun dates(text: String): List<NepaliDate> = if (text == "none") emptyList() else text.split(';').map(::date)
+
+    /** "a..b;c..d" to the ranges; `none` to an empty list. */
+    fun ranges(text: String): List<NepaliDateRange> = if (text == "none") emptyList() else text.split(';').map(::range)
 }

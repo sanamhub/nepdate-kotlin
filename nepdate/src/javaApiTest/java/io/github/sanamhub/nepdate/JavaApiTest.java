@@ -86,6 +86,55 @@ class JavaApiTest {
     }
 
     @Test
+    void integerFormAndYearLength() throws NepDateException {
+        NepaliDate date = NepaliDate.of(2081, 4, 15);
+        assertEquals(20810415, date.toYmd());
+        assertEquals(date, NepaliDate.fromYmd(20810415));
+        assertThrows(NepDateException.class, () -> NepaliDate.fromYmd(Integer.MAX_VALUE));
+        assertEquals(366, date.yearLength());
+        assertEquals(2081, date.component1());
+        assertEquals(4, date.component2());
+        assertEquals(15, date.component3());
+    }
+
+    @Test
+    void subtractionAndTheRangeOperator() throws NepDateException {
+        NepaliDate earlier = NepaliDate.of(2081, 4, 15);
+        NepaliDate later = NepaliDate.of(2081, 4, 20);
+        assertEquals(5L, later.minus(earlier).getTotalDays());
+        assertEquals(-5L, earlier.minus(later).getTotalDays());
+        assertEquals(5L, earlier.daysUntil(later));
+        assertEquals(NepaliDateRange.of(earlier, later), earlier.rangeTo(later));
+    }
+
+    @Test
+    void rangeOperations() throws NepDateException {
+        NepaliDateRange month = NepaliDateRange.ofMonth(2081, 4);
+        NepaliDateRange secondHalf = NepaliDateRange.of(NepaliDate.of(2081, 4, 17), NepaliDate.of(2081, 6, 10));
+        NepaliDate date = NepaliDate.of(2081, 4, 15);
+
+        assertEquals(NepaliDateRange.of(date, date), NepaliDateRange.singleDay(date));
+        assertEquals(11, NepaliDateRange.fromDayCount(date, 11).size());
+        assertThrows(NepDateException.class, () -> NepaliDateRange.fromDayCount(date, 0));
+
+        assertTrue(month.containsRange(NepaliDateRange.of(date, date)));
+        assertTrue(month.overlaps(secondHalf));
+        assertTrue(month.isAdjacentTo(NepaliDateRange.of(NepaliDate.of(2081, 5, 1), NepaliDate.of(2081, 5, 2))));
+        assertEquals(NepaliDateRange.of(NepaliDate.of(2081, 4, 17), NepaliDate.of(2081, 4, 32)), month.intersect(secondHalf));
+        assertEquals(NepaliDateRange.of(NepaliDate.of(2081, 4, 1), NepaliDate.of(2081, 6, 10)), month.union(secondHalf));
+        assertEquals(1, month.minus(secondHalf).size());
+        assertEquals(1, month.splitByMonth().size());
+        assertEquals(1, month.splitByFiscalQuarter().size());
+        assertEquals(32, month.datesWithInterval(1).size());
+        assertEquals(month.size() - month.weekendDays(false).size(), month.workingDays(false).size());
+        assertEquals(month.size() - month.weekendDays(true).size(), month.workingDays(true).size());
+        assertEquals("2081/04/01 - 2081/04/32", month.toString());
+        assertEquals("01-04-2081 - 32-04-2081", month.toFormattedString(DateOrder.DMY, Separator.DASH, Lang.ENGLISH));
+        assertEquals(month, NepaliDateRange.ofMonth(2081, 4));
+        assertEquals(month.hashCode(), NepaliDateRange.ofMonth(2081, 4).hashCode());
+    }
+
+    @Test
     void ranges() throws NepDateException {
         NepaliDateRange month = NepaliDateRange.ofMonth(2081, 4);
         assertEquals(32, month.size());
@@ -189,5 +238,30 @@ class JavaApiTest {
         assertTrue(NepaliDateJavaTime.nepaliToday(NepaliDateJavaTime.KATHMANDU) != null);
         assertThrows(NepDateException.class,
                 () -> NepaliDateJavaTime.toNepaliDate(java.time.LocalDate.of(1844, 4, 10)));
+    }
+
+    @Test
+    void javaTimeClockAndBatchConversions() throws NepDateException {
+        NepaliDate date = NepaliDate.of(2081, 4, 15);
+        java.time.Clock clock = java.time.Clock.fixed(
+                java.time.Instant.parse("2024-07-30T12:00:00Z"), NepaliDateJavaTime.KATHMANDU);
+        assertTrue(NepaliDateJavaTime.isToday(date, clock));
+        assertTrue(NepaliDateJavaTime.isYesterday(NepaliDate.of(2081, 4, 14), clock));
+        assertTrue(NepaliDateJavaTime.isTomorrow(NepaliDate.of(2081, 4, 16), clock));
+
+        assertEquals(java.util.Arrays.asList(date), NepaliDateJavaTime.toNepaliDates(
+                java.util.Arrays.asList(java.time.LocalDate.of(2024, 7, 30))));
+        assertEquals(java.util.Arrays.asList(java.time.LocalDate.of(2024, 7, 30)),
+                NepaliDateJavaTime.toEnglishDatesFromStrings(java.util.Arrays.asList("2081-04-15")));
+        assertEquals(java.util.Arrays.asList(java.time.LocalDate.of(2024, 7, 30)),
+                NepaliDateJavaTime.toEnglishDatesFromDates(java.util.Arrays.asList(date)));
+
+        assertEquals(NepaliDateRange.ofMonth(2081, 4),
+                NepaliDateJavaTime.currentMonth(NepaliDateRange.Companion, clock));
+        assertTrue(NepaliDateJavaTime.currentMonth(NepaliDateRange.Companion) != null);
+        assertEquals(FiscalYear.containing(date).range(),
+                NepaliDateJavaTime.currentFiscalYear(NepaliDateRange.Companion, clock));
+        assertEquals(NepaliDateRange.ofYear(2081),
+                NepaliDateJavaTime.currentCalendarYear(NepaliDateRange.Companion, clock));
     }
 }

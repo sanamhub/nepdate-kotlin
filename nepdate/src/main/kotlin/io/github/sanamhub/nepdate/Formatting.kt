@@ -82,11 +82,16 @@ private fun appendCustomPattern(
     while (i < pattern.length) {
         val c = pattern[i]
         when (c) {
-            // A backslash at the very end writes nothing (FORMATTING section 5).
-            '\\' -> {
-                if (i + 1 < pattern.length) out.append(pattern[i + 1])
-                i += 2
-            }
+            // A backslash escapes the next character; a backslash at the very end writes itself
+            // (FORMATTING section 5).
+            '\\' ->
+                if (i + 1 < pattern.length) {
+                    out.append(pattern[i + 1])
+                    i += 2
+                } else {
+                    out.append('\\')
+                    i++
+                }
             // An unterminated quote runs to the end of the pattern.
             '\'' -> {
                 val close = pattern.indexOf('\'', i + 1)

@@ -26,10 +26,41 @@ public class NepaliDate private constructor(
     public val dayOfMonth: Int get() = packedDay(ymd)
 
     /** The weekday (ALGORITHM section 7). */
-    public val dayOfWeek: Weekday get() = WEEKDAYS[(serial + EPOCH_WEEKDAY) % 7]
+    public val dayOfWeek: Weekday get() = weekdayOfSerial(serial)
 
     /** The day of the BS year, 1..367. */
     public val dayOfYear: Int get() = serial - MONTH_START[(packedYear(ymd) - MIN_YEAR) * 12] + 1
+
+    /**
+     * The length of this date's BS year, the sum of its twelve months (PARITY D-12).
+     *
+     * @return 364..367, for example 365 for 2081
+     */
+    public fun yearLength(): Int {
+        val index = (packedYear(ymd) - MIN_YEAR) * 12
+        return MONTH_START[index + 12] - MONTH_START[index]
+    }
+
+    /**
+     * The year, for `val (year, month, day) = date` (ND19).
+     *
+     * @return [year]
+     */
+    public operator fun component1(): Int = year
+
+    /**
+     * The month number, for `val (year, month, day) = date`.
+     *
+     * @return [monthValue], not the [Month] object
+     */
+    public operator fun component2(): Int = monthValue
+
+    /**
+     * The day of the month, for `val (year, month, day) = date`.
+     *
+     * @return [dayOfMonth]
+     */
+    public operator fun component3(): Int = dayOfMonth
 
     /**
      * The length of this date's month.
@@ -85,6 +116,14 @@ public class NepaliDate private constructor(
     public fun toEpochDay(): Long = (serial + EPOCH_UNIX_DAYS).toLong()
 
     /**
+     * This date packed as the `YYYYMMDD` integer of the C# `TypeConverter` (PARITY D-11), the
+     * inverse of [NepaliDate.fromYmd]. For example 2081-04-15 is `20810415`.
+     *
+     * @return 19010101..21991230
+     */
+    public fun toYmd(): Int = year * 10000 + monthValue * 100 + dayOfMonth
+
+    /**
      * The date [days] days later, or earlier for a negative [days] (ALGORITHM section 8).
      *
      * @return the new date
@@ -117,9 +156,31 @@ public class NepaliDate private constructor(
     /**
      * Days from this date to [other]: positive when [other] is later (PARITY D-07).
      *
+     * The named form answers "how long until", the direction of ALGORITHM section 8a's
+     * `days_between(this, other)`; [minus] answers "this minus other" and has the opposite sign.
+     *
      * @return the signed number of days, -109211..109211
      */
     public fun daysUntil(other: NepaliDate): Long = (other.serial - serial).toLong()
+
+    /**
+     * The distance from [other] to this date: positive when this date is later (PARITY D-07).
+     *
+     * This keeps the direction of the C# `Subtract`/`operator -`, the opposite of [daysUntil]:
+     * `later - earlier` is positive, and `later.daysUntil(earlier)` is negative.
+     *
+     * @return the distance, with [DateDiff.totalDays] carrying the sign
+     */
+    public operator fun minus(other: NepaliDate): DateDiff = other.until(this)
+
+    /**
+     * Every day from this date to [other], both included, for `start..end`.
+     *
+     * @return the range
+     * @throws NepDateException with [NepDateException.Kind.OUT_OF_RANGE] when this date is after [other]
+     */
+    @Throws(NepDateException::class)
+    public operator fun rangeTo(other: NepaliDate): NepaliDateRange = NepaliDateRange.of(this, other)
 
     /**
      * The same day [months] months later, or earlier for a negative [months] (ALGORITHM section 8).
@@ -417,7 +478,21 @@ public class NepaliDate private constructor(
             return ofSerial((epochDay - EPOCH_UNIX_DAYS).toInt())
         }
 
-        private val WEEKDAYS = Weekday.entries
+        /**
+         * The date packed as the `YYYYMMDD` integer of the C# `TypeConverter` (PARITY D-11), the
+         * inverse of [toYmd]. For example `20810415` is 2081-04-15.
+         *
+         * Every `Int` is accepted as input and none wraps: the value is split into year, month and
+         * day and then validated, so `2147483647` is an out-of-range year, not a truncated date.
+         *
+         * @return the date
+         * @throws NepDateException as [of]: [NepDateException.Kind.OUT_OF_RANGE] for a year outside
+         *   1901..2199 (which also covers a negative integer), then
+         *   [NepDateException.Kind.INVALID_MONTH], then [NepDateException.Kind.INVALID_DAY]
+         */
+        @JvmStatic
+        @Throws(NepDateException::class)
+        public fun fromYmd(value: Int): NepaliDate = of(value / 10000, value / 100 % 100, value % 100)
 
         /**
          * Strict parsing (PARSING section 1): exactly year, month and day, in ASCII or Devanagari
@@ -457,6 +532,19 @@ public class NepaliDate private constructor(
             val value = scanStrictValid(text)
             if (value < 0) return null
             return of(scannedYear(value), scannedMonth(value), scannedDay(value))
+        }
+
+        /**
+         * Lenient parsing as [parseLenient], or null where [parseLenient] would throw. Builds no
+         * exception.
+         *
+         * @return the date, or null
+         */
+        @JvmStatic
+        public fun parseLenientOrNull(text: CharSequence): NepaliDate? {
+            val value = scanLenient(text)
+            if (value < 0) return null
+            return ofOrNull(scannedYear(value), scannedMonth(value), scannedDay(value))
         }
 
         private fun fromScan(

@@ -2,20 +2,28 @@
 
 package io.github.sanamhub.nepdate.catalog
 
+import io.github.sanamhub.nepdate.DateOrder
+import io.github.sanamhub.nepdate.FiscalYear
+import io.github.sanamhub.nepdate.Lang
 import io.github.sanamhub.nepdate.Month
+import io.github.sanamhub.nepdate.NepDateException
 import io.github.sanamhub.nepdate.NepaliDate
 import io.github.sanamhub.nepdate.NepaliDateRange
+import io.github.sanamhub.nepdate.Separator
+import io.github.sanamhub.nepdate.Weekday
 import io.github.sanamhub.nepdate.nepaliToday
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /**
- * C# `Core/NepaliDateRangeExtendedTests.cs`. The port's range is a list of days with month,
- * year, contains and size only (PARITY D-09). It has no empty range: `of` rejects an end before the
- * start, so every row built on an empty range is covered by that rule instead.
+ * C# `Core/NepaliDateRangeExtendedTests.cs`. The port's range has no empty range: `of` rejects an
+ * end before the start (PARITY D-01), so every case built on an empty range is covered by that
+ * rule instead. The rest of the C# range surface is in `RangeVectorTest` and its siblings.
  */
 class NepaliDateRangeExtendedTests {
     private fun d(
@@ -88,25 +96,173 @@ class NepaliDateRangeExtendedTests {
         assertEquals(NepaliDate.of(today.year, 1, 1), NepaliDateRange.ofYear(today.year).start)
     }
 
-    // Not ported, PARITY D-09 (no splitting, interval iteration, weekend or working-day helpers):
-    // SplitByFiscalQuarter_EmptyRange_ReturnsEmptyArray, SplitByFiscalQuarter_RangeWithinOneQuarter_ReturnsSingleRange,
-    // SplitByFiscalQuarter_RangeSpanningTwoQuarters_ReturnsTwoRanges, SplitByFiscalQuarter_FullFiscalYear_ReturnsFourRanges,
-    // SplitByFiscalQuarter_RangeInQ4Months_SingleRange, DatesWithInterval_Zero_ThrowsArgumentOutOfRangeException,
-    // DatesWithInterval_NegativeInterval_ThrowsArgumentOutOfRangeException, DatesWithInterval_IntervalOfOne_YieldsEveryDay,
-    // DatesWithInterval_IntervalOfTwo_YieldsOddDays, DatesWithInterval_IntervalLargerThanRange_YieldsOnlyStartDate,
-    // DatesWithInterval_EmptyRange_YieldsNothing, WeekendDays_IncludeSundayTrue_ReturnsBothSaturdayAndSunday,
-    // WeekendDays_IncludeSundayFalse_ReturnsOnlySaturday, WeekendDays_RangeWithNoWeekend_ReturnsEmpty,
-    // WeekendDays_EmptyRange_ReturnsEmpty, WorkingDays_ExcludeSundayFalse_ExcludesOnlySaturday,
-    // WorkingDays_ExcludeSundayTrue_ExcludesBothSatAndSun, WorkingDays_EmptyRange_ReturnsEmpty,
-    // FromDayCount_ZeroDays_ThrowsArgumentOutOfRangeException, FromDayCount_NegativeDays_ThrowsArgumentOutOfRangeException.
+    @Test
+    fun SplitByFiscalQuarter_RangeWithinOneQuarter_ReturnsSingleRange() {
+        val range = range(d(2080, 4, 10), d(2080, 4, 20))
+        assertEquals(listOf(range), range.splitByFiscalQuarter())
+    }
 
-    // Not ported, PARITY D-09 (no set operations): Intersect_NonOverlappingRanges_ReturnsEmptyRange,
-    // Intersect_AdjacentRanges_ReturnsEmptyRange, Intersect_OneRangeFullyInsideOther_ReturnsInnerRange,
-    // Union_LeftRangeIsEmpty_ReturnsRightRange, Union_RightRangeIsEmpty_ReturnsLeftRange,
-    // Union_NonOverlappingRanges_SpansEntireGap, IsAdjacentTo_GapBetweenRanges_ReturnsFalse,
-    // IsAdjacentTo_OverlappingRanges_ReturnsFalse, IsAdjacentTo_EmptyRange_ReturnsFalse,
-    // Except_NonOverlappingExcludeRange_ReturnsOriginalRange, Except_ExcludeRangeFullyContainsThis_ReturnsEmptyArray,
-    // Except_ExcludeOverlapsStart_ReturnsRightPart, Except_ExcludeOverlapsEnd_ReturnsLeftPart.
+    @Test
+    fun SplitByFiscalQuarter_RangeSpanningTwoQuarters_ReturnsTwoRanges() {
+        val pieces = range(d(2080, 6, 10), d(2080, 7, 20)).splitByFiscalQuarter()
+        assertEquals(2, pieces.size)
+        assertEquals(d(2080, 6, 10), pieces.first().start)
+        assertEquals(d(2080, 6, 30), pieces.first().endInclusive)
+        assertEquals(d(2080, 7, 1), pieces.last().start)
+        assertEquals(d(2080, 7, 20), pieces.last().endInclusive)
+    }
+
+    @Test
+    fun SplitByFiscalQuarter_FullFiscalYear_ReturnsFourRanges() {
+        assertEquals(4, FiscalYear(2080).range().splitByFiscalQuarter().size)
+    }
+
+    @Test
+    fun SplitByFiscalQuarter_RangeInQ4Months_SingleRange() {
+        // Baishakh to Ashad of the next BS year is one quarter, Q4.
+        val range = range(d(2081, 1, 10), d(2081, 3, 20))
+        assertEquals(listOf(range), range.splitByFiscalQuarter())
+    }
+
+    private fun intervalError(interval: Int) =
+        assertEquals(
+            NepDateException.Kind.OUT_OF_RANGE,
+            assertFailsWith<NepDateException> { range(d(2080, 1, 1), d(2080, 1, 10)).datesWithInterval(interval) }.kind,
+        )
+
+    @Test
+    fun DatesWithInterval_Zero_ThrowsArgumentOutOfRangeException() {
+        intervalError(0)
+    }
+
+    @Test
+    fun DatesWithInterval_NegativeInterval_ThrowsArgumentOutOfRangeException() {
+        intervalError(-1)
+    }
+
+    @Test
+    fun DatesWithInterval_IntervalOfOne_YieldsEveryDay() {
+        assertEquals(range(d(2080, 1, 1), d(2080, 1, 10)).toList(), range(d(2080, 1, 1), d(2080, 1, 10)).datesWithInterval(1))
+    }
+
+    @Test
+    fun DatesWithInterval_IntervalOfTwo_YieldsOddDays() {
+        val days = range(d(2080, 1, 1), d(2080, 1, 10)).datesWithInterval(2)
+        assertEquals(listOf(1, 3, 5, 7, 9).map { d(2080, 1, it) }, days)
+    }
+
+    @Test
+    fun DatesWithInterval_IntervalLargerThanRange_YieldsOnlyStartDate() {
+        assertEquals(listOf(d(2080, 1, 1)), range(d(2080, 1, 1), d(2080, 1, 10)).datesWithInterval(30))
+    }
+
+    @Test
+    fun WeekendDays_IncludeSundayTrue_ReturnsBothSaturdayAndSunday() {
+        val weekend = range(d(2080, 1, 1), d(2080, 1, 14)).weekendDays(includeSunday = true)
+        assertTrue(weekend.all { it.dayOfWeek == Weekday.SATURDAY || it.dayOfWeek == Weekday.SUNDAY })
+        assertTrue(weekend.any { it.dayOfWeek == Weekday.SATURDAY })
+        assertTrue(weekend.any { it.dayOfWeek == Weekday.SUNDAY })
+    }
+
+    @Test
+    fun WeekendDays_IncludeSundayFalse_ReturnsOnlySaturday() {
+        val weekend = range(d(2080, 1, 1), d(2080, 1, 14)).weekendDays(includeSunday = false)
+        assertTrue(weekend.all { it.dayOfWeek == Weekday.SATURDAY })
+    }
+
+    @Test
+    fun WorkingDays_ExcludeSundayFalse_ExcludesOnlySaturday() {
+        val range = range(d(2080, 1, 1), d(2080, 1, 14))
+        val working = range.workingDays(excludeSunday = false)
+        assertTrue(working.none { it.dayOfWeek == Weekday.SATURDAY })
+        assertTrue(working.any { it.dayOfWeek == Weekday.SUNDAY })
+        assertEquals(range.size - range.weekendDays(includeSunday = false).size, working.size)
+    }
+
+    @Test
+    fun WorkingDays_ExcludeSundayTrue_ExcludesBothSatAndSun() {
+        val range = range(d(2080, 1, 1), d(2080, 1, 14))
+        val working = range.workingDays(excludeSunday = true)
+        assertTrue(working.none { it.dayOfWeek == Weekday.SATURDAY || it.dayOfWeek == Weekday.SUNDAY })
+        assertEquals(range.size - range.weekendDays(includeSunday = true).size, working.size)
+    }
+
+    private fun dayCountError(days: Int) =
+        assertEquals(
+            NepDateException.Kind.OUT_OF_RANGE,
+            assertFailsWith<NepDateException> { NepaliDateRange.fromDayCount(d(2080, 1, 1), days) }.kind,
+        )
+
+    @Test
+    fun FromDayCount_ZeroDays_ThrowsArgumentOutOfRangeException() {
+        dayCountError(0)
+    }
+
+    @Test
+    fun FromDayCount_NegativeDays_ThrowsArgumentOutOfRangeException() {
+        dayCountError(-1)
+    }
+
+    @Test
+    fun Intersect_NonOverlappingRanges_ReturnsEmptyRange() {
+        assertNull(range(d(2080, 1, 1), d(2080, 1, 10)).intersect(range(d(2080, 2, 1), d(2080, 2, 10))))
+    }
+
+    @Test
+    fun Intersect_AdjacentRanges_ReturnsEmptyRange() {
+        assertNull(range(d(2080, 1, 1), d(2080, 1, 10)).intersect(range(d(2080, 1, 11), d(2080, 1, 20))))
+    }
+
+    @Test
+    fun Intersect_OneRangeFullyInsideOther_ReturnsInnerRange() {
+        val inner = range(d(2080, 1, 5), d(2080, 1, 10))
+        assertEquals(inner, range(d(2080, 1, 1), d(2080, 1, 20)).intersect(inner))
+    }
+
+    @Test
+    fun Union_NonOverlappingRanges_SpansEntireGap() {
+        assertEquals(
+            range(d(2080, 1, 1), d(2080, 2, 10)),
+            range(d(2080, 1, 1), d(2080, 1, 10)).union(range(d(2080, 2, 1), d(2080, 2, 10))),
+        )
+    }
+
+    @Test
+    fun IsAdjacentTo_GapBetweenRanges_ReturnsFalse() {
+        assertFalse(range(d(2080, 1, 1), d(2080, 1, 10)).isAdjacentTo(range(d(2080, 1, 12), d(2080, 1, 20))))
+    }
+
+    @Test
+    fun IsAdjacentTo_OverlappingRanges_ReturnsFalse() {
+        assertFalse(range(d(2080, 1, 1), d(2080, 1, 10)).isAdjacentTo(range(d(2080, 1, 10), d(2080, 1, 20))))
+    }
+
+    @Test
+    fun Except_NonOverlappingExcludeRange_ReturnsOriginalRange() {
+        val range = range(d(2080, 1, 1), d(2080, 1, 10))
+        assertEquals(listOf(range), range.minus(range(d(2080, 2, 1), d(2080, 2, 10))))
+    }
+
+    @Test
+    fun Except_ExcludeRangeFullyContainsThis_ReturnsEmptyArray() {
+        assertEquals(emptyList(), range(d(2080, 1, 5), d(2080, 1, 10)).minus(range(d(2080, 1, 1), d(2080, 1, 20))))
+    }
+
+    @Test
+    fun Except_ExcludeOverlapsStart_ReturnsRightPart() {
+        assertEquals(
+            listOf(range(d(2080, 1, 6), d(2080, 1, 10))),
+            range(d(2080, 1, 1), d(2080, 1, 10)).minus(range(d(2080, 1, 1), d(2080, 1, 5))),
+        )
+    }
+
+    @Test
+    fun Except_ExcludeOverlapsEnd_ReturnsLeftPart() {
+        assertEquals(
+            listOf(range(d(2080, 1, 1), d(2080, 1, 5))),
+            range(d(2080, 1, 1), d(2080, 1, 10)).minus(range(d(2080, 1, 6), d(2080, 1, 20))),
+        )
+    }
 
     private val fifthToTwentieth = range(d(2080, 1, 5), d(2080, 1, 20))
 
@@ -130,7 +286,7 @@ class NepaliDateRangeExtendedTests {
         assertFalse(fifthToTwentieth.contains(d(2080, 1, 21)))
     }
 
-    // Not ported, PARITY D-09 (no empty range): Contains_EmptyRange_ContainsNothing,
+    // Not ported, PARITY D-01 (no empty range): Contains_EmptyRange_ContainsNothing,
     // GetEnumerator_EmptyRange_YieldsNoDates, Equals_BothEmpty_ReturnsTrue.
 
     @Test
@@ -145,9 +301,21 @@ class NepaliDateRangeExtendedTests {
         assertEquals(listOf(d(2080, 5, 15)), range(d(2080, 5, 15), d(2080, 5, 15)).toList())
     }
 
-    // Not ported, PARITY D-09 (the range is a List; its toString is the list's): ToString_DefaultFormat_IsStartDashEnd,
-    // ToString_EmptyRange_ReturnsEmptyRangeString, ToString_WithDateFormat_UsesSpecifiedFormat,
-    // ToString_WithDateFormat_EmptyRange_ReturnsEmptyRangeString.
+    // The empty C# range is not ported (PARITY D-01), so the two empty-range string cases have no
+    // port row. The two non-empty ones are in RangeFormatVectorTest and here.
+
+    @Test
+    fun ToString_DefaultFormat_IsStartDashEnd() {
+        assertEquals("2080/01/01 - 2080/01/15", firstToFifteenth.toString())
+    }
+
+    @Test
+    fun ToString_WithDateFormat_UsesSpecifiedFormat() {
+        assertEquals(
+            "01-01-2080 - 15-01-2080",
+            firstToFifteenth.toFormattedString(DateOrder.DMY, Separator.DASH, Lang.ENGLISH),
+        )
+    }
 
     private val firstToFifteenth = range(d(2080, 1, 1), d(2080, 1, 15))
 
