@@ -231,4 +231,43 @@ class MutationCoverageTest {
             }
         }
     }
+
+    @Test
+    fun `hash codes depend only on the values, so every run gives the same number`() {
+        val later = NepaliDate.of(2081, 4, 15)
+        val earlier = NepaliDate.of(2080, 2, 12)
+        val back = later.until(earlier)
+        assertEquals(listOf(1, 2, 3), listOf(back.years, back.months, back.days))
+        assertTrue(back.isNegative)
+        assertEquals(955757, back.hashCode())
+        assertEquals(32237, earlier.until(later).hashCode())
+        assertEquals(2093967, (earlier..later).hashCode())
+    }
+
+    @Test
+    fun `ranges that differ only in their first day hash differently`() {
+        val last = NepaliDate.of(2081, 4, 20)
+        val hashes = (1..19).map { (NepaliDate.of(2081, 4, it)..last).hashCode() }.toSet()
+        assertEquals(19, hashes.size)
+    }
+
+    @Test
+    fun `a one-day range is one fiscal quarter piece and keeps its weekend day`() {
+        var saturday = NepaliDate.of(2081, 4, 1)
+        while (saturday.dayOfWeek != Weekday.SATURDAY) saturday = saturday.plusDays(1)
+        val sunday = saturday.plusDays(1)
+        assertEquals(listOf(saturday..saturday), (saturday..saturday).splitByFiscalQuarter())
+        assertEquals(listOf(saturday), (saturday..saturday).weekendDays(includeSunday = false))
+        assertEquals(listOf(sunday), (sunday..sunday).weekendDays(includeSunday = true))
+        assertEquals(listOf(saturday, sunday), (saturday.plusDays(-3)..sunday).weekendDays())
+    }
+
+    @Test
+    fun `batch conversions accept an iterable that is not a collection`() {
+        val dates = listOf(NepaliDate.of(2081, 4, 15), NepaliDate.of(2081, 4, 16))
+        val locals = dates.map { it.toLocalDate() }
+        assertEquals(locals, toEnglishDates(Iterable { dates.iterator() }))
+        assertEquals(locals, toEnglishDates(Iterable { listOf("2081/04/15", "2081/04/16").iterator() }))
+        assertEquals(dates, toNepaliDates(Iterable { locals.iterator() }))
+    }
 }
