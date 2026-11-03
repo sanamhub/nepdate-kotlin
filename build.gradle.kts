@@ -37,9 +37,9 @@ subprojects {
     }
 }
 
-// The two published libraries share one setup. Each module applies the plugins and sets its
+// The published libraries share one setup. Each module applies the plugins and sets its
 // own artifact id, POM name and description, and dependencies.
-val libraryProjects = setOf(":nepdate", ":nepdate-patro")
+val libraryProjects = setOf(":nepdate", ":nepdate-patro", ":nepdate-serialization")
 
 // The build toolchain, default 17 (ADR-0001). Override with -PnepdateToolchain=25 to run
 // the whole CI on a newer JDK; the JDK must be registered in org.gradle.java.installations.paths.
@@ -198,8 +198,9 @@ configure(subprojects.filter { it.path in libraryProjects }) {
 // ADR-0004 gate 7: the core artifact carries no patro data and doesn't depend on the patro.
 evaluationDependsOn(":nepdate")
 evaluationDependsOn(":nepdate-patro")
+evaluationDependsOn(":nepdate-serialization")
 
-// Aggregate both modules' Dokka HTML into one site (`./gradlew :dokkaGenerate`). Each module
+// Aggregate the modules' Dokka HTML into one site (`./gradlew :dokkaGenerate`). Each module
 // applies org.jetbrains.dokka in its own build file; the root project collects them with dokka(...).
 configure<org.jetbrains.dokka.gradle.DokkaExtension> {
     moduleName.set("nepdate-kotlin")
@@ -207,6 +208,7 @@ configure<org.jetbrains.dokka.gradle.DokkaExtension> {
 dependencies {
     dokka(project(":nepdate"))
     dokka(project(":nepdate-patro"))
+    dokka(project(":nepdate-serialization"))
 }
 
 val checkCoreSplit by tasks.registering {
@@ -232,7 +234,11 @@ val checkCoreSplit by tasks.registering {
             }
 
         val problems = mutableListOf<String>()
-        if ("nepdate-patro" in corePom.get().readText()) problems += "the core POM names nepdate-patro"
+        val corePomText = corePom.get().readText()
+        if ("nepdate-patro" in corePomText) problems += "the core POM names nepdate-patro"
+        // D-11: serialization support is an optional artifact, so the core depends on no
+        // serialization library.
+        if ("kotlinx-serialization" in corePomText) problems += "the core POM depends on kotlinx-serialization"
         val core = entries(coreJar.get().asFile)
         core.filterValues { it.has(marker) }.keys.forEach { problems += "core jar entry $it holds patro data" }
         if (entries(patroJar.get().asFile).values.none { it.has(marker) }) problems += "the patro jar lacks the patro data"

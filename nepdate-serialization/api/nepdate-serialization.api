@@ -1,0 +1,9 @@
+public final class io/github/sanamhub/nepdate/serialization/NepaliDateSerializer : kotlinx/serialization/KSerializer {
+	public static final field INSTANCE Lio/github/sanamhub/nepdate/serialization/NepaliDateSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lio/github/sanamhub/nepdate/NepaliDate;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lio/github/sanamhub/nepdate/NepaliDate;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+}
+
