@@ -21,10 +21,7 @@ results, checked against the shared test vectors in [`shared/`](https://github.c
 `java.time`, ThreeTen-Extra, ICU4J nor `android.icu` has a Bikram Sambat calendar
 ([comparison](https://github.com/sanamhub/nepdate-kotlin/blob/main/docs/competitors.md)).
 
-> **Status:** 1.0.0-rc.1, the release candidate on the 1.0 line. The API is listed in
-> [docs/API.md](https://github.com/sanamhub/nepdate-kotlin/blob/main/docs/API.md) and is stable from
-> 1.0 (hub ADR-0009). Patro data (tithi, holidays, events) is informational, not an official
-> calendar.
+The API is listed in [docs/API.md](https://github.com/sanamhub/nepdate-kotlin/blob/main/docs/API.md) and is stable from 1.0 ([ADR-0009](https://github.com/sanamhub/nepdate/blob/main/docs/adr/0009-what-1.0-promises.md)). Tithi, public holidays and events are informational, not an official calendar.
 
 Three artifacts, same version:
 
@@ -253,7 +250,15 @@ The data covers BS 2077-01-01 to 2084-08-20. A day outside it answers with empty
 | A wrong date, holiday or tithi | the hub's [data error form](https://github.com/sanamhub/nepdate/issues/new/choose) |
 | The other languages | [sanamhub/nepdate](https://github.com/sanamhub/nepdate#packages) |
 
+<!-- family:start -->
+## NepDate in other languages
+
+The same calendar, with the same answers, for [C#](https://github.com/RajuPrasai/NepDate), [TypeScript](https://github.com/sanamhub/nepdate-typescript), [Python](https://github.com/sanamhub/nepdate-python), [PHP](https://github.com/sanamhub/nepdate-php), [Java](https://github.com/sanamhub/nepdate-java), [Dart](https://github.com/sanamhub/nepdate-dart), [Go](https://github.com/sanamhub/nepdate-go), [Swift](https://github.com/sanamhub/nepdate-swift), [C++](https://github.com/sanamhub/nepdate-cpp), [C](https://github.com/sanamhub/nepdate-c), [Rust](https://github.com/sanamhub/nepdate-rust), [Ruby](https://github.com/sanamhub/nepdate-ruby), [Zig](https://github.com/sanamhub/nepdate-zig). Every library is listed at [nepdate.com](https://nepdate.com/).
+
+For people rather than code: [MitiBar](https://nepdate.com/mitibar/) puts today's date on the Windows, macOS and Linux desktop, [patro.nepdate.com](https://patro.nepdate.com/) is the calendar on the web, and NepDate for Android and iOS is coming soon.
+<!-- family:end -->
+
 ## License
 
-MIT ([LICENSE](https://github.com/sanamhub/nepdate-kotlin/blob/main/LICENSE)). Calendar data from NepDate by Raju Prasai and contributors, MIT
+MIT ([LICENSE](https://github.com/sanamhub/nepdate-kotlin/blob/main/LICENSE)). Calendar data from NepDate, MIT
 ([shared/data/NOTICE](https://github.com/sanamhub/nepdate-kotlin/blob/main/shared/data/NOTICE)). Not affiliated with the Government of Nepal.
