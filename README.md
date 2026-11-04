@@ -21,9 +21,10 @@ results, checked against the shared test vectors in [`shared/`](https://github.c
 `java.time`, ThreeTen-Extra, ICU4J nor `android.icu` has a Bikram Sambat calendar
 ([comparison](https://github.com/sanamhub/nepdate-kotlin/blob/main/docs/competitors.md)).
 
-> **Status:** 0.2.0-rc.1, a release candidate. The API is listed in
-> [docs/API.md](https://github.com/sanamhub/nepdate-kotlin/blob/main/docs/API.md) and may still change before 0.2.0. Patro data (tithi, holidays, events)
-> is informational, not an official calendar.
+> **Status:** 1.0.0-rc.1, the release candidate on the 1.0 line. The API is listed in
+> [docs/API.md](https://github.com/sanamhub/nepdate-kotlin/blob/main/docs/API.md) and is stable from
+> 1.0 (hub ADR-0009). Patro data (tithi, holidays, events) is informational, not an official
+> calendar.
 
 Three artifacts, same version:
 
@@ -42,9 +43,9 @@ Gradle (Kotlin DSL), from Maven Central:
 
 ```kotlin
 dependencies {
-    implementation("io.github.sanamhub:nepdate:0.2.0-rc.1")
-    implementation("io.github.sanamhub:nepdate-patro:0.2.0-rc.1") // only for tithi, holidays, events
-    implementation("io.github.sanamhub:nepdate-serialization:0.2.0-rc.1") // only for kotlinx.serialization
+    implementation("io.github.sanamhub:nepdate:1.0.0-rc.1")
+    implementation("io.github.sanamhub:nepdate-patro:1.0.0-rc.1") // only for tithi, holidays, events
+    implementation("io.github.sanamhub:nepdate-serialization:1.0.0-rc.1") // only for kotlinx.serialization
 }
 ```
 
@@ -54,7 +55,7 @@ Maven:
 <dependency>
   <groupId>io.github.sanamhub</groupId>
   <artifactId>nepdate</artifactId>
-  <version>0.2.0-rc.1</version>
+  <version>1.0.0-rc.1</version>
 </dependency>
 ```
 
