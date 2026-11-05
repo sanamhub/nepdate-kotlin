@@ -182,7 +182,7 @@ jobs:
           prerelease=()
           case "$VERSION" in *-*) prerelease=(--prerelease) ;; esac
           gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --verify-tag \
-            --title "nepdate-kotlin $VERSION" --notes-file "$notes" "${prerelease[@]}"
+            --title "$GITHUB_REF_NAME" --notes-file "$notes" "${prerelease[@]}"
 
   verify-published:
     name: verify-published

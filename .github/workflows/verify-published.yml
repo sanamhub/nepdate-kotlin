@@ -77,7 +77,8 @@ jobs:
       run:
         shell: bash
     # Central can take 10 to 30 minutes to serve a new release; the script waits up to 45.
-    timeout-minutes: 60
+    # Long enough for the three-hour Central wait before the consumer starts.
+    timeout-minutes: 190
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -87,6 +88,31 @@ jobs:
           distribution: temurin
           java-version: "17"
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      # A release can call this seconds after the upload, while Central still answers 404. Wait
+      # for every POM before the consumer starts; the weekly and metadata jobs check versions that
+      # are already served.
+      - name: Wait for Maven Central to serve every POM
+        env:
+          VERSION: ${{ needs.resolve.outputs.version }}
+        run: |
+          set -euo pipefail
+          deadline=$((SECONDS + 3 * 60 * 60))
+          for artifact in nepdate nepdate-patro nepdate-serialization; do
+            url="https://repo1.maven.org/maven2/io/github/sanamhub/$artifact/$VERSION/$artifact-$VERSION.pom"
+            while true; do
+              code="$(curl -sS -L -o /dev/null -w '%{http_code}' "$url" || true)"
+              if [ "$code" = "200" ]; then
+                echo "$url is served"
+                break
+              fi
+              if [ "$SECONDS" -ge "$deadline" ]; then
+                echo "::error::$url returned $code after three hours; Maven Central has not served the release"
+                exit 1
+              fi
+              echo "waiting for $url (HTTP $code)"
+              sleep 60
+            done
+          done
       - name: Consumer from Maven Central
         id: check
         shell: bash
