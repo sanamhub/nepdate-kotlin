@@ -1,6 +1,7 @@
 package io.github.sanamhub.nepdate.patro
 
 import io.github.sanamhub.nepdate.NepaliDate
+import org.junit.jupiter.api.parallel.Isolated
 import java.net.URLClassLoader
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
@@ -13,6 +14,7 @@ import kotlin.test.assertEquals
  * class directories) into a fresh class loader, so PatroTables initialises again, and 16 threads
  * released together call Patro.info and read the PATRO section 4 anchors.
  */
+@Isolated
 class PatroConcurrentInitTest {
     private val urls =
         listOf(Patro::class.java, NepaliDate::class.java, KotlinVersion::class.java)

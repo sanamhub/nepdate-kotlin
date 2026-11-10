@@ -1,5 +1,6 @@
 package io.github.sanamhub.nepdate
 
+import org.junit.jupiter.api.parallel.Isolated
 import java.net.URLClassLoader
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
@@ -12,6 +13,7 @@ import kotlin.test.assertEquals
  * class loader, so CalendarTables and NepaliDate's companion initialise again, and 16 threads
  * released together race on that first use.
  */
+@Isolated
 class CalendarConcurrentInitTest {
     private val urls =
         listOf(NepaliDate::class.java, KotlinVersion::class.java)
