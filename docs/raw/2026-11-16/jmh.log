@@ -1,0 +1,5 @@
+idle gate (30 one-second samples): avg=5.5 max=17.4
+during the run (one-second samples, total and all CPUs except CPU 2):
+n=205 total avg=10.1 peak=29.4 | other-cpus avg=4.2 peak=25.0
+exit: 0
+A first run of the same command, started right after the build, was discarded: a burst of about 10 s above 30 percent load (peak 49) fell inside its first benchmarks. It is not kept.
