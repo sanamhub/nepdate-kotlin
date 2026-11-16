@@ -1,13 +1,116 @@
 package io.github.sanamhub.nepdate
 
-// One implementation per format, appending to the caller's StringBuilder (ADR-0002 section 6).
-// The String forms in NepaliDate call these with a builder sized for the longest output.
+// The append forms write to the caller's StringBuilder (ADR-0002 section 6). The String forms of
+// the short and long formats fill one array instead; a test checks the two agree for every day.
 
 /** Longest short form: `2080/05/15`. */
 internal const val SHORT_CAPACITY: Int = 10
 
-/** Longest long form: `Wednesday, Baishakh 15, 2080` plus room for Nepali names. */
-internal const val LONG_CAPACITY: Int = 32
+/**
+ * Room for the longest long form in either language: the longest weekday and month names, the two
+ * `", "`, the space, a two-digit day and a four-digit year.
+ */
+private val LONG_CHARS: Int =
+    Weekday.entries.maxOf { maxOf(it.displayName(Lang.ENGLISH).length, it.displayName(Lang.NEPALI).length) } +
+        Month.entries.maxOf { maxOf(it.displayName(Lang.ENGLISH).length, it.displayName(Lang.NEPALI).length) } +
+        11
+
+private fun zeroOf(lang: Lang): Char = if (lang == Lang.NEPALI) DEVANAGARI_ZERO else '0'
+
+/** Writes a number below 100, as two digits when it has two or [pad] asks for them. */
+private fun writeField(
+    buffer: CharArray,
+    position: Int,
+    value: Int,
+    pad: Boolean,
+    zero: Char,
+): Int {
+    var at = position
+    if (pad || value >= 10) buffer[at++] = zero + value / 10
+    buffer[at++] = zero + value % 10
+    return at
+}
+
+/** Writes a four-digit year; every supported year has four digits. */
+private fun writeYear(
+    buffer: CharArray,
+    position: Int,
+    year: Int,
+    zero: Char,
+): Int {
+    val high = year / 100
+    val low = year % 100
+    buffer[position] = zero + high / 10
+    buffer[position + 1] = zero + high % 10
+    buffer[position + 2] = zero + low / 10
+    buffer[position + 3] = zero + low % 10
+    return position + 4
+}
+
+private fun writeName(
+    buffer: CharArray,
+    position: Int,
+    name: String,
+): Int {
+    name.toCharArray(buffer, position, 0, name.length)
+    return position + name.length
+}
+
+/**
+ * The short form as a String. It fills one array in place: a StringBuilder starts in Latin-1 and
+ * copies itself on the first Devanagari digit, and checks its capacity on every append.
+ */
+internal fun shortString(
+    date: NepaliDate,
+    order: DateOrder,
+    separator: Separator,
+    pad: Boolean,
+    lang: Lang,
+): String {
+    val buffer = CharArray(SHORT_CAPACITY)
+    val zero = zeroOf(lang)
+    val sep = separator.char
+    // The constant's name spells its field order.
+    val fields = order.name
+    var length = 0
+    for (i in 0 until 3) {
+        if (i > 0) buffer[length++] = sep
+        length =
+            when (fields[i]) {
+                'Y' -> writeYear(buffer, length, date.year, zero)
+                'M' -> writeField(buffer, length, date.monthValue, pad, zero)
+                else -> writeField(buffer, length, date.dayOfMonth, pad, zero)
+            }
+    }
+    return String(buffer, 0, length)
+}
+
+/** The long form as a String, filled in place like [shortString]. */
+internal fun longString(
+    date: NepaliDate,
+    weekday: Boolean,
+    year: Boolean,
+    pad: Boolean,
+    lang: Lang,
+): String {
+    val buffer = CharArray(LONG_CHARS)
+    val zero = zeroOf(lang)
+    var length = 0
+    if (weekday) {
+        length = writeName(buffer, length, date.dayOfWeek.displayName(lang))
+        buffer[length++] = ','
+        buffer[length++] = ' '
+    }
+    length = writeName(buffer, length, date.month.displayName(lang))
+    buffer[length++] = ' '
+    length = writeField(buffer, length, date.dayOfMonth, pad, zero)
+    if (year) {
+        buffer[length++] = ','
+        buffer[length++] = ' '
+        length = writeYear(buffer, length, date.year, zero)
+    }
+    return String(buffer, 0, length)
+}
 
 internal fun appendShort(
     out: StringBuilder,

@@ -5,6 +5,13 @@ All notable changes to `io.github.sanamhub:nepdate`, `io.github.sanamhub:nepdate
 Changelog](https://keepachangelog.com/en/1.1.0/), versions follow [Semantic
 Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+
+- `toString`, `toIsoString`, `toShortString` and `toLongString` fill one array instead of appending
+  to a `StringBuilder`, which is faster and allocates less for Nepali text. The text is unchanged.
+
 ## [1.0.0-rc.1] - 2026-11-04
 
 ### Changed
