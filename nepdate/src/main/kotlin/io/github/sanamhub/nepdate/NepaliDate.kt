@@ -282,15 +282,14 @@ public class NepaliDate private constructor(
     override fun compareTo(other: NepaliDate): Int = serial.compareTo(other.serial)
 
     /** The date as `YYYY/MM/DD` (FORMATTING section 2), for example `2081/04/15`. */
-    override fun toString(): String = appendShortString(StringBuilder(SHORT_CAPACITY)).toString()
+    override fun toString(): String = shortString(this, DateOrder.YMD, Separator.SLASH, true, Lang.ENGLISH)
 
     /**
      * The date as `YYYY-MM-DD` with ASCII digits (PARITY D-11), for example `2081-04-15`.
      *
      * @return the ISO-style string
      */
-    public fun toIsoString(): String =
-        appendShort(StringBuilder(SHORT_CAPACITY), this, DateOrder.YMD, Separator.DASH, true, Lang.ENGLISH).toString()
+    public fun toIsoString(): String = shortString(this, DateOrder.YMD, Separator.DASH, true, Lang.ENGLISH)
 
     /**
      * The date as numbers in [order] with [separator] between them (FORMATTING section 3), for
@@ -305,7 +304,7 @@ public class NepaliDate private constructor(
         separator: Separator = Separator.SLASH,
         pad: Boolean = true,
         lang: Lang = Lang.ENGLISH,
-    ): String = appendShort(StringBuilder(SHORT_CAPACITY), this, order, separator, pad, lang).toString()
+    ): String = shortString(this, order, separator, pad, lang)
 
     /**
      * The date with the month name (FORMATTING section 4), for example `Shrawan 15, 2081`,
@@ -322,7 +321,7 @@ public class NepaliDate private constructor(
         year: Boolean = true,
         pad: Boolean = true,
         lang: Lang = Lang.ENGLISH,
-    ): String = appendLong(StringBuilder(LONG_CAPACITY), this, weekday, year, pad, lang).toString()
+    ): String = longString(this, weekday, year, pad, lang)
 
     /**
      * The date in a .NET-style [pattern] (FORMATTING section 5): `yyyy`, `yy`, `MMMM`, `MMM`, `MM`,
