@@ -73,6 +73,8 @@ if [ "$unclassified" -ne 0 ]; then
 fi
 
 score=$((detected * 100 / total))
+# PIT prints the score rounded to the nearest percent; the gate below uses the floor.
+printed=$(((detected * 200 + total) / (total * 2)))
 
 # PIT prints this line on a real run. A FROM-CACHE restore prints nothing, so the XML report is
 # the source of truth and the console is only a cross-check when it is present.
@@ -81,8 +83,8 @@ if [ -n "$line" ]; then
   read -r console_total console_detected console_score <<< "$(printf '%s\n' "$line" |
     sed -E 's/^>> Generated ([0-9]+) mutations Killed ([0-9]+) \(([0-9]+)%\)$/\1 \2 \3/')"
   if [ "$console_total" -ne "$total" ] || [ "$console_detected" -ne "$detected" ] ||
-    [ "$console_score" -ne "$score" ]; then
-    echo "mutation: XML report (${detected}/${total}, ${score}%) disagrees with PIT (${console_detected}/${console_total}, ${console_score}%)"
+    [ "$console_score" -ne "$printed" ]; then
+    echo "mutation: XML report (${detected}/${total}, ${printed}%) disagrees with PIT (${console_detected}/${console_total}, ${console_score}%)"
     exit 1
   fi
 fi
