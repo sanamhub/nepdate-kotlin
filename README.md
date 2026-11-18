@@ -40,9 +40,9 @@ Gradle (Kotlin DSL), from Maven Central:
 
 ```kotlin
 dependencies {
-    implementation("io.github.sanamhub:nepdate:1.0.0-rc.1")
-    implementation("io.github.sanamhub:nepdate-patro:1.0.0-rc.1") // only for tithi, holidays, events
-    implementation("io.github.sanamhub:nepdate-serialization:1.0.0-rc.1") // only for kotlinx.serialization
+    implementation("io.github.sanamhub:nepdate:1.0.0")
+    implementation("io.github.sanamhub:nepdate-patro:1.0.0") // only for tithi, holidays, events
+    implementation("io.github.sanamhub:nepdate-serialization:1.0.0") // only for kotlinx.serialization
 }
 ```
 
@@ -52,7 +52,7 @@ Maven:
 <dependency>
   <groupId>io.github.sanamhub</groupId>
   <artifactId>nepdate</artifactId>
-  <version>1.0.0-rc.1</version>
+  <version>1.0.0</version>
 </dependency>
 ```
 

@@ -5,7 +5,7 @@ All notable changes to `io.github.sanamhub:nepdate`, `io.github.sanamhub:nepdate
 Changelog](https://keepachangelog.com/en/1.1.0/), versions follow [Semantic
 Versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.0.0] - 2026-11-18
 
 ### Changed
 
