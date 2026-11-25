@@ -240,7 +240,7 @@ The data covers BS 2077-01-01 to 2084-08-20. A day outside it answers with empty
 | Topic | Where |
 |---|---|
 | Every public type and function, with an example | [docs/API.md](https://github.com/sanamhub/nepdate-kotlin/blob/main/docs/API.md) |
-| Speed, allocations and size, with the C# baseline | [docs/benchmarks.md](https://github.com/sanamhub/nepdate-kotlin/blob/main/docs/benchmarks.md) |
+| Speed, allocations and size | [docs/benchmarks.md](https://github.com/sanamhub/nepdate-kotlin/blob/main/docs/benchmarks.md) |
 | What changed in each version | [CHANGELOG.md](https://github.com/sanamhub/nepdate-kotlin/blob/main/CHANGELOG.md) |
 | Design decisions | [docs/adr/README.md](https://github.com/sanamhub/nepdate-kotlin/blob/main/docs/adr/README.md) |
 | Building, gates and pull requests | [CONTRIBUTING.md](https://github.com/sanamhub/nepdate-kotlin/blob/main/CONTRIBUTING.md) |
